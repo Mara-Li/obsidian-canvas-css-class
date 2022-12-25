@@ -1,0 +1,65 @@
+name: Release Obsidian plugin
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "*"
+env:
+  PLUGIN_NAME: canvas-css-class # Change this to match the id of your plugin.
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Build
+        id: build
+        run: |
+          npm install
+          npm run build
+          mkdir ${{ env.PLUGIN_NAME }}
+          cp main.js styles.css ${{ env.PLUGIN_NAME }}
+      - name: Copy files (beta)
+        if: contains(github.ref, '-')
+        run: |
+          cp manifest-beta.json ${{ env.PLUGIN_NAME }}
+          mv manifest-beta.json manifest.json
+      - name: Copy files if not beta
+        if: ${{ !contains(github.ref, '-') }}
+        run: cp manifest.json ${{ env.PLUGIN_NAME }}
+      - name: Create zip
+        run: |
+          zip -r ${{ env.PLUGIN_NAME }}.zip ${{ env.PLUGIN_NAME }}
+          ls
+          echo "tag_name=$(git tag --sort version:refname | tail -n 1)" >> $GITHUB_OUTPUT
+      - name: Create changelog (beta)
+        if: contains(github.ref, '-')
+        run: npx rexreplace "^.*?#+\s\[.*?\n.*?(?=\s*#+\s\[)" "_" -s -M -G -m -o "CHANGELOG-beta.md" > CHANGELOG-LATEST.md
+      - name: Create changelog (not beta)
+        if: ${{ !contains(github.ref, '-') }}
+        run: npx rexreplace "^.*?#+\s\[.*?\n.*?(?=\s*#+\s\[)" "_" -s -M -G -m -o "CHANGELOG.md" > CHANGELOG-LATEST.md
+      - name: Create Release
+        id: create_release
+        uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ github.ref }}
+        with:
+          tag_name: ${{ github.ref }}
+          name: ${{ github.ref }}
+          body_path: CHANGELOG-LATEST.md
+          draft: false
+          prerelease: false
+          token: ${{ secrets.GITHUB_TOKEN }}
+          files: |
+            ${{ env.PLUGIN_NAME }}.zip
+            main.js
+            manifest.json
+            styles.css
