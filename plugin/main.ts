@@ -96,6 +96,9 @@ export default class CanvasCSS extends Plugin {
 		})
 		
 		this.registerEvent(this.app.workspace.on("file-open", (file) => {
+			// @ts-ignore
+			const dataType = document.querySelector('.workspace-leaf.mod-active > .workspace-leaf-content').attributes[1].value;
+			
 			if (file && file.extension === "canvas") {
 				// @ts-ignore
 				document.querySelector('body').setAttribute("data-canvas-path", file.path);
@@ -115,8 +118,7 @@ export default class CanvasCSS extends Plugin {
 							this.addToDOM(canvas, file.path);
 						}
 					}
-				
-				} else {
+				} else if (dataType !== "canvas") {
 				//@ts-ignore
 				document.querySelector('body').classList.remove("canvas-file");
 				// @ts-ignore
