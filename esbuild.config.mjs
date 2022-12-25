@@ -1,6 +1,7 @@
 import esbuild from "esbuild";
 import process from "process";
 import builtins from 'builtin-modules'
+import * as fs from "fs";
 
 const banner =
 `/*
@@ -9,13 +10,22 @@ if you want to view the source, please visit the github repository of this plugi
 */
 `;
 
+const moveStyles = {
+	name: 'move-styles',
+	setup(build) {
+		build.onEnd(() => {
+			fs.copyFileSync('plugin/styles.css', './styles.css');
+		});
+	}
+}
+
 const prod = (process.argv[2] === 'production');
 
 esbuild.build({
 	banner: {
 		js: banner,
 	},
-	entryPoints: ['main.ts'],
+	entryPoints: ['plugin/main.ts', 'plugin/styles.css'],
 	bundle: true,
 	external: [
 		'obsidian',
@@ -37,6 +47,8 @@ esbuild.build({
 	target: 'es2018',
 	logLevel: "info",
 	sourcemap: prod ? false : 'inline',
+	minify: prod,
 	treeShaking: true,
-	outfile: 'main.js',
+	outdir: './',
+	plugins: [moveStyles],
 }).catch(() => process.exit(1));
