@@ -9,7 +9,42 @@ This plugin do two things :
 Yeah, that's it.
 
 
-# :robot: Developping
+# Usage
+
+The plugin will add two commands to the command modal :
+- `Add CSS class` : Add a css class to the current canvas file
+- `Remove CSS class` : Remove a css class to the current canvas file
+
+You can also use the settings to add or remove a css class to the current canvas file.
+
+Moreover, the settings allow you to add a css class for a not-opened canvas file, using the filepath of the file. It allows you to add a css class to a canvas file, even if you don't have it opened.
+
+![](docs/add_css_class_settings.png)
+
+
+> **Warning**   
+> If the filepath is edited (aka the file is moved or renamed), the css class will not be applied anymore. You will have to edit the filepath in the settings.
+
+In the settings, you can also : 
+- Remove all the css class 
+- Remove specific css class
+- Edit a css class (renaming it)
+
+![](docs/canvas-settings.png)
+
+
+> **Note**  
+> - You don't need to add the `.canvas` to the filepath. The plugin will do it for you
+> - Same for class, the `.` will be added automatically when the CSS class is added.
+> - And, in the same idea, space will be converted to `-` in the class name, and converted to lowercase.
+
+# Installation
+
+- Install the plugin using the community plugin manager (not yet available)
+- Using [BRAT](https://github.com/TfTHacker/obsidian42-brat) using this link : `https://github.com/Lisandra-dev/obsidian-canvas-css-class`
+
+---
+# :robot: Developing
 
 You can help me to develop the plugin using npm !
 
