@@ -8,7 +8,6 @@
 		"dev": "node esbuild.config.mjs --sourcemap development",
 		"lint": "eslint --ext .ts plugin/",
 		"lint:fix": "eslint --fix --ext .ts  plugin/",
-		"version": "commit-and-tag-version --packageFiles package.json --bumpFiles manifest.json package.json",
 		"bump": "node version-bump.mjs",
 		"bump:beta": "node bump-beta.mjs",
 		"beta": "commit-and-tag-version  --prerelease --tag-build beta --infile CHANGELOG-beta.md && node version-beta.mjs && git add manifest-beta.json && git commit --amend --no-edit",
