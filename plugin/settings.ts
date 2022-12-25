@@ -1,6 +1,6 @@
 import {App, Notice, PluginSettingTab, Setting} from "obsidian";
 import CanvasCSS from "./main";
-import {AddCssClass, AddNewClassWithFile} from "./modals/addClass";
+import {AddCssClass, AddNewClassWithFile, RenameCanvasPath, RenameCssClass} from "./modals/addClass";
 
 export class CanvasCssSettingsTabs extends PluginSettingTab {
 	plugin: CanvasCSS;
@@ -23,13 +23,21 @@ export class CanvasCssSettingsTabs extends PluginSettingTab {
 		}
 		
 		new Setting(containerEl)
-			.setName("Adding a new class")
-			.setDesc("Use the command modal to add a class.")
+			.setDesc("Use the command modal to add a class to a new file.")
 			.addButton(cb => cb
-				.setButtonText("Add a class")
+				.setButtonText("Add new Canvas")
 				.onClick(async () => {
 					new AddNewClassWithFile(this.app, async (path:string, cssClass: string) => {
-						this.plugin.settings.canvasAdded.push({canvasPath: path, canvasClass: [cssClass]});
+						if (this.plugin.settings.canvasAdded.find(c => c.canvasPath === path)) {
+							// add class to existing only if it doesn't exist
+							if (!this.plugin.settings.canvasAdded.find(c => c.canvasPath === path)?.canvasClass?.includes(cssClass)) {
+								this.plugin.settings.canvasAdded.find(c => c.canvasPath === path)?.canvasClass?.push(cssClass);
+							} else {
+								new Notice("This class is already applied to this canvas.");
+							}
+						} else {
+							this.plugin.settings.canvasAdded.push({canvasPath: path, canvasClass: [cssClass]});
+						}
 						await this.plugin.saveSettings();
 						this.display();
 						this.plugin.addToDOM(cssClass, path);
@@ -57,6 +65,18 @@ export class CanvasCssSettingsTabs extends PluginSettingTab {
 								}
 							}).open();
 						}))
+				.addExtraButton(cb =>
+					cb
+						.setIcon("edit")
+						.setTooltip("Edit the filepath")
+						.onClick(async () => {
+							new RenameCanvasPath(this.app, async (newPath: string) => {
+								canvas.canvasPath = newPath.replace(".canvas", "") + ".canvas";
+								await this.plugin.saveSettings();
+								this.display();
+							}).open();
+						}))
+				
 			.addExtraButton(cb =>
 					cb
 						.setIcon("trash")
@@ -72,7 +92,7 @@ export class CanvasCssSettingsTabs extends PluginSettingTab {
 				new Setting(containerEl)
 					.setName(cssClass)
 					.setClass("canvas-css-class-opt")
-					.addButton(cb =>
+					.addExtraButton(cb =>
 						cb.setIcon("cross")
 							.setTooltip("Remove")
 							.onClick(async () => {
@@ -93,6 +113,23 @@ export class CanvasCssSettingsTabs extends PluginSettingTab {
 								this.plugin.removeFromDOM(cssClass);
 							})
 					)
+					.addExtraButton(cb =>
+						cb.setIcon("edit")
+							.setTooltip("Rename class")
+							.onClick(async () => {
+								new RenameCssClass(this.app, async (newClass: string) =>
+								{
+									const index = canvas.canvasClass.indexOf(cssClass);
+									if (index > -1) {
+										canvas.canvasClass[index] = newClass;
+									}
+									await this.plugin.saveSettings();
+									this.display();
+									this.plugin.removeFromDOM(cssClass);
+									this.plugin.addToDOM(newClass, canvas.canvasPath);
+								}).open();
+							})
+					);
 			}
 		}
 	}
