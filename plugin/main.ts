@@ -99,7 +99,8 @@ export default class CanvasCSS extends Plugin {
 			if (file && file.extension === "canvas") {
 				// @ts-ignore
 				document.querySelector('body').setAttribute("data-canvas-path", file.path);
-				
+				// @ts-ignore
+				document.querySelector('body').classList.add("canvas-file");
 				const canvasClassesNotFromThisFile = this.settings.canvasAdded.filter((item) => item.canvasPath !== file.path);
 				for (const canvas of canvasClassesNotFromThisFile) {
 					for (const cssClass of canvas.canvasClass) {
@@ -116,6 +117,8 @@ export default class CanvasCSS extends Plugin {
 					}
 				
 				} else {
+				//@ts-ignore
+				document.querySelector('body').classList.remove("canvas-file");
 				// @ts-ignore
 				document.querySelector('body').removeAttribute("data-canvas-path");
 				this.removeAllClasses();
