@@ -1,7 +1,7 @@
 # Canvas CSS Class
 
 This plugin do two things : 
-- Add the class `.canvas-file` to the body of each canvas file, and adding the attribute `[data-path="filepath"]` 
+- Add the class `.canvas-file` to the body of each canvas file, and adding the attribute `[data-canvas-path="filepath"]` 
 - Allow you to add custom css class to canvas, using a modal input. Obviously, you can also remove the css-class using the plugin, with the settings or the commands modal. 
 
 
