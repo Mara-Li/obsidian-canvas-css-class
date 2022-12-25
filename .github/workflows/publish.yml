@@ -53,7 +53,7 @@ jobs:
           VERSION: ${{ github.ref }}
         with:
           tag_name: ${{ github.ref }}
-          name: ${{ github.ref }}
+          name: ${{ github.github.ref_name }}
           body_path: CHANGELOG-LATEST.md
           draft: false
           prerelease: false
