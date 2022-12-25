@@ -68,7 +68,7 @@ export class AddNewClassWithFile extends Modal {
 			.addButton(cb => cb
 				.setButtonText("Add")
 				.onClick(async () => {
-					this.onSubmit(this.path, this.cssClass);
+					this.onSubmit(this.path.replace(".canvas", "") + ".canvas", this.cssClass.replace(/\W+/g, '-').toLowerCase());
 					this.close();
 				}));
 	}
