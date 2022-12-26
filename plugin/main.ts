@@ -3,13 +3,13 @@ import {DEFAULT_SETTINGS, CanvasCssSettings} from "./interface";
 import {CanvasCssSettingsTabs} from "./settings";
 import {AddCssClass} from "./modals/addClass";
 import {RemoveCSSclass} from "./modals/removeClass";
+import {t} from "./i18n";
 
 export default class CanvasCSS extends Plugin {
 	settings: CanvasCssSettings;
 	
 	addToDOM(cssClass: string, filePath: string) {
 		if (!document) return;
-		console.log(cssClass, filePath);
 		// @ts-ignore
 		if (document.querySelector('body').getAttribute("data-canvas-path") === filePath) {
 			// @ts-ignore
@@ -39,7 +39,7 @@ export default class CanvasCSS extends Plugin {
 		// This adds a complex command that can check whether the current state of the app allows execution of the command
 		this.addCommand({
 			id: 'add-canvas-css-class',
-			name: 'Add a CSS Class to the Canvas',
+			name: t('commands.addCanvas') as string,
 			checkCallback: (checking: boolean) => {
 				// Conditions to check
 				const canvasView = this.app.workspace.getActiveViewOfType(ItemView);
@@ -52,7 +52,7 @@ export default class CanvasCSS extends Plugin {
 							const oldClasses = this.settings.canvasAdded.find((item) => item.canvasPath === canvasPath)
 							if (oldClasses) {
 								if (oldClasses.canvasClass.includes(result)) {
-									new Notice("Class already added.");
+									new Notice(t('settings.alreadyApplied') as string);
 								} else {
 									oldClasses.canvasClass.push(result);
 									// replace the old canvas class with the new one
@@ -78,7 +78,7 @@ export default class CanvasCSS extends Plugin {
 		
 		this.addCommand({
 			id: 'remove-canvas-css-class',
-			name: 'Remove a CSS Class from the Canvas',
+			name: t('commands.removeCanvas') as string,
 			checkCallback: (checking: boolean) => {
 				const canvasView = this.app.workspace.getActiveViewOfType(ItemView);
 				if ((canvasView?.getViewType() === "canvas")) {

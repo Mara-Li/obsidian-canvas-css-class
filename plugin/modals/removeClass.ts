@@ -1,6 +1,7 @@
 import {App, FuzzySuggestModal, Notice} from "obsidian";
 import {CanvasCssSettings} from "../interface";
 import CanvasCSS from "../main";
+import {t, StringFunction} from "../i18n";
 
 export class RemoveCSSclass extends FuzzySuggestModal<string> {
 	app: App
@@ -45,7 +46,7 @@ export class RemoveCSSclass extends FuzzySuggestModal<string> {
 				}
 			}
 			this.plugin.saveSettings();
-			new Notice(`Class ${item.toString()} removed from ${this.filepath}`);
+			new Notice((t("removeFromCanvas") as StringFunction)([item.toString(), this.filepath]));
 			CanvasCSS.removeFromDOM(item.toString());
 		}
 	}

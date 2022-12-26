@@ -1,4 +1,9 @@
 import {App, Modal, Setting} from "obsidian";
+import {t} from "../i18n";
+
+const add = (t('addButton') as string);
+const className = (t('className') as string);
+
 
 export class AddCssClass extends Modal {
 	result: string;
@@ -11,18 +16,18 @@ export class AddCssClass extends Modal {
 
 	onOpen() {
 		const {contentEl} = this;
-		contentEl.createEl("h1", {text: "Add CSS Class"});
+		contentEl.createEl("h1", {text:(t('addCssClass.title') as string)});
 		new Setting(contentEl)
-			.setName("Class Name")
-			.setDesc("The name of the class you want to add to the canvas")
+			.setName(className)
+			.setDesc(t('addCssClass.desc') as string)
 			.addText(text => text
-				.setPlaceholder("Class Name")
+				.setPlaceholder(className)
 				.onChange(async (value) => {
 					this.result = value;
 				}));
 		new Setting(contentEl)
 			.addButton(cb => cb
-				.setButtonText("Add")
+				.setButtonText(add)
 				.onClick(async () => {
 					this.onSubmit(this.result.replace(/\W+/g, '-').toLowerCase());
 					this.close();
@@ -47,26 +52,26 @@ export class AddNewClassWithFile extends Modal {
 
 	onOpen() {
 		const {contentEl} = this;
-		contentEl.createEl("h1", {text: "Add CSS Class"});
+		contentEl.createEl("h1", {text: t('addCssClass.title') as string});
 		new Setting(contentEl)
-			.setName("Filepath")
-			.setDesc("The filepath of the canvas you want to add a class to")
+			.setName(t('addFilePath.filePath') as string)
+			.setDesc(t('addFilePath.desc') as string)
 			.addText(text => text
-				.setPlaceholder("Filepath")
+				.setPlaceholder(t('addFilePath.filePath') as string)
 				.onChange(async (value) => {
 					this.path = value.replace(".canvas", "") + ".canvas";
 				}));
 		new Setting(contentEl)
-			.setName("Class Name")
-			.setDesc("The name of the class you want to add to the canvas")
+			.setName(className)
+			.setDesc(t('addCssClass.desc') as string)
 			.addText(text => text
-				.setPlaceholder("Class Name")
+				.setPlaceholder(className)
 				.onChange(async (value) => {
 					this.cssClass = value;
 				}));
 		new Setting(contentEl)
 			.addButton(cb => cb
-				.setButtonText("Add")
+				.setButtonText(add)
 				.onClick(async () => {
 					this.onSubmit(this.path.replace(".canvas", "") + ".canvas", this.cssClass.replace(/\W+/g, '-').toLowerCase());
 					this.close();
@@ -90,18 +95,18 @@ export class RenameCssClass extends Modal {
 
 	onOpen() {
 		const {contentEl} = this;
-		contentEl.createEl("h1", {text: "Rename CSS Class"});
+		contentEl.createEl("h1", {text: t('renameCssClass.title') as string});
 		new Setting(contentEl)
-			.setName("New Class Name")
-			.setDesc("The new name of the class you want to add to the canvas")
+			.setName(t('renameCssClass.title') as string)
+			.setDesc(t('renameCssClass.desc') as string)
 			.addText(text => text
-				.setPlaceholder("New name")
+				.setPlaceholder(t('renameCssClass.placeholder') as string)
 				.onChange(async (value) => {
 					this.result = value;
 				}));
 		new Setting(contentEl)
 			.addButton(cb => cb
-				.setButtonText("Add")
+				.setButtonText(add)
 				.onClick(async () => {
 					this.onSubmit(this.result.replace(/\W+/g, '-').toLowerCase());
 					this.close();
@@ -125,18 +130,18 @@ export class RenameCanvasPath extends Modal {
 
 	onOpen() {
 		const {contentEl} = this;
-		contentEl.createEl("h1", {text: "Edit Canvas Path"});
+		contentEl.createEl("h1", {text: (t('renameFilePath.title') as string)});
 		new Setting(contentEl)
-			.setName("New Path")
-			.setDesc("The new path of the canvas")
+			.setName(t('renameFilePath.placeholder') as string)
+			.setDesc(t('renameFilePath.desc') as string)
 			.addText(text => text
-				.setPlaceholder("New Path")
+				.setPlaceholder(t('renameFilePath.placeholder') as string)
 				.onChange(async (value) => {
 					this.result = value;
 				}));
 		new Setting(contentEl)
 			.addButton(cb => cb
-				.setButtonText("Add")
+				.setButtonText(add)
 				.onClick(async () => {
 					this.onSubmit(this.result.replace(".canvas", "") + ".canvas");
 					this.close();

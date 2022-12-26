@@ -1,6 +1,7 @@
 import {App, Notice, PluginSettingTab, Setting} from "obsidian";
 import CanvasCSS from "./main";
 import {AddCssClass, AddNewClassWithFile, RenameCanvasPath, RenameCssClass} from "./modals/addClass";
+import {t} from "./i18n";
 
 export class CanvasCssSettingsTabs extends PluginSettingTab {
 	plugin: CanvasCSS;
@@ -15,17 +16,17 @@ export class CanvasCssSettingsTabs extends PluginSettingTab {
 
 		containerEl.empty();
 
-		containerEl.createEl("h1", {text: "Canvas CSS Class Settings"});
+		containerEl.createEl("h1", {text: t('settings.title') as string});
 		
 		if (this.plugin.settings.canvasAdded.length=== 0) {
-			containerEl.createEl("p", {text: "No classes added yet."});
-			containerEl.createEl("p", {text: "Use the command modal to add a class."});
+			containerEl.createEl("p", {text: t('settings.noClassAdded') as string});
+			containerEl.createEl("p", {text: t('settings.useCommandsInfo') as string});
 		}
 		
 		new Setting(containerEl)
-			.setDesc("Use the command modal to add a class to a new file.")
+			.setDesc(t('settings.newCanvas.addingInfo') as string)
 			.addButton(cb => cb
-				.setButtonText("Add new Canvas")
+				.setButtonText(t('settings.newCanvas.addNewCanvas') as string)
 				.onClick(async () => {
 					new AddNewClassWithFile(this.app, async (path:string, cssClass: string) => {
 						if (this.plugin.settings.canvasAdded.find(c => c.canvasPath === path)) {
@@ -33,7 +34,7 @@ export class CanvasCssSettingsTabs extends PluginSettingTab {
 							if (!this.plugin.settings.canvasAdded.find(c => c.canvasPath === path)?.canvasClass?.includes(cssClass)) {
 								this.plugin.settings.canvasAdded.find(c => c.canvasPath === path)?.canvasClass?.push(cssClass);
 							} else {
-								new Notice("This class is already applied to this canvas.");
+								new Notice(t('settings.alreadyApplied') as string);
 							}
 						} else {
 							this.plugin.settings.canvasAdded.push({canvasPath: path, canvasClass: [cssClass]});
@@ -51,7 +52,7 @@ export class CanvasCssSettingsTabs extends PluginSettingTab {
 				.addExtraButton(cb =>
 					cb
 						.setIcon("plus")
-						.setTooltip("Add a class to this canvas")
+						.setTooltip(t('settings.newClass.addingInfo') as string)
 						.onClick(async () => {
 							new AddCssClass(this.app, async (cssClass: string) =>
 							{
@@ -61,14 +62,14 @@ export class CanvasCssSettingsTabs extends PluginSettingTab {
 									this.display();
 									this.plugin.addToDOM(cssClass, canvas.canvasPath);
 								} else {
-									new Notice("This class already exists for this canvas.");
+									new Notice(t('settings.alreadyApplied') as string);
 								}
 							}).open();
 						}))
 				.addExtraButton(cb =>
 					cb
 						.setIcon("edit")
-						.setTooltip("Edit the filepath")
+						.setTooltip(t('settings.edit.filepath') as string)
 						.onClick(async () => {
 							new RenameCanvasPath(this.app, async (newPath: string) => {
 								canvas.canvasPath = newPath.replace(".canvas", "") + ".canvas";
@@ -80,7 +81,7 @@ export class CanvasCssSettingsTabs extends PluginSettingTab {
 			.addExtraButton(cb =>
 					cb
 						.setIcon("trash")
-						.setTooltip("Remove all classes from this canvas")
+						.setTooltip(t('settings.remove.desc') as string)
 						.onClick(async () => {
 							this.plugin.settings.canvasAdded = this.plugin.settings.canvasAdded.filter((item) => item.canvasPath !== canvas.canvasPath);
 							await this.plugin.saveSettings();
@@ -94,7 +95,7 @@ export class CanvasCssSettingsTabs extends PluginSettingTab {
 					.setClass("canvas-css-class-opt")
 					.addExtraButton(cb =>
 						cb.setIcon("cross")
-							.setTooltip("Remove")
+							.setTooltip(t('settings.remove.title') as string)
 							.onClick(async () => {
 								//remove class from the array
 								const index = canvas.canvasClass.indexOf(cssClass);
@@ -115,7 +116,7 @@ export class CanvasCssSettingsTabs extends PluginSettingTab {
 					)
 					.addExtraButton(cb =>
 						cb.setIcon("edit")
-							.setTooltip("Rename class")
+							.setTooltip(t('settings.edit.class') as string)
 							.onClick(async () => {
 								new RenameCssClass(this.app, async (newClass: string) =>
 								{
