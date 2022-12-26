@@ -51,12 +51,30 @@ You can help me to develop the plugin using npm !
 - First clone the project on your computer with git clone `git@github.com:Lisandra-dev/canvas-css-class.git`
 - cd `canvas-css-class`
 - `npm install`
-
+- `npm run dev` to start the developping "in live" with your Obsidian (you need to have the plugin installed in your `.obsidian/plugins`) to see the changes in live. As it can break your Obsidian Sync, I recommend you to use a test vault.)
+- `npm run build` to build the plugin. 
 
 Some notes:
 
 - I use Conventional Commit to generate the commit message, so please respect the format!
 - Don't forget to documents your function!
+
+## 🗺️ Translation 
+
+I use i18n to adding translation to the plugin. If you want to help me to translate the plugin, you can do it with :
+- [Fork the project](https://github.com/Lisandra-dev/obsidian-canvas-css-class/fork)
+- Clone the new fork on your computer or open it with Github Dev (replace the `.com` with `.dev` in the URL)
+- Create a new branch, called `translation`
+- Clone the file `en.ts` in the folder `plugin/i18n/locales/` and rename it with the language code (for example `fr.ts` for french)
+- Translate the file
+- In [the index](plugin/i18n/index.ts):
+    1. Add the import using `import <language> from "./locales/<language>";`
+    2. Before editing the localeMap, you need to know the exact name used by Obsidian for your language. You can find it using `<% tp.obsidian.moment.locale() %>` if you have templater, or opening the developer console (using CTRL+MAJ+I) and typing `moment.locale()`.
+  3. Edit the `LocaleMap` with the language code and the name of the language. You need to have `obsidian-code-language : language` (for example `fr : french`, or for chinese `"zh-cn":cn`).
+
+- Commit your changes and push it to your fork
+- Create a new pull request to the main project
+
 
 ---
 
