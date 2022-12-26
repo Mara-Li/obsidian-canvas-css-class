@@ -71,7 +71,7 @@ export class CanvasCssSettingsTabs extends PluginSettingTab {
 						.setIcon("edit")
 						.setTooltip(t('settings.edit.filepath') as string)
 						.onClick(async () => {
-							new RenameCanvasPath(this.app, async (newPath: string) => {
+							new RenameCanvasPath(this.app, canvas.canvasPath.replace('.canvas', ''), async (newPath: string) => {
 								canvas.canvasPath = newPath.replace(".canvas", "") + ".canvas";
 								await this.plugin.saveSettings();
 								this.display();
@@ -94,6 +94,23 @@ export class CanvasCssSettingsTabs extends PluginSettingTab {
 					.setName(cssClass)
 					.setClass("canvas-css-class-opt")
 					.addExtraButton(cb =>
+						cb.setIcon("edit")
+							.setTooltip(t('settings.edit.class') as string)
+							.onClick(async () => {
+								new RenameCssClass(this.app, cssClass, async (newClass: string) =>
+								{
+									const index = canvas.canvasClass.indexOf(cssClass);
+									if (index > -1) {
+										canvas.canvasClass[index] = newClass;
+									}
+									await this.plugin.saveSettings();
+									this.display();
+									this.plugin.removeFromDOM(cssClass);
+									this.plugin.addToDOM(newClass, canvas.canvasPath);
+								}).open();
+							})
+					)
+				.addExtraButton(cb =>
 						cb.setIcon("cross")
 							.setTooltip(t('settings.remove.title') as string)
 							.onClick(async () => {
@@ -112,23 +129,6 @@ export class CanvasCssSettingsTabs extends PluginSettingTab {
 								await this.plugin.saveSettings();
 								this.display();
 								this.plugin.removeFromDOM(cssClass);
-							})
-					)
-					.addExtraButton(cb =>
-						cb.setIcon("edit")
-							.setTooltip(t('settings.edit.class') as string)
-							.onClick(async () => {
-								new RenameCssClass(this.app, async (newClass: string) =>
-								{
-									const index = canvas.canvasClass.indexOf(cssClass);
-									if (index > -1) {
-										canvas.canvasClass[index] = newClass;
-									}
-									await this.plugin.saveSettings();
-									this.display();
-									this.plugin.removeFromDOM(cssClass);
-									this.plugin.addToDOM(newClass, canvas.canvasPath);
-								}).open();
 							})
 					);
 			}

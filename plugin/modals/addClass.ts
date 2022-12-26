@@ -86,10 +86,12 @@ export class AddNewClassWithFile extends Modal {
 
 export class RenameCssClass extends Modal {
 	result: string;
+	oldName: string;
 	onSubmit:(result: string)=>void;
 	
-  constructor(app: App, onSubmit: (result: string) => void) {
+  constructor(app: App, oldName:string, onSubmit: (result: string) => void) {
     super(app);
+		this.oldName = oldName;
     this.onSubmit = onSubmit;
   }
 
@@ -99,11 +101,13 @@ export class RenameCssClass extends Modal {
 		new Setting(contentEl)
 			.setName(t('renameCssClass.title') as string)
 			.setDesc(t('renameCssClass.desc') as string)
-			.addText(text => text
-				.setPlaceholder(t('renameCssClass.placeholder') as string)
-				.onChange(async (value) => {
-					this.result = value;
-				}));
+			.addText(text =>
+				text
+					.setPlaceholder(t('renameCssClass.placeholder') as string)
+					.setValue(this.oldName)
+					.onChange(async (value) => {
+						this.result = value;
+					}));
 		new Setting(contentEl)
 			.addButton(cb => cb
 				.setButtonText(add)
@@ -121,10 +125,12 @@ export class RenameCssClass extends Modal {
 
 export class RenameCanvasPath extends Modal {
 	result: string;
+	oldPath: string;
 	onSubmit:(result: string)=>void;
 	
-  constructor(app: App, onSubmit: (result: string) => void) {
+  constructor(app: App, oldPath:string, onSubmit: (result: string) => void) {
     super(app);
+		this.oldPath = oldPath;
     this.onSubmit = onSubmit;
   }
 
@@ -134,8 +140,10 @@ export class RenameCanvasPath extends Modal {
 		new Setting(contentEl)
 			.setName(t('renameFilePath.placeholder') as string)
 			.setDesc(t('renameFilePath.desc') as string)
-			.addText(text => text
+			.addText(text =>
+				text
 				.setPlaceholder(t('renameFilePath.placeholder') as string)
+				.setValue(this.oldPath)
 				.onChange(async (value) => {
 					this.result = value;
 				}));

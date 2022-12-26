@@ -36,18 +36,16 @@ export default class CanvasCSS extends Plugin {
 	async onload() {
 		await this.loadSettings();
 		
-		// This adds a complex command that can check whether the current state of the app allows execution of the command
+		
 		this.addCommand({
 			id: 'add-canvas-css-class',
 			name: t('commands.addCanvas') as string,
 			checkCallback: (checking: boolean) => {
-				// Conditions to check
 				const canvasView = this.app.workspace.getActiveViewOfType(ItemView);
 				if ((canvasView?.getViewType() === "canvas")) {
 					if (!checking) {
 						//@ts-ignore
 						const canvasPath = canvasView.file.path;
-
 						new AddCssClass(this.app, (result) => {
 							const oldClasses = this.settings.canvasAdded.find((item) => item.canvasPath === canvasPath)
 							if (oldClasses) {
@@ -70,9 +68,8 @@ export default class CanvasCSS extends Plugin {
 							this.saveSettings();
 							this.addToDOM(result, canvasPath);
 						}).open();
-					}
-					return true;
-				}
+					} return true;
+				} return false;
 			}
 		});
 		
