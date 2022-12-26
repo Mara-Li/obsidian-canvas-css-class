@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [1.1.1](https://github.com/Lisandra-dev/canvas-css-class/compare/1.0.1...1.1.1) (2022-12-26)
+
+
+### Features
+
+* **i18n:** integrate translation ([d57bf7c](https://github.com/Lisandra-dev/canvas-css-class/commit/d57bf7c8a252343cf783b8d0156d3ae4fecc7c87))
+
 ## [1.1.0](https://github.com/Lisandra-dev/canvas-css-class/compare/1.0.1...1.1.0) (2022-12-26)
 
 
