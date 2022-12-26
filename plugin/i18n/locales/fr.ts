@@ -31,20 +31,20 @@ export default {
 			addNewCanvas: "Ajouter un nouveau Canvas",
 		},
 		newClass:{
-			addingInfo: "Ajouter une classe à ce Canvas",
+			addingInfo: "Ajouter une classe",
 		},
 		edit: {
 			filepath: "Modifier le chemin",
 			class: 'Renommer la classe',
 		},
 		remove: {
-			desc: 'Supprimer toutes les classes de ce Canvas',
+			desc: 'Supprimer toutes les classes',
 			title: 'Supprimer'
 		}
 	},
 	commands: {
-		addCanvas: 'Ajouter une classe CSS à ce Canvas',
-		removeCanvas: 'Supprimer une classe CSS de ce Canvas',
+		addCanvas: 'Ajouter une classe CSS au Canvas actif',
+		removeCanvas: 'Supprimer une classe CSS du Canvas actif',
 	},
 	
 }

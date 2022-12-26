@@ -43,8 +43,8 @@ export default {
 		}
 	},
 	commands: {
-		addCanvas: 'Add a CSS Class to this Canvas',
-		removeCanvas: 'Remove a CSS Class from this Canvas',
+		addCanvas: 'Add a CSS Class to the active canvas',
+		removeCanvas: 'Remove a CSS Class from the active canvas',
 	},
 	
 }
