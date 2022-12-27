@@ -40,7 +40,7 @@ In the settings, you can also :
 
 # Installation
 
-- Install the plugin using the community plugin manager (not yet available)
+- Install the plugin using the community plugin manager
 - Using [BRAT](https://github.com/TfTHacker/obsidian42-brat) using this link : `https://github.com/Lisandra-dev/obsidian-canvas-css-class`
 
 ---
