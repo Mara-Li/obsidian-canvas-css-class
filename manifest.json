@@ -1,7 +1,7 @@
 {
 	"id": "canvas-css-class",
 	"name": "Canvas CSS class",
-	"version": "1.1.1",
+	"version": "1.2.0",
 	"minAppVersion": "1.1.0",
 	"description": "Add a CSS class to the canvas, but also other attributes.",
 	"author": "Lisandra-dev",
