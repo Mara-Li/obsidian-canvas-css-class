@@ -79,16 +79,16 @@ export default class CanvasCSS extends Plugin {
 			checkCallback: (checking: boolean) => {
 				const canvasView = this.app.workspace.getActiveViewOfType(ItemView);
 				if ((canvasView?.getViewType() === "canvas")) {
-					if (!checking) {
-						//@ts-ignore
+					//@ts-ignore
 						const canvasPath = canvasView.file.path;
 						const oldClasses = this.settings.canvasAdded.find((item) => item.canvasPath === canvasPath)
 						if (oldClasses) {
-							new RemoveCSSclass(this.app, this, this.settings, canvasPath).open();
-						}
-					}
-					return true;
-				}
+						if (!checking) {
+							//@ts-ignore
+								new RemoveCSSclass(this.app, this, this.settings, canvasPath).open();
+							}	return true;
+					} return false;
+				} return false;
 			}
 		})
 		
