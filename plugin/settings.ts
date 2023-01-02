@@ -2,6 +2,7 @@ import {App, Notice, PluginSettingTab, Setting} from "obsidian";
 import CanvasCSS from "./main";
 import {AddCssClass, AddNewClassWithFile, RenameCanvasPath, RenameCssClass} from "./modals/addClass";
 import {t} from "./i18n";
+import {removeFromDOM} from "./utils";
 
 export class CanvasCssSettingsTabs extends PluginSettingTab {
 	plugin: CanvasCSS;
@@ -105,7 +106,7 @@ export class CanvasCssSettingsTabs extends PluginSettingTab {
 									}
 									await this.plugin.saveSettings();
 									this.display();
-									this.plugin.removeFromDOM(cssClass);
+									removeFromDOM(cssClass, logLevel);
 									this.plugin.addToDOM(newClass, canvas.canvasPath);
 								}).open();
 							})
@@ -128,7 +129,7 @@ export class CanvasCssSettingsTabs extends PluginSettingTab {
 								}
 								await this.plugin.saveSettings();
 								this.display();
-								this.plugin.removeFromDOM(cssClass);
+								removeFromDOM(cssClass, logLevel);
 							})
 					);
 			}

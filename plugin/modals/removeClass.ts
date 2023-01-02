@@ -2,6 +2,7 @@ import {App, FuzzySuggestModal, Notice} from "obsidian";
 import {CanvasCssSettings} from "../interface";
 import CanvasCSS from "../main";
 import {t, StringFunction} from "../i18n";
+import {removeFromDOM} from "../utils";
 
 export class RemoveCSSclass extends FuzzySuggestModal<string> {
 	app: App
@@ -30,6 +31,8 @@ export class RemoveCSSclass extends FuzzySuggestModal<string> {
 		return item;
 	}
 	
+
+	
 	onChooseItem(item: { toString: () => string; }, evt: MouseEvent | KeyboardEvent): void {
 		//remove item from the array
 		const findedCanvas = this.settings.canvasAdded.find((canvas) => canvas.canvasPath === this.filepath);
@@ -47,7 +50,7 @@ export class RemoveCSSclass extends FuzzySuggestModal<string> {
 			}
 			this.plugin.saveSettings();
 			new Notice((t("removeFromCanvas") as StringFunction)([item.toString(), this.filepath]));
-			CanvasCSS.removeFromDOM(item.toString());
+			removeFromDOM(item.toString(), this.settings.logLevel);
 		}
 	}
 }

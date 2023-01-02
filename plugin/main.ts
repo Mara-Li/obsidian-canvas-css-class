@@ -3,7 +3,8 @@ import {DEFAULT_SETTINGS, CanvasCssSettings} from "./interface";
 import {CanvasCssSettingsTabs} from "./settings";
 import {AddCssClass} from "./modals/addClass";
 import {RemoveCSSclass} from "./modals/removeClass";
-import {t} from "./i18n";
+import {t, translationLanguage} from "./i18n";
+import {logging, removeFromDOM} from "./utils";
 
 export default class CanvasCSS extends Plugin {
 	settings: CanvasCssSettings;
@@ -37,7 +38,7 @@ export default class CanvasCSS extends Plugin {
 	
 	async onload() {
 		await this.loadSettings();
-		
+		console.log(`Loading ${this.manifest.name.replaceAll(' ', '')} v${this.manifest.version} (language: ${translationLanguage})`);
 		
 		this.addCommand({
 			id: 'add-canvas-css-class',
@@ -110,7 +111,6 @@ export default class CanvasCSS extends Plugin {
 				}
 				
 				const canvasClassList = this.settings.canvasAdded.find((canvas) => canvas.canvasPath === file.path);
-				
 				if (canvasClassList) {
 					for (const canvas of canvasClassList.canvasClass) {
 							this.addToDOM(canvas, file.path);
@@ -124,7 +124,7 @@ export default class CanvasCSS extends Plugin {
 	}
 
 	onunload() {
-
+		console.log(`Unloading ${this.manifest.name.replaceAll(' ', '')} v${this.manifest.version} (language: ${translationLanguage})`);
 	}
 
 	async loadSettings() {
