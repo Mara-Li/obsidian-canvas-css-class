@@ -13,7 +13,7 @@ export default {
 		placeholder: "Nouveau nom",
 	},
 	renameFilePath: {
-		title: 'Modifier le chemin du Canvas',
+		title: "Modifier le chemin du Canvas",
 		placeholder: "Nouveau chemin",
 		desc: "Le nouveau chemin du Canvas que vous souhaitez modifier",
 	},
@@ -21,21 +21,21 @@ export default {
 	addButton: "Ajouter",
 	removeFromCanvas:(key: string[]): string  => `Suppression de ${key[0]} dans ${key[1]}`,
 	settings: {
-		title: 'Paramètre de Canvas CSS Class',
-		noClassAdded: 'Aucune classe ajoutée.',
+		title: "Paramètre de Canvas CSS Class",
+		noClassAdded: "Aucune classe ajoutée.",
 		useCommandsInfo: "Utilisez la fenêtre de commande pour ajouter un Canvas et une classe.",
 		alreadyApplied: "Cette classe est déjà appliquée à ce Canvas.",
 		console: {
 			title: "Niveau de log",
 			desc: "Permet de mieux suivre les ajouts/suppressions effectués par le plugin. Notice affichera une notification Obsidian.",
 			options: {
-					none: "Aucun",
-					error: "Erreur",
-					log: "Log",
-					warn: "Avertissement",
-					notice: "Notice",
-				},
+				none: "Aucun",
+				error: "Erreur",
+				log: "Log",
+				warn: "Avertissement",
+				notice: "Notice",
 			},
+		},
 		newCanvas: {
 			addingInfo: "Utilisez la fenêtre de commande pour ajouter une classe à un nouveau fichier.",
 			addNewCanvas: "Ajouter un nouveau Canvas",
@@ -45,16 +45,16 @@ export default {
 		},
 		edit: {
 			filepath: "Modifier le chemin",
-			class: 'Renommer la classe',
+			class: "Renommer la classe",
 		},
 		remove: {
-			desc: 'Supprimer toutes les classes',
-			title: 'Supprimer'
+			desc: "Supprimer toutes les classes",
+			title: "Supprimer"
 		}
 	},
 	commands: {
-		addCanvas: 'Ajouter une classe CSS au Canvas actif',
-		removeCanvas: 'Supprimer une classe CSS du Canvas actif',
+		addCanvas: "Ajouter une classe CSS au Canvas actif",
+		removeCanvas: "Supprimer une classe CSS du Canvas actif",
 	},
 	
-}
+};

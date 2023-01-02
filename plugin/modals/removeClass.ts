@@ -5,7 +5,7 @@ import {t, StringFunction} from "../i18n";
 import {removeFromDOM} from "../utils";
 
 export class RemoveCSSclass extends FuzzySuggestModal<string> {
-	app: App
+	app: App;
 	plugin: CanvasCSS;
 	settings: CanvasCssSettings;
 	filepath: string;
@@ -31,8 +31,7 @@ export class RemoveCSSclass extends FuzzySuggestModal<string> {
 		return item;
 	}
 	
-
-	
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	onChooseItem(item: { toString: () => string; }, evt: MouseEvent | KeyboardEvent): void {
 		//remove item from the array
 		const findedCanvas = this.settings.canvasAdded.find((canvas) => canvas.canvasPath === this.filepath);

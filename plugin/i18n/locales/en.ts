@@ -13,7 +13,7 @@ export default {
 		placeholder: "New name",
 	},
 	renameFilePath: {
-		title: 'Edit canvas filepath',
+		title: "Edit canvas filepath",
 		placeholder: "New Filepath",
 		desc: "The new filepath of the canvas you want to rename",
 	},
@@ -21,21 +21,21 @@ export default {
 	addButton: "Add",
 	removeFromCanvas:(key: string[]): string  => `Removed ${key[0]} from ${key[1]}`,
 	settings: {
-		title: 'Canvas CSS Class Settings',
-		noClassAdded: 'No class added yet.',
+		title: "Canvas CSS Class Settings",
+		noClassAdded: "No class added yet.",
 		useCommandsInfo: "Use the commands modal to add a canvas and a class.",
 		alreadyApplied: "This class is already applied to this canvas.",
 		console: {
 			title: "Log Level",
 			desc: "Allows to better follow the additions/removals made by the plugin. Notice will display an Obsidian notification.",
 			options: {
-					none: "None",
-					error: "Error",
-					log: "Log",
-					warn: "Warn",
-					notice: "Notice",
-				},
+				none: "None",
+				error: "Error",
+				log: "Log",
+				warn: "Warn",
+				notice: "Notice",
 			},
+		},
 		newCanvas: {
 			addingInfo: "Use the commands modal to add a class to a new file.",
 			addNewCanvas: "Add new Canvas",
@@ -45,16 +45,16 @@ export default {
 		},
 		edit: {
 			filepath: "Edit filepath",
-			class: 'Rename class',
+			class: "Rename class",
 		},
 		remove: {
-			desc: 'Remove all classes from this canvas',
-			title: 'Remove'
+			desc: "Remove all classes from this canvas",
+			title: "Remove"
 		}
 	},
 	commands: {
-		addCanvas: 'Add a CSS Class to the active canvas',
-		removeCanvas: 'Remove a CSS Class from the active canvas',
+		addCanvas: "Add a CSS Class to the active canvas",
+		removeCanvas: "Remove a CSS Class from the active canvas",
 	},
 	
-}
+};

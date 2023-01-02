@@ -5,8 +5,8 @@ export interface CanvasCssSettings {
 
 export const DEFAULT_SETTINGS: CanvasCssSettings = {
 	canvasAdded: [],
-	logLevel: 'none'
-}
+	logLevel: "none"
+};
 
 export interface CanvasClass {
 	canvasPath: string;

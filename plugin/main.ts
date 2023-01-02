@@ -1,4 +1,4 @@
-import {ItemView, Notice, Plugin} from 'obsidian';
+import {ItemView, Notice, Plugin} from "obsidian";
 import {DEFAULT_SETTINGS, CanvasCssSettings} from "./interface";
 import {CanvasCssSettingsTabs} from "./settings";
 import {AddCssClass} from "./modals/addClass";
@@ -17,12 +17,12 @@ export default class CanvasCSS extends Plugin {
 	addToDOM(cssClass: string, filePath: string) {
 		if (!document) return;
 		// @ts-ignore
-		if (document.querySelector('.workspace-leaf.mod-active .view-content').getAttribute("data-canvas-path") === filePath) {
+		if (document.querySelector(".workspace-leaf.mod-active .view-content").getAttribute("data-canvas-path") === filePath) {
 			this.logMessage(`Adding ${cssClass} to the dom`);
 			// @ts-ignore
-			this.logMessage(`Class of ${document.querySelector('.workspace-leaf.mod-active .view-content').getAttribute('data-canvas-path')} : ${document.querySelector('.workspace-leaf.mod-active .view-content').classList}`);
+			this.logMessage(`Class of ${document.querySelector(".workspace-leaf.mod-active .view-content").getAttribute("data-canvas-path")} : ${document.querySelector(".workspace-leaf.mod-active .view-content").classList}`);
 			// @ts-ignore
-			document.querySelector('.workspace-leaf.mod-active .view-content').classList.add(cssClass);
+			document.querySelector(".workspace-leaf.mod-active .view-content").classList.add(cssClass);
 		}
 	}
 	
@@ -38,11 +38,11 @@ export default class CanvasCSS extends Plugin {
 	
 	async onload() {
 		await this.loadSettings();
-		console.log(`Loading ${this.manifest.name.replaceAll(' ', '')} v${this.manifest.version} (language: ${translationLanguage})`);
+		console.log(`Loading ${this.manifest.name.replaceAll(" ", "")} v${this.manifest.version} (language: ${translationLanguage})`);
 		
 		this.addCommand({
-			id: 'add-canvas-css-class',
-			name: t('commands.addCanvas') as string,
+			id: "add-canvas-css-class",
+			name: t("commands.addCanvas") as string,
 			checkCallback: (checking: boolean) => {
 				const canvasView = this.app.workspace.getActiveViewOfType(ItemView);
 				if ((canvasView?.getViewType() === "canvas")) {
@@ -50,10 +50,10 @@ export default class CanvasCSS extends Plugin {
 						//@ts-ignore
 						const canvasPath = canvasView.file.path;
 						new AddCssClass(this.app, (result) => {
-							const oldClasses = this.settings.canvasAdded.find((item) => item.canvasPath === canvasPath)
+							const oldClasses = this.settings.canvasAdded.find((item) => item.canvasPath === canvasPath);
 							if (oldClasses) {
 								if (oldClasses.canvasClass.includes(result)) {
-									new Notice(t('settings.alreadyApplied') as string);
+									new Notice(t("settings.alreadyApplied") as string);
 								} else {
 									oldClasses.canvasClass.push(result);
 									// replace the old canvas class with the new one
@@ -63,7 +63,7 @@ export default class CanvasCSS extends Plugin {
 										} else {
 											return item;
 										}
-									})
+									});
 								}
 							} else {
 								this.settings.canvasAdded.push({canvasPath: canvasPath, canvasClass: [result]});
@@ -77,32 +77,32 @@ export default class CanvasCSS extends Plugin {
 		});
 		
 		this.addCommand({
-			id: 'remove-canvas-css-class',
-			name: t('commands.removeCanvas') as string,
+			id: "remove-canvas-css-class",
+			name: t("commands.removeCanvas") as string,
 			checkCallback: (checking: boolean) => {
 				const canvasView = this.app.workspace.getActiveViewOfType(ItemView);
 				if ((canvasView?.getViewType() === "canvas")) {
 					//@ts-ignore
-						const canvasPath = canvasView.file.path;
-						const oldClasses = this.settings.canvasAdded.find((item) => item.canvasPath === canvasPath)
-						if (oldClasses) {
+					const canvasPath = canvasView.file.path;
+					const oldClasses = this.settings.canvasAdded.find((item) => item.canvasPath === canvasPath);
+					if (oldClasses) {
 						if (!checking) {
 							//@ts-ignore
-								new RemoveCSSclass(this.app, this, this.settings, canvasPath).open();
-							}	return true;
+							new RemoveCSSclass(this.app, this, this.settings, canvasPath).open();
+						}	return true;
 					} return false;
 				} return false;
 			}
-		})
+		});
 		
 		this.registerEvent(this.app.workspace.on("file-open", (file) => {
 			// @ts-ignore
-			const dataType = document.querySelector('.workspace-leaf.mod-active > .workspace-leaf-content') ? document.querySelector('.workspace-leaf.mod-active > .workspace-leaf-content').attributes[1].value : "";
+			const dataType = document.querySelector(".workspace-leaf.mod-active > .workspace-leaf-content") ? document.querySelector(".workspace-leaf.mod-active > .workspace-leaf-content").attributes[1].value : "";
 			if (file && file.extension === "canvas" && dataType === "canvas") {
 				// @ts-ignore
-				document.querySelector('.workspace-leaf.mod-active .view-content').setAttribute("data-canvas-path", file.path);
+				document.querySelector(".workspace-leaf.mod-active .view-content").setAttribute("data-canvas-path", file.path);
 				// @ts-ignore
-				document.querySelector('.workspace-leaf.mod-active .view-content').classList.add("canvas-file");
+				document.querySelector(".workspace-leaf.mod-active .view-content").classList.add("canvas-file");
 				const canvasClassesNotFromThisFile = this.settings.canvasAdded.filter((item) => item.canvasPath !== file.path);
 				for (const canvas of canvasClassesNotFromThisFile) {
 					for (const cssClass of canvas.canvasClass) {
@@ -113,10 +113,10 @@ export default class CanvasCSS extends Plugin {
 				const canvasClassList = this.settings.canvasAdded.find((canvas) => canvas.canvasPath === file.path);
 				if (canvasClassList) {
 					for (const canvas of canvasClassList.canvasClass) {
-							this.addToDOM(canvas, file.path);
-						}
+						this.addToDOM(canvas, file.path);
 					}
 				}
+			}
 		}));
 
 		this.addSettingTab(new CanvasCssSettingsTabs(this.app, this));
@@ -124,7 +124,7 @@ export default class CanvasCSS extends Plugin {
 	}
 
 	onunload() {
-		console.log(`Unloading ${this.manifest.name.replaceAll(' ', '')} v${this.manifest.version} (language: ${translationLanguage})`);
+		console.log(`Unloading ${this.manifest.name.replaceAll(" ", "")} v${this.manifest.version} (language: ${translationLanguage})`);
 	}
 
 	async loadSettings() {

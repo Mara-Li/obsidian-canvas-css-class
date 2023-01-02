@@ -7,20 +7,20 @@ import {Notice} from "obsidian";
 
 export function logging(message: string, logLevel: string): void {
 	switch (logLevel) {
-		case 'warn':
-			console.warn(message);
-			break;
-		case 'error':
-			console.error(message);
-			break;
-		case 'log':
-			console.log(message);
-			break;
-		case 'notice':
-			new Notice(message);
-			break;
-		default:
-			break;
+	case "warn":
+		console.warn(message);
+		break;
+	case "error":
+		console.error(message);
+		break;
+	case "log":
+		console.log(message);
+		break;
+	case "notice":
+		new Notice(message);
+		break;
+	default:
+		break;
 	}
 }
 
@@ -30,11 +30,11 @@ export function logging(message: string, logLevel: string): void {
  * @param {string} logLevel the log level of the message
  */
 export function removeFromDOM(cssClass: string, logLevel: string): void {
-		// @ts-ignore
-			logging(`Class of ${document.querySelector('.workspace-leaf.mod-active .view-content').getAttribute('data-canvas-path')} : ${document.querySelector('.workspace-leaf.mod-active .view-content').classList}`, logLevel);
-			// @ts-ignore
-		document.querySelector('.workspace-leaf.mod-active .view-content').classList.remove(cssClass);
-		logging(`Removed ${cssClass} from the dom`, logLevel);
-		// @ts-ignore
+	// @ts-ignore
+	logging(`Class of ${document.querySelector(".workspace-leaf.mod-active .view-content").getAttribute("data-canvas-path")} : ${document.querySelector(".workspace-leaf.mod-active .view-content").classList}`, logLevel);
+	// @ts-ignore
+	document.querySelector(".workspace-leaf.mod-active .view-content").classList.remove(cssClass);
+	logging(`Removed ${cssClass} from the dom`, logLevel);
+	// @ts-ignore
 }
 
