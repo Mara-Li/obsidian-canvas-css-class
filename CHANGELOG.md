@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.0.0](https://github.com/Lisandra-dev/canvas-css-class/compare/1.0.1...2.0.0) (2023-01-02)
+
+
+### ⚠ BREAKING CHANGES
+
+* Changing body to workspace-leaf view-content : some CSS maybe need to be edited to remove the body.
+
+### Features
+
+* **docs:** adding loglevel to follow edit from the plugin ([551e5ee](https://github.com/Lisandra-dev/canvas-css-class/commit/551e5eeea4c80bc8e89be5c8754dd9b7a7ecc82f))
+* **i18n:** integrate translation ([d57bf7c](https://github.com/Lisandra-dev/canvas-css-class/commit/d57bf7c8a252343cf783b8d0156d3ae4fecc7c87))
+
+
+### Bug Fixes
+
+* Change the method to append the class to the file ([6443f02](https://github.com/Lisandra-dev/canvas-css-class/commit/6443f0222af5339bc87ce4994e2b4ae56f48ca8a))
+* improve canvas remove CSS ([d3af073](https://github.com/Lisandra-dev/canvas-css-class/commit/d3af0731ebc20ab38f80030ee279c384e3ad5a40))
+
 ## [1.2.0](https://github.com/Lisandra-dev/canvas-css-class/compare/1.0.1...1.2.0) (2022-12-27)
 
 
