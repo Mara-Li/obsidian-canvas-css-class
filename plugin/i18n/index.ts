@@ -8,6 +8,7 @@ const localeMap : {[key: string]: Partial<typeof en>}= {
 };
 
 const locale = localeMap[moment.locale()] || localeMap.en;
+export const translationLanguage = locale ? moment.locale() : 'en';
 
 export interface StringFunction {
 	(params: string|string[]): string;

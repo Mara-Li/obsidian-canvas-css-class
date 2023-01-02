@@ -25,7 +25,17 @@ export default {
 		noClassAdded: 'No class added yet.',
 		useCommandsInfo: "Use the commands modal to add a canvas and a class.",
 		alreadyApplied: "This class is already applied to this canvas.",
-
+		console: {
+			title: "Log Level",
+			desc: "Allows to better follow the additions/removals made by the plugin. Notice will display an Obsidian notification.",
+			options: {
+					none: "None",
+					error: "Error",
+					log: "Log",
+					warn: "Warn",
+					notice: "Notice",
+				},
+			},
 		newCanvas: {
 			addingInfo: "Use the commands modal to add a class to a new file.",
 			addNewCanvas: "Add new Canvas",

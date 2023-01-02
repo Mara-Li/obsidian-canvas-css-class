@@ -7,9 +7,6 @@ import {Notice} from "obsidian";
 
 export function logging(message: string, logLevel: string): void {
 	switch (logLevel) {
-		case 'info':
-			console.info(message);
-			break;
 		case 'warn':
 			console.warn(message);
 			break;

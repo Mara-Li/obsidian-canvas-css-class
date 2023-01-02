@@ -1,9 +1,11 @@
 export interface CanvasCssSettings {
 	canvasAdded: CanvasClass[];
+	logLevel: string;
 }
 
 export const DEFAULT_SETTINGS: CanvasCssSettings = {
-	canvasAdded: []
+	canvasAdded: [],
+	logLevel: 'none'
 }
 
 export interface CanvasClass {

@@ -25,7 +25,17 @@ export default {
 		noClassAdded: 'Aucune classe ajoutée.',
 		useCommandsInfo: "Utilisez la fenêtre de commande pour ajouter un Canvas et une classe.",
 		alreadyApplied: "Cette classe est déjà appliquée à ce Canvas.",
-
+		console: {
+			title: "Niveau de log",
+			desc: "Permet de mieux suivre les ajouts/suppressions effectués par le plugin. Notice affichera une notification Obsidian.",
+			options: {
+					none: "Aucun",
+					error: "Erreur",
+					log: "Log",
+					warn: "Avertissement",
+					notice: "Notice",
+				},
+			},
 		newCanvas: {
 			addingInfo: "Utilisez la fenêtre de commande pour ajouter une classe à un nouveau fichier.",
 			addNewCanvas: "Ajouter un nouveau Canvas",

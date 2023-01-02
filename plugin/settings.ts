@@ -25,6 +25,24 @@ export class CanvasCssSettingsTabs extends PluginSettingTab {
 		}
 		
 		new Setting(containerEl)
+			.setName(t('settings.console.title') as string)
+			.setDesc(t('settings.console.desc') as string)
+			.addDropdown((dropdown) => {
+				dropdown
+					.addOption("none", t('settings.console.options.none') as string)
+					.addOption("error", t('settings.console.options.error') as string)
+					.addOption("warn", t('settings.console.options.warn') as string)
+					.addOption("log", t('settings.console.options.log') as string)
+					.addOption("notice", t('settings.console.options.notice') as string)
+					.setValue(this.plugin.settings.logLevel)
+					.onChange(async (value) => {
+						this.plugin.settings.logLevel = value;
+						await this.plugin.saveSettings();
+					});
+			});
+		const logLevel = this.plugin.settings.logLevel;
+		
+		new Setting(containerEl)
 			.setDesc(t('settings.newCanvas.addingInfo') as string)
 			.addButton(cb => cb
 				.setButtonText(t('settings.newCanvas.addNewCanvas') as string)
