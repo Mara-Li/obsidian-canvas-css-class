@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.1.0](https://github.com/Lisandra-dev/canvas-css-class/compare/2.0.0...2.1.0) (2023-01-07)
+
+
+### Features
+
+* adding two methods to append css class ([b6f2b3a](https://github.com/Lisandra-dev/canvas-css-class/commit/b6f2b3a986bd4a0ec9c6c279ab6caca2f3d7effd))
+
+
+### Bug Fixes
+
+* adding quick commands to allow the use of commanders/macro ([23b380f](https://github.com/Lisandra-dev/canvas-css-class/commit/23b380f6731e6a8c259d241efc9b1642c19fb1ad))
+* better reloading canvas ([975b464](https://github.com/Lisandra-dev/canvas-css-class/commit/975b464a023540b5f4136871f156acedab69ce0a))
+
 ## [2.0.0](https://github.com/Lisandra-dev/canvas-css-class/compare/1.0.1...2.0.0) (2023-01-02)
 
 
