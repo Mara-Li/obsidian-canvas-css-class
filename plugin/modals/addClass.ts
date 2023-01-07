@@ -87,9 +87,21 @@ export class AddNewClassWithFile extends Modal {
 				.onChange(async (value) => {
 					this.cssClass = value;
 				}));
+		
+		const desc = document.createDocumentFragment();
+		// create list of modes
+		desc.createEl("p", {text: t("settings.appendMode.desc") as string});
+		const list = desc.createEl("ul");
+		for (const mode in AppendMode) {
+			const li = list.createEl("li");
+			li.createEl("span", {text: AppendMode[mode as keyof typeof AppendMode]});
+			li.createEl("span", {text: " - "});
+			li.createEl("span", {text: t(`settings.appendMode.${mode}Desc`) as string});
+		}
+		
 		new Setting(contentEl)
 			.setName(t("settings.appendMode.title") as string)
-			.setDesc(t("settings.appendMode.desc") as string)
+			.setDesc(desc)
 			.addDropdown(dropdown => dropdown
 				.addOption("body", t("settings.appendMode.options.body") as string)
 				.addOption("workspace-leaf", t("settings.appendMode.options.workspaceLeaf") as string)
