@@ -3,7 +3,7 @@ export interface CanvasCssSettings {
 	logLevel: string;
 }
 
-export enum AppendBehavior {
+export enum AppendMode {
 	body = "body",
 	workspaceLeaf = "view-content",
 }
@@ -17,5 +17,5 @@ export const DEFAULT_SETTINGS: CanvasCssSettings = {
 export interface CanvasClass {
 	canvasPath: string;
 	canvasClass: string[];
-	appendBehavior: string;
+	appendMode: string;
 }

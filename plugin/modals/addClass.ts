@@ -1,6 +1,6 @@
 import {App, Modal, Setting} from "obsidian";
 import {t} from "../i18n";
-import {AppendBehavior} from "../interface";
+import {AppendMode} from "../interface";
 
 const add = (t("addButton") as string);
 const className = (t("className") as string);
@@ -55,15 +55,15 @@ export class AddCssClass extends Modal {
 export class AddNewClassWithFile extends Modal {
 	path: string;
 	cssClass: string;
-	appendBehavior: string;
-	onSubmit:(path: string, cssClass: string, appendBehavior: string)=>void;
+	appendMode: string;
+	onSubmit:(path: string, cssClass: string, appendMode: string)=>void;
 	
 	/**
 	 * Constructor
 	 * @param app: App
 	 * @param onSubmit {function} the callback function
 	 */
-	constructor(app: App, onSubmit: (path: string, cssClass: string, appendBehavior: string) => void) {
+	constructor(app: App, onSubmit: (path: string, cssClass: string, appendMode: string) => void) {
 		super(app);
 		this.onSubmit = onSubmit;
 	}
@@ -88,21 +88,21 @@ export class AddNewClassWithFile extends Modal {
 					this.cssClass = value;
 				}));
 		new Setting(contentEl)
-			.setName(t("settings.appendBehavior.title") as string)
-			.setDesc(t("settings.appendBehavior.desc") as string)
+			.setName(t("settings.appendMode.title") as string)
+			.setDesc(t("settings.appendMode.desc") as string)
 			.addDropdown(dropdown => dropdown
-				.addOption("body", t("settings.appendBehavior.options.body") as string)
-				.addOption("workspace-leaf", t("settings.appendBehavior.options.workspaceLeaf") as string)
-				.setValue(AppendBehavior.body)
+				.addOption("body", t("settings.appendMode.options.body") as string)
+				.addOption("workspace-leaf", t("settings.appendMode.options.workspaceLeaf") as string)
+				.setValue(AppendMode.body)
 				.onChange(async (value) => {
-					this.appendBehavior = value;
+					this.appendMode = value;
 					this.close();
 				}));
 		new Setting(contentEl)
 			.addButton(cb => cb
 				.setButtonText(add)
 				.onClick(async () => {
-					this.onSubmit(this.path.replace(".canvas", "") + ".canvas", this.cssClass.replace(/\W+/g, "-").toLowerCase(), this.appendBehavior);
+					this.onSubmit(this.path.replace(".canvas", "") + ".canvas", this.cssClass.replace(/\W+/g, "-").toLowerCase(), this.appendMode);
 					this.close();
 				}));
 	}

@@ -36,7 +36,7 @@ export default {
 				notice: "Notice",
 			},
 		},
-		appendBehavior: {
+		appendMode: {
 			title: "Comportement d'ajout",
 			desc: "Où ajouter la classe dans le Canvas.",
 			bodyDesc: "Ajoute le Canvas au body. Permet d'exporter le Canvas en tant qu'image mais peut avoir un comportement inattendu, notamment avec plusieurs fichiers ouverts.",
@@ -66,14 +66,14 @@ export default {
 	commands: {
 		addCanvas: "Ajouter une classe CSS au Canvas actif",
 		removeCanvas: "Supprimer une classe CSS du Canvas actif",
-		changeAppendBehavior: "Modifier le comportement d'ajout de la classe au Canvas",
-		switchToViewContentBehavior: "Passer au comportement view-content",
-		switchToBodyBehavior: "Passer au comportement body",
+		changeAppendMode: "Modifier le comportement d'ajout de la classe au Canvas",
+		switchToViewContentMode: "Passer au mode view-content",
+		switchToBodyMode: "Passer au mode body",
 		quickSwitch: "Quick switch entre body & view-content",
 	},
 	message : {
-		quickSwitch:(key: string): string => `Passage au comportement : ${key}`,
-		switchedToBody: "Passage au comportement body",
-		switchedToViewContent: "Passage au comportement view-content",
+		quickSwitch:(key: string): string => `Passage au mode : ${key}`,
+		switchedToBody: "Passage au mode body",
+		switchedToViewContent: "Passage au mode view-content",
 	}
 };

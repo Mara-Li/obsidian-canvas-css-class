@@ -1,6 +1,6 @@
 import {App, Modal, Setting} from "obsidian";
 import {t} from "../i18n";
-import {AppendBehavior} from "../interface";
+import {AppendMode} from "../interface";
 
 const add = (t("addButton") as string);
 
@@ -97,44 +97,44 @@ export class RenameCanvasPath extends Modal {
 }
 
 /**
- * Modal to change the behavior for the adding of class in the canvas
+ * Modal to change the mode for the adding of class in the canvas
  * @param app {App} the Obsidian app
- * @param oldBehavior {string} the old behavior
+ * @param oldMode {string} the old mode
  * @param onSubmit {function} the callback function
  */
-export class EditBehavior extends Modal {
+export class EditMode extends Modal {
 	result: string;
-	oldBehavior: string;
+	oldMode: string;
 	onSubmit:(result: string)=>void;
 	
-	constructor(app: App, oldBehavior:string, onSubmit: (result: string) => void) {
+	constructor(app: App, oldMode:string, onSubmit: (result: string) => void) {
 		super(app);
-		this.oldBehavior = oldBehavior;
+		this.oldMode = oldMode;
 		this.onSubmit = onSubmit;
 	}
 
 	onOpen() {
 		const {contentEl} = this;
-		contentEl.createEl("h1", {text: t("settings.appendBehavior.title") as string});
+		contentEl.createEl("h1", {text: t("settings.appendMode.title") as string});
 		
 		const desc = document.createDocumentFragment();
-		// create list of behaviors
-		desc.createEl("p", {text: t("settings.appendBehavior.desc") as string});
+		// create list of modes
+		desc.createEl("p", {text: t("settings.appendMode.desc") as string});
 		const list = desc.createEl("ul");
-		for (const behavior in AppendBehavior) {
+		for (const mode in AppendMode) {
 			const li = list.createEl("li");
-			li.createEl("span", {text: AppendBehavior[behavior as keyof typeof AppendBehavior]});
+			li.createEl("span", {text: AppendMode[mode as keyof typeof AppendMode]});
 			li.createEl("span", {text: " - "});
-			li.createEl("span", {text: t(`settings.appendBehavior.${behavior}Desc`) as string});
+			li.createEl("span", {text: t(`settings.appendMode.${mode}Desc`) as string});
 		}
 		
 		new Setting(contentEl)
-			.setName(t("settings.appendBehavior.title") as string)
+			.setName(t("settings.appendMode.title") as string)
 			.setDesc(desc)
 			.addDropdown(dropdown => dropdown
-				.addOption(AppendBehavior.body, t("settings.appendBehavior.options.body") as string)
-				.addOption(AppendBehavior.workspaceLeaf, t("settings.appendBehavior.options.workspaceLeaf") as string)
-				.setValue(this.oldBehavior)
+				.addOption(AppendMode.body, t("settings.appendMode.options.body") as string)
+				.addOption(AppendMode.workspaceLeaf, t("settings.appendMode.options.workspaceLeaf") as string)
+				.setValue(this.oldMode)
 				.onChange(async (value) => {
 					this.result = value;
 				}));

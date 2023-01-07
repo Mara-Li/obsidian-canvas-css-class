@@ -14,11 +14,11 @@ Yeah, that's it.
 The plugin will add two commands to the command modal :
 - `Add CSS class` : Add a css class to the current canvas file
 - `Remove CSS class` : Remove a css class to the current canvas file
-- `Change the append behavior between body & workspace` : Allow to choose the behavior of the plugin. By default, the plugin will add the css class to `.workspace-leaf.mod-active .view-content` of the canvas file. See below for more information.  
-  There is 3 commands to allow changing the behavior : 
+- `Change the append mode between body & workspace` : Allow to choose the behavior of the plugin. By default, the plugin will add the css class to `.workspace-leaf.mod-active .view-content` of the canvas file. See below for more information.  
+  There is 3 commands to allow changing this behavior : 
   - `quickswitch between body & view-content` : Invert the behavior of the actual canvas. 
-  - `Switch to view-content behavior` : Convert the actual canvas to the view-content behavior.
-  - `Switch to body behavior` : Convert the actual canvas to the body behavior.
+  - `Switch to view-content mode` : Convert the actual canvas to the view-content behavior.
+  - `Switch to body mode` : Convert the actual canvas to the body behavior.
 
 You can also use the settings to add or remove a css class to the current canvas file.
 
@@ -34,7 +34,7 @@ In the settings, you can also :
 - Remove all the css class 
 - Remove specific css class
 - Edit a css class (renaming it)
-- Change the append behavior between body & workspace
+- Change the adding behavior between body & workspace
 
 ![](docs/canvas-settings.png)
 

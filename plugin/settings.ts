@@ -1,7 +1,7 @@
 import {App, Notice, PluginSettingTab, Setting} from "obsidian";
 import CanvasCSS from "./main";
 import {AddCssClass, AddNewClassWithFile} from "./modals/addClass";
-import {EditBehavior, RenameCanvasPath, RenameCssClass} from "./modals/editClass";
+import {EditMode, RenameCanvasPath, RenameCssClass} from "./modals/editClass";
 import {t} from "./i18n";
 import {addCanvasPathAndCanvasFile, addToDOM, reloadCanvas, removeFromDOM} from "./utils";
 
@@ -48,7 +48,7 @@ export class CanvasCssSettingsTabs extends PluginSettingTab {
 			.addButton(cb => cb
 				.setButtonText(t("settings.newCanvas.addNewCanvas") as string)
 				.onClick(async () => {
-					new AddNewClassWithFile(this.app, async (path:string, cssClass: string, appendBehavior:string) => {
+					new AddNewClassWithFile(this.app, async (path:string, cssClass: string, appendMode:string) => {
 						if (this.plugin.settings.canvasAdded.find(c => c.canvasPath === path)) {
 							// add class to existing only if it doesn't exist
 							if (!this.plugin.settings.canvasAdded.find(c => c.canvasPath === path)?.canvasClass?.includes(cssClass)) {
@@ -57,11 +57,11 @@ export class CanvasCssSettingsTabs extends PluginSettingTab {
 								new Notice(t("settings.alreadyApplied") as string);
 							}
 						} else {
-							this.plugin.settings.canvasAdded.push({canvasPath: path, canvasClass: [cssClass], appendBehavior: appendBehavior});
+							this.plugin.settings.canvasAdded.push({canvasPath: path, canvasClass: [cssClass], appendMode: appendMode});
 						}
 						await this.plugin.saveSettings();
 						this.display();
-						addToDOM(cssClass, path, appendBehavior, logLevel);
+						addToDOM(cssClass, path, appendMode, logLevel);
 					}).open();
 				}));
 		
@@ -80,7 +80,7 @@ export class CanvasCssSettingsTabs extends PluginSettingTab {
 									canvas.canvasClass.push(cssClass);
 									await this.plugin.saveSettings();
 									this.display();
-									addToDOM(cssClass, canvas.canvasPath, canvas.appendBehavior, logLevel);
+									addToDOM(cssClass, canvas.canvasPath, canvas.appendMode, logLevel);
 								} else {
 									new Notice(t("settings.alreadyApplied") as string);
 								}
@@ -100,14 +100,14 @@ export class CanvasCssSettingsTabs extends PluginSettingTab {
 				.addExtraButton(cb =>
 					cb
 						.setIcon("pane-layout")
-						.setTooltip(t("settings.appendBehavior.edit") as string)
+						.setTooltip(t("settings.appendMode.edit") as string)
 						.onClick(async () => {
-							new EditBehavior(this.app, canvas.appendBehavior, async (newAppendBehavior: string) => {
-								canvas.appendBehavior = newAppendBehavior;
+							new EditMode(this.app, canvas.appendMode, async (newAppendMode: string) => {
+								canvas.appendMode = newAppendMode;
 								await this.plugin.saveSettings();
 								this.display();
-								addCanvasPathAndCanvasFile(canvas.appendBehavior, canvas.canvasPath);
-								reloadCanvas(canvas.canvasPath, canvas.appendBehavior, this.plugin.settings);
+								addCanvasPathAndCanvasFile(canvas.appendMode, canvas.canvasPath);
+								reloadCanvas(canvas.canvasPath, canvas.appendMode, this.plugin.settings);
 							}).open();
 						})
 				)
@@ -141,8 +141,8 @@ export class CanvasCssSettingsTabs extends PluginSettingTab {
 									}
 									await this.plugin.saveSettings();
 									this.display();
-									addCanvasPathAndCanvasFile(canvas.appendBehavior, canvas.canvasPath);
-									reloadCanvas(canvas.canvasPath, canvas.appendBehavior, this.plugin.settings);
+									addCanvasPathAndCanvasFile(canvas.appendMode, canvas.canvasPath);
+									reloadCanvas(canvas.canvasPath, canvas.appendMode, this.plugin.settings);
 								}).open();
 							})
 					)

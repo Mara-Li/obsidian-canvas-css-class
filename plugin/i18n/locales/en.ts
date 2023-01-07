@@ -25,16 +25,16 @@ export default {
 		noClassAdded: "No class added yet.",
 		useCommandsInfo: "Use the commands modal to add a canvas and a class.",
 		alreadyApplied: "This class is already applied to this canvas.",
-		appendBehavior: {
-			title: "Append Behavior",
+		appendMode: {
+			title: "Append Mode",
 			desc: "Where to append the class into the canvas.",
-			bodyDesc: "Append the canvas to the body. Allow to export as an image with the canvas but can have some unexpected behavior, notably when multiple files are open.",
+			bodyDesc: "Append the canvas to the body. Allow to export as an image with the canvas but can have some unexpected mode, notably when multiple files are open.",
 			workspaceLeafDesc: "Append the canvas to the view-content. Keep the class when focus change but can't be exported with the image.",
 			options: {
 				body: "body",
 				workspaceLeaf: "view-content",
 			},
-			edit: "Edit the behavior for appending class to the canvas.",
+			edit: "Edit the mode for appending class to the canvas.",
 		},
 		console: {
 			title: "Log Level",
@@ -66,14 +66,14 @@ export default {
 	commands: {
 		addCanvas: "Add a CSS Class to the active canvas",
 		removeCanvas: "Remove a CSS Class from the active canvas",
-		changeAppendBehavior: "Change the append behavior between body & workspace",
-		switchToViewContentBehavior: "Switch to view-content behavior",
-		switchToBodyBehavior: "Switch to body behavior",
-		quickSwitch: "Quick switch between view-content & body behavior",
+		changeAppendMode: "Change the append mode between body & workspace",
+		switchToViewContentMode: "Switch to view-content mode",
+		switchToBodyMode: "Switch to body mode",
+		quickSwitch: "Quick switch between view-content & body mode",
 	},
 	message : {
-		quickSwitch:(key: string): string => `Switched to ${key} behavior`,
-		switchedToBody: "Switched to body behavior",
-		switchedToViewContent: "Switched to view-content behavior",
+		quickSwitch:(key: string): string => `Switched to ${key} mode`,
+		switchedToBody: "Switched to body mode",
+		switchedToViewContent: "Switched to view-content mode",
 	}
 };
