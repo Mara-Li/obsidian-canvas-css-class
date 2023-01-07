@@ -1,8 +1,9 @@
 import {App, Notice, PluginSettingTab, Setting} from "obsidian";
 import CanvasCSS from "./main";
-import {AddCssClass, AddNewClassWithFile, RenameCanvasPath, RenameCssClass} from "./modals/addClass";
+import {AddCssClass, AddNewClassWithFile} from "./modals/addClass";
+import {EditBehavior, RenameCanvasPath, RenameCssClass} from "./modals/editClass";
 import {t} from "./i18n";
-import {removeFromDOM} from "./utils";
+import {addToDOM, reloadCanvas, removeFromDOM} from "./utils";
 
 export class CanvasCssSettingsTabs extends PluginSettingTab {
 	plugin: CanvasCSS;
@@ -47,7 +48,7 @@ export class CanvasCssSettingsTabs extends PluginSettingTab {
 			.addButton(cb => cb
 				.setButtonText(t("settings.newCanvas.addNewCanvas") as string)
 				.onClick(async () => {
-					new AddNewClassWithFile(this.app, async (path:string, cssClass: string) => {
+					new AddNewClassWithFile(this.app, async (path:string, cssClass: string, appendBehavior:string) => {
 						if (this.plugin.settings.canvasAdded.find(c => c.canvasPath === path)) {
 							// add class to existing only if it doesn't exist
 							if (!this.plugin.settings.canvasAdded.find(c => c.canvasPath === path)?.canvasClass?.includes(cssClass)) {
@@ -56,11 +57,11 @@ export class CanvasCssSettingsTabs extends PluginSettingTab {
 								new Notice(t("settings.alreadyApplied") as string);
 							}
 						} else {
-							this.plugin.settings.canvasAdded.push({canvasPath: path, canvasClass: [cssClass]});
+							this.plugin.settings.canvasAdded.push({canvasPath: path, canvasClass: [cssClass], appendBehavior: appendBehavior});
 						}
 						await this.plugin.saveSettings();
 						this.display();
-						this.plugin.addToDOM(cssClass, path);
+						addToDOM(cssClass, path, appendBehavior, logLevel);
 					}).open();
 				}));
 		
@@ -79,7 +80,7 @@ export class CanvasCssSettingsTabs extends PluginSettingTab {
 									canvas.canvasClass.push(cssClass);
 									await this.plugin.saveSettings();
 									this.display();
-									this.plugin.addToDOM(cssClass, canvas.canvasPath);
+									addToDOM(cssClass, canvas.canvasPath, canvas.appendBehavior, logLevel);
 								} else {
 									new Notice(t("settings.alreadyApplied") as string);
 								}
@@ -96,16 +97,31 @@ export class CanvasCssSettingsTabs extends PluginSettingTab {
 								this.display();
 							}).open();
 						}))
+				.addExtraButton(cb =>
+					cb
+						.setIcon("pane-layout")
+						.setTooltip(t("settings.appendBehavior.edit") as string)
+						.onClick(async () => {
+							new EditBehavior(this.app, canvas.appendBehavior, async (newAppendBehavior: string) => {
+								canvas.appendBehavior = newAppendBehavior;
+								await this.plugin.saveSettings();
+								this.display();
+								reloadCanvas(canvas.canvasPath, canvas.appendBehavior, this.plugin.settings);
+							}).open();
+						})
+				)
 				
 				.addExtraButton(cb =>
 					cb
 						.setIcon("trash")
 						.setTooltip(t("settings.remove.desc") as string)
 						.onClick(async () => {
+							const oldCanvas = this.plugin.settings.canvasAdded.find(c => c.canvasPath === canvas.canvasPath);
 							this.plugin.settings.canvasAdded = this.plugin.settings.canvasAdded.filter((item) => item.canvasPath !== canvas.canvasPath);
 							await this.plugin.saveSettings();
-							//remove all classes from body
-							document.body.classList.remove(...canvas.canvasClass);
+							for (const cssClass of oldCanvas?.canvasClass ?? []) {
+								removeFromDOM(cssClass, logLevel);
+							}
 							this.display();
 						}));
 			for (const cssClass of canvas.canvasClass) {
@@ -124,8 +140,7 @@ export class CanvasCssSettingsTabs extends PluginSettingTab {
 									}
 									await this.plugin.saveSettings();
 									this.display();
-									removeFromDOM(cssClass, logLevel);
-									this.plugin.addToDOM(newClass, canvas.canvasPath);
+									reloadCanvas(canvas.canvasPath, canvas.appendBehavior, this.plugin.settings);
 								}).open();
 							})
 					)

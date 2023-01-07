@@ -1,30 +1,16 @@
 import {ItemView, Notice, Plugin} from "obsidian";
-import {DEFAULT_SETTINGS, CanvasCssSettings} from "./interface";
+import {DEFAULT_SETTINGS, CanvasCssSettings, AppendBehavior} from "./interface";
 import {CanvasCssSettingsTabs} from "./settings";
 import {AddCssClass} from "./modals/addClass";
 import {RemoveCSSclass} from "./modals/removeClass";
 import {t, translationLanguage} from "./i18n";
-import {logging, removeFromDOM} from "./utils";
+import {addToDOM, logging, reloadCanvas, removeFromDOM, whereToAppend} from "./utils";
+import {EditBehavior} from "./modals/editClass";
 
 export default class CanvasCSS extends Plugin {
 	settings: CanvasCssSettings;
 	
-	/**
-	 * This function add to the dom (view-content) the css class ;
-	 * @param {string} cssClass the css class to add
-	 * @param {string} filePath the path of the canvas, to add the class to the right canvas
-	 */
-	addToDOM(cssClass: string, filePath: string) {
-		if (!document) return;
-		// @ts-ignore
-		if (document.querySelector(".workspace-leaf.mod-active .view-content").getAttribute("data-canvas-path") === filePath) {
-			this.logMessage(`Adding ${cssClass} to the dom`);
-			// @ts-ignore
-			this.logMessage(`Class of ${document.querySelector(".workspace-leaf.mod-active .view-content").getAttribute("data-canvas-path")} : ${document.querySelector(".workspace-leaf.mod-active .view-content").classList}`);
-			// @ts-ignore
-			document.querySelector(".workspace-leaf.mod-active .view-content").classList.add(cssClass);
-		}
-	}
+
 	
 	/**
 	 * Alias of the logging function
@@ -34,6 +20,7 @@ export default class CanvasCSS extends Plugin {
 		logging(message, this.settings.logLevel);
 	}
 	
+
 
 	
 	async onload() {
@@ -66,10 +53,11 @@ export default class CanvasCSS extends Plugin {
 									});
 								}
 							} else {
-								this.settings.canvasAdded.push({canvasPath: canvasPath, canvasClass: [result]});
+								this.settings.canvasAdded.push({canvasPath: canvasPath, canvasClass: [result], appendBehavior: AppendBehavior.workspaceLeaf});
 							}
 							this.saveSettings();
-							this.addToDOM(result, canvasPath);
+							const behavior = this.settings.canvasAdded.find((item) => item.canvasPath === canvasPath)?.appendBehavior;
+							addToDOM(result, canvasPath, behavior ? behavior : AppendBehavior.workspaceLeaf, this.settings.logLevel);
 						}).open();
 					} return true;
 				} return false;
@@ -95,25 +83,59 @@ export default class CanvasCSS extends Plugin {
 			}
 		});
 		
+		this.addCommand({
+			id: "change-append-behavior",
+			name: t("commands.changeAppendBehavior") as string,
+			checkCallback: (checking: boolean) => {
+				const canvasView = this.app.workspace.getActiveViewOfType(ItemView);
+				if ((canvasView?.getViewType() === "canvas")) {
+				//@ts-ignore
+					const canvasPath = canvasView.file.path;
+					const oldClasses = this.settings.canvasAdded.find((item) => item.canvasPath === canvasPath);
+					if (oldClasses) {
+						if (!checking) {
+						//@ts-ignore
+							new EditBehavior(this.app, oldClasses.appendBehavior, async (newAppendBehavior: string) => {
+								oldClasses.appendBehavior = newAppendBehavior;
+								await this.saveSettings();
+								reloadCanvas(canvasPath, oldClasses.appendBehavior, this.settings);
+							}).open();
+						
+						}	return true;
+					} return false;
+				} return false;
+			}
+		});
+		
 		this.registerEvent(this.app.workspace.on("file-open", (file) => {
 			// @ts-ignore
 			const dataType = document.querySelector(".workspace-leaf.mod-active > .workspace-leaf-content") ? document.querySelector(".workspace-leaf.mod-active > .workspace-leaf-content").attributes[1].value : "";
 			if (file && file.extension === "canvas" && dataType === "canvas") {
-				// @ts-ignore
-				document.querySelector(".workspace-leaf.mod-active .view-content").setAttribute("data-canvas-path", file.path);
-				// @ts-ignore
-				document.querySelector(".workspace-leaf.mod-active .view-content").classList.add("canvas-file");
+				const canvasClassList = this.settings.canvasAdded.find((canvas) => canvas.canvasPath === file.path);
+				const querySelector = whereToAppend(canvasClassList?.appendBehavior ? canvasClassList.appendBehavior : AppendBehavior.workspaceLeaf);
+				document.querySelector(querySelector)?.setAttribute("data-canvas-path", file.path);
+				document.querySelector(querySelector)?.classList.add("canvas-file");
+				if (canvasClassList) {
+					reloadCanvas(file.path, canvasClassList.appendBehavior, this.settings);
+				} else {
+					document.querySelector("body")?.removeAttribute("data-canvas-path");
+					document.querySelector("body")?.classList.remove("canvas-file");
+				}
+
 				const canvasClassesNotFromThisFile = this.settings.canvasAdded.filter((item) => item.canvasPath !== file.path);
 				for (const canvas of canvasClassesNotFromThisFile) {
 					for (const cssClass of canvas.canvasClass) {
 						removeFromDOM(cssClass, this.settings.logLevel);
 					}
 				}
-				
-				const canvasClassList = this.settings.canvasAdded.find((canvas) => canvas.canvasPath === file.path);
-				if (canvasClassList) {
-					for (const canvas of canvasClassList.canvasClass) {
-						this.addToDOM(canvas, file.path);
+			} else if (dataType !== "canvas") {
+				document.querySelector("body")?.removeAttribute("data-canvas-path");
+				document.querySelector("body")?.classList.remove("canvas-file");
+				document.querySelector(".workspace-leaf.mod-active .view-content")?.removeAttribute("data-canvas-path");
+				document.querySelector(".workspace-leaf.mod-active .view-content")?.classList.remove("canvas-file");
+				for (const canvas of this.settings.canvasAdded) {
+					for (const cssClass of canvas.canvasClass) {
+						removeFromDOM(cssClass, this.settings.logLevel);
 					}
 				}
 			}

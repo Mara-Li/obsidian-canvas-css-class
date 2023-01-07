@@ -25,6 +25,17 @@ export default {
 		noClassAdded: "No class added yet.",
 		useCommandsInfo: "Use the commands modal to add a canvas and a class.",
 		alreadyApplied: "This class is already applied to this canvas.",
+		appendBehavior: {
+			title: "Append Behavior",
+			desc: "Where to append the class into the canvas.",
+			bodyDesc: "Append the canvas to the body. Allow to export as an image with the canvas but can have some unexpected behavior.",
+			workspaceLeafDesc: "Append the canvas to the view-content. Better compatibility but can't be exported with the image.",
+			options: {
+				body: "body",
+				workspaceLeaf: "view-content",
+			},
+			edit: "Edit the behavior for appending class to the canvas.",
+		},
 		console: {
 			title: "Log Level",
 			desc: "Allows to better follow the additions/removals made by the plugin. Notice will display an Obsidian notification.",
@@ -55,6 +66,7 @@ export default {
 	commands: {
 		addCanvas: "Add a CSS Class to the active canvas",
 		removeCanvas: "Remove a CSS Class from the active canvas",
+		changeAppendBehavior: "Change the append behavior between body & workspace",
 	},
 	
 };
