@@ -5,12 +5,9 @@ import {AddCssClass} from "./modals/addClass";
 import {RemoveCSSclass} from "./modals/removeClass";
 import {t, translationLanguage} from "./i18n";
 import {addToDOM, logging, reloadCanvas, removeFromDOM, whereToAppend} from "./utils";
-import {EditBehavior} from "./modals/editClass";
 
 export default class CanvasCSS extends Plugin {
 	settings: CanvasCssSettings;
-	
-
 	
 	/**
 	 * Alias of the logging function
@@ -84,28 +81,64 @@ export default class CanvasCSS extends Plugin {
 		});
 		
 		this.addCommand({
-			id: "change-append-behavior",
-			name: t("commands.changeAppendBehavior") as string,
+			id: "switch-to-body-behavior",
+			name: t("commands.switchToBodyBehavior") as string,
 			checkCallback: (checking: boolean) => {
 				const canvasView = this.app.workspace.getActiveViewOfType(ItemView);
 				if ((canvasView?.getViewType() === "canvas")) {
-				//@ts-ignore
+					//@ts-ignore
 					const canvasPath = canvasView.file.path;
-					const oldClasses = this.settings.canvasAdded.find((item) => item.canvasPath === canvasPath);
-					if (oldClasses) {
-						if (!checking) {
-						//@ts-ignore
-							new EditBehavior(this.app, oldClasses.appendBehavior, async (newAppendBehavior: string) => {
-								oldClasses.appendBehavior = newAppendBehavior;
-								await this.saveSettings();
-								reloadCanvas(canvasPath, oldClasses.appendBehavior, this.settings);
-							}).open();
-						
-						}	return true;
-					} return false;
-				} return false;
-			}
-		});
+					if (!checking) {
+						let oldClasses = this.settings.canvasAdded.find((item) => item.canvasPath === canvasPath);
+						if (!oldClasses) {
+							// Add the canvas to the settings
+							oldClasses = {canvasPath: canvasPath, canvasClass: [], appendBehavior: AppendBehavior.body};
+							this.settings.canvasAdded.push({
+								canvasPath: canvasPath,
+								canvasClass: [],
+								appendBehavior: AppendBehavior.workspaceLeaf
+							});
+							this.saveSettings();
+						}
+						// @ts-ignore
+						oldClasses.appendBehavior = AppendBehavior.body;
+						this.saveSettings();
+						reloadCanvas(canvasPath, oldClasses.appendBehavior, this.settings);
+					}
+					return true;
+				}
+				return false;
+			}});
+		
+		this.addCommand({
+			id: "switch-to-body-behavior",
+			name: t("commands.quickSwitch") as string,
+			checkCallback: (checking: boolean) => {
+				const canvasView = this.app.workspace.getActiveViewOfType(ItemView);
+				if ((canvasView?.getViewType() === "canvas")) {
+					//@ts-ignore
+					const canvasPath = canvasView.file.path;
+					if (!checking) {
+						let oldClasses = this.settings.canvasAdded.find((item) => item.canvasPath === canvasPath);
+						if (!oldClasses) {
+							// Add the canvas to the settings
+							oldClasses = {canvasPath: canvasPath, canvasClass: [], appendBehavior: AppendBehavior.body};
+							this.settings.canvasAdded.push({
+								canvasPath: canvasPath,
+								canvasClass: [],
+								appendBehavior: AppendBehavior.body
+							});
+							this.saveSettings();
+						}
+						// @ts-ignore
+						oldClasses.appendBehavior = oldClasses.appendBehavior === AppendBehavior.body ? AppendBehavior.workspaceLeaf : AppendBehavior.body;
+						this.saveSettings();
+						reloadCanvas(canvasPath, oldClasses.appendBehavior, this.settings);
+					}
+					return true;
+				}
+				return false;
+			}});
 		
 		this.registerEvent(this.app.workspace.on("file-open", (file) => {
 			// @ts-ignore
