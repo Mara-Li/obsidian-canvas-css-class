@@ -149,7 +149,6 @@ export default class CanvasCSS extends Plugin {
 					const canvasPath = canvasView.file.path;
 					if (!checking) {
 						const oldClasses = this.quickCreateSettings(canvasPath, AppendBehavior.workspaceLeaf);
-						
 						oldClasses.appendBehavior = oldClasses.appendBehavior === AppendBehavior.body ? AppendBehavior.workspaceLeaf : AppendBehavior.body;
 						this.saveSettings();
 						addCanvasPathAndCanvasFile(oldClasses.appendBehavior, canvasPath);

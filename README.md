@@ -54,11 +54,11 @@ The problem is that the css class is not conserved and exported when you export 
 Changing the behavior to the `body` of Obsidian allow you to export the image conserving the css-class, but if you switch of focused file, the css class will be removed.
 
 My advice : 
-- Use a macro to switch into `body` behavior when you use the command for export as an image (you can use [Quick Add](https://github.com/chhoumann/quickadd) for that)
+- Use a macro to switch into `body` behavior when you use the command for export as an image (you can use [Quick Add](https://github.com/chhoumann/quickadd) for that). Note : you need to add a delay, min of 30s, to allowing this to work. 
 - Create a button with [commander](https://github.com/phibr0/obsidian-commander) to quick switch between the two behaviors.
 
-> **Note**  
-> Switching between the two behavior needs to re-focus the canvas file.
+> **Note**
+> If you add the same class to two different file, opened in the same time, but one on the body and the other on the view-content, the class will be applied « globally », so the focusing-removing won't happen here.
 
 ---
 # Installation
@@ -75,7 +75,7 @@ You can help me to develop the plugin using npm !
 - First clone the project on your computer with git clone `git@github.com:Lisandra-dev/canvas-css-class.git`
 - cd `canvas-css-class`
 - `npm install`
-- `npm run dev` to start the developping "in live" with your Obsidian (you need to have the plugin installed in your `.obsidian/plugins`) to see the changes in live. As it can break your Obsidian Sync, I recommend you to use a test vault.)
+- `npm run dev` to start the developing "in live" with your Obsidian (you need to have the plugin installed in your `.obsidian/plugins`) to see the changes in live. As it can break your Obsidian Sync, I recommend you to use a test vault.)
 - `npm run build` to build the plugin. 
 
 Some notes:
