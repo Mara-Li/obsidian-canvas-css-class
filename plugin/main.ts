@@ -7,7 +7,6 @@ import {t, translationLanguage} from "./i18n";
 import {
 	addCanvasPathAndCanvasFile,
 	addToDOM,
-	logging,
 	reloadCanvas,
 	removeCanvasPathAndCanvasFile,
 	removeFromDOM,
@@ -18,14 +17,11 @@ export default class CanvasCSS extends Plugin {
 	settings: CanvasCssSettings;
 	
 	/**
-	 * Alias of the logging function
-	 * @param message {string} the message to log
+	 * Quick add a canvas file to the settings, without adding any css class. Used when switching between the two behavior.
+	 * Useful if the CSS is for [data-canvas-path] or for .canvas-file
+	 * @param canvasFilePath {string} the path of the canvas
+	 * @param behavior {string} the behavior set for the canvas
 	 */
-	logMessage(message: string): void {
-		logging(message, this.settings.logLevel);
-	}
-	
-
 	quickCreateSettings(canvasFilePath: string, behavior: AppendBehavior) {
 		let oldClasses = this.settings.canvasAdded.find((item) => item.canvasPath === canvasFilePath);
 		if (!oldClasses) {

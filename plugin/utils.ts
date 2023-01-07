@@ -76,7 +76,7 @@ export function whereToAppend(appendBehavior: string): string {
 }
 
 /**
- * Function that reload the canvas to change the bahavior and add the class. Allow to quick change the behavior between the two. 
+ * Function that reload the canvas to change the behavior and add the class. Allow to quick change the behavior between the two.
  * @param canvasPath {string} the path of the canvas
  * @param appendBehavior {string} the behavior set for the canvas
  * @param settings {CanvasCssSettings} the settings of the plugin
