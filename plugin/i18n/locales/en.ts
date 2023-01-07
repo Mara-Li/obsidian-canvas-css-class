@@ -28,8 +28,8 @@ export default {
 		appendBehavior: {
 			title: "Append Behavior",
 			desc: "Where to append the class into the canvas.",
-			bodyDesc: "Append the canvas to the body. Allow to export as an image with the canvas but can have some unexpected behavior.",
-			workspaceLeafDesc: "Append the canvas to the view-content. Better compatibility but can't be exported with the image.",
+			bodyDesc: "Append the canvas to the body. Allow to export as an image with the canvas but can have some unexpected behavior, notably when multiple files are open.",
+			workspaceLeafDesc: "Append the canvas to the view-content. Keep the class when focus change but can't be exported with the image.",
 			options: {
 				body: "body",
 				workspaceLeaf: "view-content",
