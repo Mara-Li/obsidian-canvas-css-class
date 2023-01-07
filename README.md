@@ -14,6 +14,11 @@ Yeah, that's it.
 The plugin will add two commands to the command modal :
 - `Add CSS class` : Add a css class to the current canvas file
 - `Remove CSS class` : Remove a css class to the current canvas file
+- `Change the append behavior between body & workspace` : Allow to choose the behavior of the plugin. By default, the plugin will add the css class to `.workspace-leaf.mod-active .view-content` of the canvas file. See below for more information.  
+  There is 3 commands to allow changing the behavior : 
+  - `quickswitch between body & view-content` : Invert the behavior of the actual canvas. 
+  - `Switch to view-content behavior` : Convert the actual canvas to the view-content behavior.
+  - `Switch to body behavior` : Convert the actual canvas to the body behavior.
 
 You can also use the settings to add or remove a css class to the current canvas file.
 
@@ -29,6 +34,7 @@ In the settings, you can also :
 - Remove all the css class 
 - Remove specific css class
 - Edit a css class (renaming it)
+- Change the append behavior between body & workspace
 
 ![](docs/canvas-settings.png)
 
@@ -38,6 +44,23 @@ In the settings, you can also :
 > - Same for class, the `.` will be added automatically when the CSS class is added.
 > - And, in the same idea, space will be converted to `-` in the class name, and converted to lowercase.
 
+## Append behavior
+
+The plugin will add, by default, the css class to `.workspace-leaf.mod-active .view-content` of the canvas file.
+
+This allows a better compatibility when you switch of focused file, because the css class will be conserved. 
+The problem is that the css class is not conserved and exported when you export as an image. 
+
+Changing the behavior to the `body` of Obsidian allow you to export the image conserving the css-class, but if you switch of focused file, the css class will be removed.
+
+My advice : 
+- Use a macro to switch into `body` behavior when you use the command for export as an image (you can use [Quick Add](https://github.com/chhoumann/quickadd) for that)
+- Create a button with [commander](https://github.com/phibr0/obsidian-commander) to quick switch between the two behaviors.
+
+> **Note**  
+> Switching between the two behavior needs to re-focus the canvas file.
+
+---
 # Installation
 
 - Install the plugin using the community plugin manager (not yet added)

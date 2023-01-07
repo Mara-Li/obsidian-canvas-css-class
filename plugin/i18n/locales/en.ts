@@ -67,6 +67,9 @@ export default {
 		addCanvas: "Add a CSS Class to the active canvas",
 		removeCanvas: "Remove a CSS Class from the active canvas",
 		changeAppendBehavior: "Change the append behavior between body & workspace",
+		switchToViewContentBehavior: "Switch to view-content behavior",
+		switchToBodyBehavior: "Switch to body behavior",
+		quickSwitch: "Quick switch between view-content & body behavior",
 	},
 	
 };

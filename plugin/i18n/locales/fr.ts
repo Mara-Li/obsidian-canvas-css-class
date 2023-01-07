@@ -66,6 +66,10 @@ export default {
 	commands: {
 		addCanvas: "Ajouter une classe CSS au Canvas actif",
 		removeCanvas: "Supprimer une classe CSS du Canvas actif",
+		changeAppendBehavior: "Modifier le comportement d'ajout de la classe au Canvas",
+		switchToViewContentBehavior: "Passer au comportement view-content",
+		switchToBodyBehavior: "Passer au comportement body",
+		quickSwitch: "Quick switch entre body & view-content",
 	},
 	
 };
