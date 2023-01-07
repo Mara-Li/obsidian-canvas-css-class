@@ -4,6 +4,13 @@ import {AppendBehavior} from "../interface";
 
 const add = (t("addButton") as string);
 
+
+/**
+ * Modal to rename a css class in the settings
+ * @param app {App} the Obsidian app
+ * @param oldName {string} the old class name
+ * @param onSubmit {function} the callback function
+ */
 export class RenameCssClass extends Modal {
 	result: string;
 	oldName: string;
@@ -42,6 +49,13 @@ export class RenameCssClass extends Modal {
 		contentEl.empty();
 	}
 }
+
+/**
+ * Modal to change the path of a canvas file
+ * @param app {App} the Obsidian app
+ * @param oldPath {string} the old path
+ * @param onSubmit {function} the callback function
+ */
 
 export class RenameCanvasPath extends Modal {
 	result: string;
@@ -82,14 +96,20 @@ export class RenameCanvasPath extends Modal {
 	}
 }
 
+/**
+ * Modal to change the behavior for the adding of class in the canvas
+ * @param app {App} the Obsidian app
+ * @param oldBehavior {string} the old behavior
+ * @param onSubmit {function} the callback function
+ */
 export class EditBehavior extends Modal {
 	result: string;
-	oldName: string;
+	oldBehavior: string;
 	onSubmit:(result: string)=>void;
 	
-	constructor(app: App, oldName:string, onSubmit: (result: string) => void) {
+	constructor(app: App, oldBehavior:string, onSubmit: (result: string) => void) {
 		super(app);
-		this.oldName = oldName;
+		this.oldBehavior = oldBehavior;
 		this.onSubmit = onSubmit;
 	}
 
@@ -114,7 +134,7 @@ export class EditBehavior extends Modal {
 			.addDropdown(dropdown => dropdown
 				.addOption(AppendBehavior.body, t("settings.appendBehavior.options.body") as string)
 				.addOption(AppendBehavior.workspaceLeaf, t("settings.appendBehavior.options.workspaceLeaf") as string)
-				.setValue(this.oldName)
+				.setValue(this.oldBehavior)
 				.onChange(async (value) => {
 					this.result = value;
 				}));

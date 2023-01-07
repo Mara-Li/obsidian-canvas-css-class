@@ -26,15 +26,21 @@ export function logging(message: string, logLevel: string): void {
 }
 
 /**
- * * This function remove the css class from the dom (view-content) ; the workspace-leaf must be active
- * * @param {string} cssClass the css class to remove
- * @param {string} logLevel the log level of the message
+ * The function to remove from Dom the class added. It removes from the body and the view-content
+ * @param cssClass {string} the class to remove
+ * @param logLevel {string} the log level of the plugin
  */
 export function removeFromDOM(cssClass: string, logLevel: string): void {
 	removeFromBody(cssClass, logLevel);
 	removeFromViewContent(cssClass, logLevel);
 }
 
+
+/**
+ * The function to remove from Dom the class added. It removes from the body.
+ * @param cssClass {string} the class to remove
+ * @param logLevel {string} the log level of the plugin
+ */
 export function removeFromBody(cssClass: string, logLevel: string): void {
 	// @ts-ignore
 	logging(`Class of ${document.querySelector("body").getAttribute("data-canvas-path")} : ${document.querySelector("body").classList}`, logLevel);
@@ -43,6 +49,11 @@ export function removeFromBody(cssClass: string, logLevel: string): void {
 	logging(`Removed ${cssClass} from the body`, logLevel);
 }
 
+/**
+ * The function to remove from Dom the class added. It removes from the view-content.
+ * @param cssClass {string} the class to remove
+ * @param logLevel {string} the log level of the plugin
+ */
 export function removeFromViewContent(cssClass: string, logLevel: string): void {
 	// @ts-ignore
 	logging(`Class of ${document.querySelector(".workspace-leaf.mod-active .view-content").getAttribute("data-canvas-path")} : ${document.querySelector(".workspace-leaf.mod-active .view-content").classList}`, logLevel);
@@ -51,14 +62,11 @@ export function removeFromViewContent(cssClass: string, logLevel: string): void 
 	logging(`Removed ${cssClass} from the view-content`, logLevel);
 }
 
-export function switchRemoveFromDOM(cssClass: string, logLevel: string, query: string): void {
-	if (query === "body") {
-		removeFromBody(cssClass, logLevel);
-	} else {
-		removeFromViewContent(cssClass, logLevel);
-	}
-}
 
+/**
+ * Function to get the query selector of the canvas based on the behavior settings
+ * @param appendBehavior {string} the behavior set for the canvas
+ */
 export function whereToAppend(appendBehavior: string): string {
 	if (appendBehavior === AppendBehavior.body) {
 		return "body";
@@ -67,6 +75,12 @@ export function whereToAppend(appendBehavior: string): string {
 	}
 }
 
+/**
+ * Function that reload the canvas to change the bahavior and add the class. Allow to quick change the behavior between the two. 
+ * @param canvasPath {string} the path of the canvas
+ * @param appendBehavior {string} the behavior set for the canvas
+ * @param settings {CanvasCssSettings} the settings of the plugin
+ */
 export function reloadCanvas(canvasPath: string, appendBehavior: string, settings: CanvasCssSettings): void {
 	const query = whereToAppend(appendBehavior);
 	const selectedCanvas = document.querySelector(query)?.getAttribute("data-canvas-path");

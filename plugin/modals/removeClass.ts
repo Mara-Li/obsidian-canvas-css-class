@@ -4,6 +4,14 @@ import CanvasCSS from "../main";
 import {t, StringFunction} from "../i18n";
 import {removeFromDOM} from "../utils";
 
+
+/**
+ * Modal to remove a CSS class from a canvas
+ * @param app {App} the Obsidian app
+ * @param plugin {CanvasCSS} the plugin
+ * @param settings {CanvasCssSettings} the plugin settings
+ * @param filepath {string} the path of the canvas
+ */
 export class RemoveCSSclass extends FuzzySuggestModal<string> {
 	app: App;
 	plugin: CanvasCSS;

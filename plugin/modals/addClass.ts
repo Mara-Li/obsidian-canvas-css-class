@@ -5,6 +5,11 @@ import {AppendBehavior} from "../interface";
 const add = (t("addButton") as string);
 const className = (t("className") as string);
 
+/**
+ * Modal to add a CSS class to a canvas
+ * @param app {App} the Obsidian app
+ * @param onSubmit {function} the callback function
+ */
 
 export class AddCssClass extends Modal {
 	result: string;
@@ -41,12 +46,23 @@ export class AddCssClass extends Modal {
 	}
 }
 
+
+/**
+ * Modal to add a new css class to a new file
+ * @param app {App} the Obsidian app
+ * @param onSubmit {function} the callback function
+ */
 export class AddNewClassWithFile extends Modal {
 	path: string;
 	cssClass: string;
 	appendBehavior: string;
 	onSubmit:(path: string, cssClass: string, appendBehavior: string)=>void;
 	
+	/**
+	 * Constructor
+	 * @param app: App
+	 * @param onSubmit {function} the callback function
+	 */
 	constructor(app: App, onSubmit: (path: string, cssClass: string, appendBehavior: string) => void) {
 		super(app);
 		this.onSubmit = onSubmit;
