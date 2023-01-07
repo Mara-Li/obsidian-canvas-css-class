@@ -88,17 +88,15 @@ export function reloadCanvas(canvasPath: string, appendBehavior: string, setting
 		const cssClass = settings.canvasAdded.find((canvas) => canvas.canvasPath === canvasPath)?.canvasClass;
 		if (cssClass) {
 			if (query === "body") {
-				document.querySelector(".workspace-leaf.mod-active .view-content")?.removeAttribute("data-canvas-path");
-				document.querySelector(".workspace-leaf.mod-active .view-content")?.classList.remove("canvas-file");
+				removeCanvasPathAndCanvasFile(AppendBehavior.workspaceLeaf);
 				for (const canvas of cssClass) {
 					removeFromViewContent(canvas, settings.logLevel);
 					addToDOM(canvas, canvasPath, appendBehavior, settings.logLevel);
 				}
 			} else {
-				document.querySelector("body")?.removeAttribute("data-canvas-path");
-				document.querySelector("body")?.classList.remove("canvas-file");
+				removeCanvasPathAndCanvasFile("body");
 				for (const canvas of cssClass) {
-					removeFromViewContent(canvas, settings.logLevel);
+					removeFromBody(canvas, settings.logLevel);
 					addToDOM(canvas, canvasPath, appendBehavior, settings.logLevel);
 				}
 			}
@@ -120,4 +118,26 @@ export function addToDOM(cssClass: string, filePath: string, appendBehavior: str
 		logging(`Class of ${document.querySelector(querySelector)?.getAttribute(querySelector)} : ${document.querySelector(querySelector)?.classList}`, logLevel);
 		document.querySelector(querySelector)?.classList.add(cssClass);
 	}
+}
+
+
+/**
+ * Function to ADD the canvas path and canvas file from the body and the view-content
+ * @param appendBehavior {string} the behavior set for the canvas
+ * @param filePath {string} the path of the canvas
+ */
+export function addCanvasPathAndCanvasFile(appendBehavior: string, filePath: string): void {
+	const querySelector = whereToAppend(appendBehavior);
+	document.querySelector(querySelector)?.setAttribute("data-canvas-path", filePath);
+	document.querySelector(querySelector)?.classList.add("canvas-file");
+}
+
+/**
+ * Function to REMOVE the canvas path and canvas file from the body and the view-content
+ * @param appendBehavior {string} the behavior set for the canvas
+ */
+export function removeCanvasPathAndCanvasFile(appendBehavior: string): void {
+	const querySelector = whereToAppend(appendBehavior);
+	document.querySelector(querySelector)?.removeAttribute("data-canvas-path");
+	document.querySelector(querySelector)?.classList.remove("canvas-file");
 }

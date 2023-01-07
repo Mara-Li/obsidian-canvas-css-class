@@ -4,7 +4,15 @@ import {CanvasCssSettingsTabs} from "./settings";
 import {AddCssClass} from "./modals/addClass";
 import {RemoveCSSclass} from "./modals/removeClass";
 import {t, translationLanguage} from "./i18n";
-import {addToDOM, logging, reloadCanvas, removeFromDOM, whereToAppend} from "./utils";
+import {
+	addCanvasPathAndCanvasFile,
+	addToDOM,
+	logging,
+	reloadCanvas,
+	removeCanvasPathAndCanvasFile,
+	removeFromDOM,
+	whereToAppend
+} from "./utils";
 
 export default class CanvasCSS extends Plugin {
 	settings: CanvasCssSettings;
@@ -18,6 +26,20 @@ export default class CanvasCSS extends Plugin {
 	}
 	
 
+	quickCreateSettings(canvasFilePath: string, behavior: AppendBehavior) {
+		let oldClasses = this.settings.canvasAdded.find((item) => item.canvasPath === canvasFilePath);
+		if (!oldClasses) {
+			// Add the canvas to the settings
+			oldClasses = {canvasPath: canvasFilePath, canvasClass: [], appendBehavior: behavior};
+			this.settings.canvasAdded.push({
+				canvasPath: canvasFilePath,
+				canvasClass: [],
+				appendBehavior: behavior
+			});
+			this.saveSettings().then();
+		}
+		return oldClasses;
+	}
 
 	
 	async onload() {
@@ -89,20 +111,11 @@ export default class CanvasCSS extends Plugin {
 					//@ts-ignore
 					const canvasPath = canvasView.file.path;
 					if (!checking) {
-						let oldClasses = this.settings.canvasAdded.find((item) => item.canvasPath === canvasPath);
-						if (!oldClasses) {
-							// Add the canvas to the settings
-							oldClasses = {canvasPath: canvasPath, canvasClass: [], appendBehavior: AppendBehavior.body};
-							this.settings.canvasAdded.push({
-								canvasPath: canvasPath,
-								canvasClass: [],
-								appendBehavior: AppendBehavior.workspaceLeaf
-							});
-							this.saveSettings();
-						}
+						const oldClasses = this.quickCreateSettings(canvasPath, AppendBehavior.body);
 						// @ts-ignore
 						oldClasses.appendBehavior = AppendBehavior.body;
 						this.saveSettings();
+						addCanvasPathAndCanvasFile(AppendBehavior.body, canvasPath);
 						reloadCanvas(canvasPath, oldClasses.appendBehavior, this.settings);
 					}
 					return true;
@@ -111,28 +124,39 @@ export default class CanvasCSS extends Plugin {
 			}});
 		
 		this.addCommand({
-			id: "switch-to-body-behavior",
-			name: t("commands.quickSwitch") as string,
+			id: "switch-to-view-content-behavior",
+			name: t("commands.switchToViewContentBehavior") as string,
 			checkCallback: (checking: boolean) => {
 				const canvasView = this.app.workspace.getActiveViewOfType(ItemView);
 				if ((canvasView?.getViewType() === "canvas")) {
 					//@ts-ignore
 					const canvasPath = canvasView.file.path;
 					if (!checking) {
-						let oldClasses = this.settings.canvasAdded.find((item) => item.canvasPath === canvasPath);
-						if (!oldClasses) {
-							// Add the canvas to the settings
-							oldClasses = {canvasPath: canvasPath, canvasClass: [], appendBehavior: AppendBehavior.body};
-							this.settings.canvasAdded.push({
-								canvasPath: canvasPath,
-								canvasClass: [],
-								appendBehavior: AppendBehavior.body
-							});
-							this.saveSettings();
-						}
-						// @ts-ignore
+						const oldClasses = this.quickCreateSettings(canvasPath, AppendBehavior.workspaceLeaf);
+						oldClasses.appendBehavior = AppendBehavior.workspaceLeaf;
+						this.saveSettings();
+						addCanvasPathAndCanvasFile(AppendBehavior.workspaceLeaf, canvasPath);
+						reloadCanvas(canvasPath, oldClasses.appendBehavior, this.settings);
+					}
+					return true;
+				}
+				return false;
+			}});
+		
+		this.addCommand({
+			id: "quick-switch-behavior",
+			name: t("commands.quickSwitch") as string,
+			checkCallback:(checking: boolean) => {
+				const canvasView = this.app.workspace.getActiveViewOfType(ItemView);
+				if ((canvasView?.getViewType() === "canvas")) {
+					//@ts-ignore
+					const canvasPath = canvasView.file.path;
+					if (!checking) {
+						const oldClasses = this.quickCreateSettings(canvasPath, AppendBehavior.workspaceLeaf);
+						
 						oldClasses.appendBehavior = oldClasses.appendBehavior === AppendBehavior.body ? AppendBehavior.workspaceLeaf : AppendBehavior.body;
 						this.saveSettings();
+						addCanvasPathAndCanvasFile(oldClasses.appendBehavior, canvasPath);
 						reloadCanvas(canvasPath, oldClasses.appendBehavior, this.settings);
 					}
 					return true;
@@ -145,27 +169,23 @@ export default class CanvasCSS extends Plugin {
 			const dataType = document.querySelector(".workspace-leaf.mod-active > .workspace-leaf-content") ? document.querySelector(".workspace-leaf.mod-active > .workspace-leaf-content").attributes[1].value : "";
 			if (file && file.extension === "canvas" && dataType === "canvas") {
 				const canvasClassList = this.settings.canvasAdded.find((canvas) => canvas.canvasPath === file.path);
-				const querySelector = whereToAppend(canvasClassList?.appendBehavior ? canvasClassList.appendBehavior : AppendBehavior.workspaceLeaf);
-				document.querySelector(querySelector)?.setAttribute("data-canvas-path", file.path);
-				document.querySelector(querySelector)?.classList.add("canvas-file");
+				addCanvasPathAndCanvasFile(canvasClassList?.appendBehavior ? canvasClassList.appendBehavior : AppendBehavior.workspaceLeaf, file.path);
 				if (canvasClassList) {
 					reloadCanvas(file.path, canvasClassList.appendBehavior, this.settings);
-				} else {
-					document.querySelector("body")?.removeAttribute("data-canvas-path");
-					document.querySelector("body")?.classList.remove("canvas-file");
 				}
-
 				const canvasClassesNotFromThisFile = this.settings.canvasAdded.filter((item) => item.canvasPath !== file.path);
+				
 				for (const canvas of canvasClassesNotFromThisFile) {
 					for (const cssClass of canvas.canvasClass) {
-						removeFromDOM(cssClass, this.settings.logLevel);
+						const isIncluded = canvasClassList ? canvasClassList.canvasClass.includes(cssClass) : false;
+						if (!isIncluded) {
+							document.querySelector(whereToAppend(canvas.appendBehavior))?.classList.remove(cssClass);
+						}
 					}
 				}
 			} else if (dataType !== "canvas") {
-				document.querySelector("body")?.removeAttribute("data-canvas-path");
-				document.querySelector("body")?.classList.remove("canvas-file");
-				document.querySelector(".workspace-leaf.mod-active .view-content")?.removeAttribute("data-canvas-path");
-				document.querySelector(".workspace-leaf.mod-active .view-content")?.classList.remove("canvas-file");
+				removeCanvasPathAndCanvasFile(AppendBehavior.body);
+				removeCanvasPathAndCanvasFile(AppendBehavior.workspaceLeaf);
 				for (const canvas of this.settings.canvasAdded) {
 					for (const cssClass of canvas.canvasClass) {
 						removeFromDOM(cssClass, this.settings.logLevel);
