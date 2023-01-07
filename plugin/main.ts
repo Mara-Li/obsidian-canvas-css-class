@@ -3,7 +3,7 @@ import {DEFAULT_SETTINGS, CanvasCssSettings, AppendBehavior} from "./interface";
 import {CanvasCssSettingsTabs} from "./settings";
 import {AddCssClass} from "./modals/addClass";
 import {RemoveCSSclass} from "./modals/removeClass";
-import {t, translationLanguage} from "./i18n";
+import {StringFunction, t, translationLanguage} from "./i18n";
 import {
 	addCanvasPathAndCanvasFile,
 	addToDOM,
@@ -36,11 +36,26 @@ export default class CanvasCSS extends Plugin {
 		}
 		return oldClasses;
 	}
+	
+	convertOldSettings() {
+		// Convert the old settings to the new ones
+		if (this.settings.canvasAdded) {
+			// Convert the old settings to the new ones
+			this.settings.canvasAdded.forEach((canvas) => {
+				if (!canvas.appendBehavior) {
+					canvas.appendBehavior = AppendBehavior.workspaceLeaf;
+				}
+			});
+			this.saveSettings().then();
+		}
+	}
 
 	
 	async onload() {
 		await this.loadSettings();
 		console.log(`Loading ${this.manifest.name.replaceAll(" ", "")} v${this.manifest.version} (language: ${translationLanguage})`);
+		
+		this.convertOldSettings();
 		
 		this.addCommand({
 			id: "add-canvas-css-class",
@@ -112,6 +127,9 @@ export default class CanvasCSS extends Plugin {
 						oldClasses.appendBehavior = AppendBehavior.body;
 						this.saveSettings();
 						addCanvasPathAndCanvasFile(AppendBehavior.body, canvasPath);
+						new Notice(
+							(t("message.switchedToBody") as string)
+						);
 						reloadCanvas(canvasPath, oldClasses.appendBehavior, this.settings);
 					}
 					return true;
@@ -132,6 +150,9 @@ export default class CanvasCSS extends Plugin {
 						oldClasses.appendBehavior = AppendBehavior.workspaceLeaf;
 						this.saveSettings();
 						addCanvasPathAndCanvasFile(AppendBehavior.workspaceLeaf, canvasPath);
+						new Notice(
+							(t("message.switchedToViewContent") as string)
+						);
 						reloadCanvas(canvasPath, oldClasses.appendBehavior, this.settings);
 					}
 					return true;
@@ -152,6 +173,9 @@ export default class CanvasCSS extends Plugin {
 						oldClasses.appendBehavior = oldClasses.appendBehavior === AppendBehavior.body ? AppendBehavior.workspaceLeaf : AppendBehavior.body;
 						this.saveSettings();
 						addCanvasPathAndCanvasFile(oldClasses.appendBehavior, canvasPath);
+						new Notice(
+							(t("message.quickSwitch") as StringFunction)(oldClasses.appendBehavior)
+						);
 						reloadCanvas(canvasPath, oldClasses.appendBehavior, this.settings);
 					}
 					return true;

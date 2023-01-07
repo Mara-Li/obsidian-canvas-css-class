@@ -71,5 +71,9 @@ export default {
 		switchToBodyBehavior: "Passer au comportement body",
 		quickSwitch: "Quick switch entre body & view-content",
 	},
-	
+	message : {
+		quickSwitch:(key: string): string => `Passage au comportement : ${key}`,
+		switchedToBody: "Passage au comportement body",
+		switchedToViewContent: "Passage au comportement view-content",
+	}
 };
