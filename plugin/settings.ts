@@ -3,7 +3,7 @@ import CanvasCSS from "./main";
 import {AddCssClass, AddNewClassWithFile} from "./modals/addClass";
 import {EditBehavior, RenameCanvasPath, RenameCssClass} from "./modals/editClass";
 import {t} from "./i18n";
-import {addToDOM, reloadCanvas, removeFromDOM} from "./utils";
+import {addCanvasPathAndCanvasFile, addToDOM, reloadCanvas, removeFromDOM} from "./utils";
 
 export class CanvasCssSettingsTabs extends PluginSettingTab {
 	plugin: CanvasCSS;
@@ -106,6 +106,7 @@ export class CanvasCssSettingsTabs extends PluginSettingTab {
 								canvas.appendBehavior = newAppendBehavior;
 								await this.plugin.saveSettings();
 								this.display();
+								addCanvasPathAndCanvasFile(canvas.appendBehavior, canvas.canvasPath);
 								reloadCanvas(canvas.canvasPath, canvas.appendBehavior, this.plugin.settings);
 							}).open();
 						})
@@ -140,6 +141,7 @@ export class CanvasCssSettingsTabs extends PluginSettingTab {
 									}
 									await this.plugin.saveSettings();
 									this.display();
+									addCanvasPathAndCanvasFile(canvas.appendBehavior, canvas.canvasPath);
 									reloadCanvas(canvas.canvasPath, canvas.appendBehavior, this.plugin.settings);
 								}).open();
 							})
