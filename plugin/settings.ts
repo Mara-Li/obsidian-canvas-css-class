@@ -3,7 +3,7 @@ import CanvasCSS from "./main";
 import {AddCssClass, AddNewClassWithFile} from "./modals/addClass";
 import {EditMode, RenameCanvasPath, RenameCssClass} from "./modals/editClass";
 import {t} from "./i18n";
-import {addCanvasPathAndCanvasFile, addToDOM, reloadCanvas, removeFromDOM} from "./utils";
+import {addToDOM, reloadCanvas, removeFromDOM} from "./utils";
 
 export class CanvasCssSettingsTabs extends PluginSettingTab {
 	plugin: CanvasCSS;
@@ -61,7 +61,8 @@ export class CanvasCssSettingsTabs extends PluginSettingTab {
 						}
 						await this.plugin.saveSettings();
 						this.display();
-						addToDOM(cssClass, path, appendMode, logLevel);
+						const openedLeaves = this.plugin.getSpecificLeaf(this.app.workspace, path);
+						addToDOM(cssClass, path, appendMode, logLevel, openedLeaves);
 					}).open();
 				}));
 		
@@ -80,7 +81,8 @@ export class CanvasCssSettingsTabs extends PluginSettingTab {
 									canvas.canvasClass.push(cssClass);
 									await this.plugin.saveSettings();
 									this.display();
-									addToDOM(cssClass, canvas.canvasPath, canvas.appendMode, logLevel);
+									const openedLeaves = this.plugin.getSpecificLeaf(this.app.workspace, canvas.canvasPath);
+									addToDOM(cssClass, canvas.canvasPath, canvas.appendMode, logLevel, openedLeaves);
 								} else {
 									new Notice(t("settings.alreadyApplied") as string);
 								}
@@ -106,8 +108,8 @@ export class CanvasCssSettingsTabs extends PluginSettingTab {
 								canvas.appendMode = newAppendMode;
 								await this.plugin.saveSettings();
 								this.display();
-								addCanvasPathAndCanvasFile(canvas.appendMode, canvas.canvasPath);
-								reloadCanvas(canvas.canvasPath, canvas.appendMode, this.plugin.settings);
+								const openedLeaves = this.plugin.getSpecificLeaf(this.app.workspace, canvas.canvasPath);
+								reloadCanvas(canvas.canvasPath, canvas.appendMode, this.plugin.settings, openedLeaves);
 							}).open();
 						})
 				)
@@ -121,7 +123,8 @@ export class CanvasCssSettingsTabs extends PluginSettingTab {
 							this.plugin.settings.canvasAdded = this.plugin.settings.canvasAdded.filter((item) => item.canvasPath !== canvas.canvasPath);
 							await this.plugin.saveSettings();
 							for (const cssClass of oldCanvas?.canvasClass ?? []) {
-								removeFromDOM(cssClass, logLevel);
+								const openedLeaves = this.plugin.getSpecificLeaf(this.app.workspace, canvas.canvasPath);
+								removeFromDOM(cssClass, logLevel, openedLeaves);
 							}
 							this.display();
 						}));
@@ -141,8 +144,8 @@ export class CanvasCssSettingsTabs extends PluginSettingTab {
 									}
 									await this.plugin.saveSettings();
 									this.display();
-									addCanvasPathAndCanvasFile(canvas.appendMode, canvas.canvasPath);
-									reloadCanvas(canvas.canvasPath, canvas.appendMode, this.plugin.settings);
+									const openedLeaves = this.plugin.getSpecificLeaf(this.app.workspace, canvas.canvasPath);
+									reloadCanvas(canvas.canvasPath, canvas.appendMode, this.plugin.settings, openedLeaves);
 								}).open();
 							})
 					)
@@ -164,7 +167,8 @@ export class CanvasCssSettingsTabs extends PluginSettingTab {
 								}
 								await this.plugin.saveSettings();
 								this.display();
-								removeFromDOM(cssClass, logLevel);
+								const openedLeaves = this.plugin.getSpecificLeaf(this.app.workspace, canvas.canvasPath);
+								removeFromDOM(cssClass, logLevel, openedLeaves);
 							})
 					);
 			}

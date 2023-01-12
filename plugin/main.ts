@@ -1,16 +1,14 @@
-import {ItemView, Notice, Plugin} from "obsidian";
+import {ItemView, Notice, Plugin, Workspace, WorkspaceLeaf} from "obsidian";
 import {DEFAULT_SETTINGS, CanvasCssSettings, AppendMode} from "./interface";
 import {CanvasCssSettingsTabs} from "./settings";
 import {AddCssClass} from "./modals/addClass";
 import {RemoveCSSclass} from "./modals/removeClass";
 import {StringFunction, t, translationLanguage} from "./i18n";
 import {
-	addCanvasPathAndCanvasFile,
-	addToDOM,
+	addToDOM, logging,
 	reloadCanvas,
-	removeCanvasPathAndCanvasFile,
-	removeFromDOM,
-	whereToAppend
+	removeCanvasPathAndCanvasFile, removeFromBody,
+	removeFromViewContent,
 } from "./utils";
 
 export default class CanvasCSS extends Plugin {
@@ -50,6 +48,16 @@ export default class CanvasCSS extends Plugin {
 		}
 	}
 
+	getSpecificLeaf(workspace: Workspace, filePath: string): WorkspaceLeaf[] {
+		const allSpecificLeafs: WorkspaceLeaf[] = [];
+		workspace.iterateAllLeaves((leaf) => {
+			const viewState = leaf.getViewState();
+			if (viewState.type === "canvas" && viewState.state.file === filePath && !allSpecificLeafs.includes(leaf)) {
+				allSpecificLeafs.push(leaf);
+			}
+		});
+		return allSpecificLeafs;
+	}
 	
 	async onload() {
 		await this.loadSettings();
@@ -87,7 +95,8 @@ export default class CanvasCSS extends Plugin {
 							}
 							this.saveSettings();
 							const mode = this.settings.canvasAdded.find((item) => item.canvasPath === canvasPath)?.appendMode;
-							addToDOM(result, canvasPath, mode ? mode : AppendMode.workspaceLeaf, this.settings.logLevel);
+							const theOpenedLeaf = this.getSpecificLeaf(this.app.workspace, canvasPath);
+							addToDOM(result, canvasPath, mode ? mode : AppendMode.workspaceLeaf, this.settings.logLevel, theOpenedLeaf);
 						}).open();
 					} return true;
 				} return false;
@@ -126,11 +135,11 @@ export default class CanvasCSS extends Plugin {
 						// @ts-ignore
 						oldClasses.appendMode = AppendMode.body;
 						this.saveSettings();
-						addCanvasPathAndCanvasFile(AppendMode.body, canvasPath);
 						new Notice(
 							(t("message.switchedToBody") as string)
 						);
-						reloadCanvas(canvasPath, oldClasses.appendMode, this.settings);
+						const leaves = this.getSpecificLeaf(this.app.workspace, canvasPath);
+						reloadCanvas(canvasPath, oldClasses.appendMode, this.settings, leaves);
 					}
 					return true;
 				}
@@ -149,11 +158,11 @@ export default class CanvasCSS extends Plugin {
 						const oldClasses = this.quickCreateSettings(canvasPath, AppendMode.workspaceLeaf);
 						oldClasses.appendMode = AppendMode.workspaceLeaf;
 						this.saveSettings();
-						addCanvasPathAndCanvasFile(AppendMode.workspaceLeaf, canvasPath);
 						new Notice(
 							(t("message.switchedToViewContent") as string)
 						);
-						reloadCanvas(canvasPath, oldClasses.appendMode, this.settings);
+						const leaves = this.getSpecificLeaf(this.app.workspace, canvasPath);
+						reloadCanvas(canvasPath, oldClasses.appendMode, this.settings, leaves);
 					}
 					return true;
 				}
@@ -172,11 +181,11 @@ export default class CanvasCSS extends Plugin {
 						const oldClasses = this.quickCreateSettings(canvasPath, AppendMode.workspaceLeaf);
 						oldClasses.appendMode = oldClasses.appendMode === AppendMode.body ? AppendMode.workspaceLeaf : AppendMode.body;
 						this.saveSettings();
-						addCanvasPathAndCanvasFile(oldClasses.appendMode, canvasPath);
 						new Notice(
 							(t("message.quickSwitch") as StringFunction)(oldClasses.appendMode)
 						);
-						reloadCanvas(canvasPath, oldClasses.appendMode, this.settings);
+						const leaves = this.getSpecificLeaf(this.app.workspace, canvasPath);
+						reloadCanvas(canvasPath, oldClasses.appendMode, this.settings, leaves);
 					}
 					return true;
 				}
@@ -185,12 +194,13 @@ export default class CanvasCSS extends Plugin {
 		
 		this.registerEvent(this.app.workspace.on("file-open", (file) => {
 			// @ts-ignore
-			const dataType = document.querySelector(".workspace-leaf.mod-active > .workspace-leaf-content") ? document.querySelector(".workspace-leaf.mod-active > .workspace-leaf-content").attributes[1].value : "";
-			if (file && file.extension === "canvas" && dataType === "canvas") {
+			const leavesTypes = this.app.workspace.getActiveViewOfType(ItemView)?.getViewType();
+			if (file && file.extension === "canvas" && leavesTypes === "canvas") {
+				logging(`OPENED FILE ${file.path} IS A CANVAS ; ADDING CLASS`, this.settings.logLevel);
 				const canvasClassList = this.settings.canvasAdded.find((canvas) => canvas.canvasPath === file.path);
-				addCanvasPathAndCanvasFile(canvasClassList?.appendMode ? canvasClassList.appendMode : AppendMode.workspaceLeaf, file.path);
+				const leaves = this.getSpecificLeaf(this.app.workspace, file.path);
 				if (canvasClassList) {
-					reloadCanvas(file.path, canvasClassList.appendMode, this.settings);
+					reloadCanvas(file.path, canvasClassList.appendMode, this.settings, leaves);
 				}
 				const canvasClassesNotFromThisFile = this.settings.canvasAdded.filter((item) => item.canvasPath !== file.path);
 				
@@ -198,16 +208,17 @@ export default class CanvasCSS extends Plugin {
 					for (const cssClass of canvas.canvasClass) {
 						const isIncluded = canvasClassList ? canvasClassList.canvasClass.includes(cssClass) : false;
 						if (!isIncluded) {
-							document.querySelector(whereToAppend(canvas.appendMode))?.classList.remove(cssClass);
+							removeFromViewContent(cssClass, this.settings.logLevel, leaves);
+							removeFromBody(cssClass, this.settings.logLevel);
 						}
 					}
 				}
-			} else if (dataType !== "canvas") {
+			} else if (leavesTypes !== "canvas") {
+				logging(`OPENED FILE (${file?.path}) IS NOT A CANVAS, REMOVING ALL FROM THE BODY`, this.settings.logLevel);
 				removeCanvasPathAndCanvasFile(AppendMode.body);
-				removeCanvasPathAndCanvasFile(AppendMode.workspaceLeaf);
 				for (const canvas of this.settings.canvasAdded) {
 					for (const cssClass of canvas.canvasClass) {
-						removeFromDOM(cssClass, this.settings.logLevel);
+						removeFromBody(cssClass, this.settings.logLevel);
 					}
 				}
 			}
