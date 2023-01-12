@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.1.4](https://github.com/Lisandra-dev/canvas-css-class/compare/2.1.3...2.1.4) (2023-01-12)
+
+
+### Bug Fixes
+
+* use interateleaf instead of querying document ([b0b8ecb](https://github.com/Lisandra-dev/canvas-css-class/commit/b0b8ecb5b948ff3603fd48c4be6f8a1ab307ee78))
+
 ### [2.1.3](https://github.com/Lisandra-dev/canvas-css-class/compare/2.1.2...2.1.3) (2023-01-07)
 
 ### [2.1.2](https://github.com/Lisandra-dev/canvas-css-class/compare/2.1.1...2.1.2) (2023-01-07)
