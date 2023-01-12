@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.1.5](https://github.com/Lisandra-dev/canvas-css-class/compare/2.1.4...2.1.5) (2023-01-12)
+
+
+### Bug Fixes
+
+* use `file.view` instance of FileView ([6af83c4](https://github.com/Lisandra-dev/canvas-css-class/commit/6af83c46c9bbd46b2b02fbcf246b64ac2a7bad07))
+
 ### [2.1.4](https://github.com/Lisandra-dev/canvas-css-class/compare/2.1.3...2.1.4) (2023-01-12)
 
 
