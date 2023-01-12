@@ -3,7 +3,7 @@
 	 * @param {string} message the message to send to the console
  * * @param {string} level the log level of the message
 	 */
-import {Notice, WorkspaceLeaf} from "obsidian";
+import {FileView, Notice, WorkspaceLeaf} from "obsidian";
 import {AppendMode, CanvasCssSettings} from "./interface";
 
 export function logging(message: string, logLevel: string): void {
@@ -29,10 +29,11 @@ export function logging(message: string, logLevel: string): void {
  * The function to remove from Dom the class added. It removes from the body and the view-content
  * @param cssClass {string} the class to remove
  * @param logLevel {string} the log level of the plugin
- * @param leaves
+ * @param leaves {WorkspaceLeaf[]} the leaves to remove the class from, if the method used is AppendMode.workspaceLeaf
+ * @param filepath {string} the path of the file to remove the class from, if the method used is AppendMode.body (used only for the log)
  */
-export function removeFromDOM(cssClass: string, logLevel: string, leaves: WorkspaceLeaf[]): void {
-	removeFromBody(cssClass, logLevel);
+export function removeFromDOM(cssClass: string, logLevel: string, leaves: WorkspaceLeaf[], filepath: string | undefined): void {
+	removeFromBody(cssClass, logLevel, filepath);
 	removeFromViewContent(cssClass, logLevel, leaves, true);
 }
 
@@ -41,11 +42,12 @@ export function removeFromDOM(cssClass: string, logLevel: string, leaves: Worksp
  * The function to remove from Dom the class added. It removes from the body.
  * @param cssClass {string} the class to remove
  * @param logLevel {string} the log level of the plugin
+ * @param filepath
  */
-export function removeFromBody(cssClass: string, logLevel: string): void {
+export function removeFromBody(cssClass: string, logLevel: string, filepath: string | undefined): void {
 	const classIsInBody = document.body.classList.contains(cssClass);
 	if (classIsInBody) {
-		logging(`Class of ${document.querySelector("body")?.getAttribute("data-canvas-path")} : ${document.querySelector("body")?.classList}`, logLevel);
+		logging(`Class of ${filepath} : ${document.querySelector("body")?.classList}`, logLevel);
 		document.querySelector("body")?.classList.remove(cssClass);
 		logging(`Removed ${cssClass} from the body`, logLevel);
 	}
@@ -102,8 +104,9 @@ export function reloadCanvas(canvasPath: string, appendMode: string, settings: C
 		if (appendMode === AppendMode.body) {
 			logging(`RELOADING CANVAS ${canvasPath} WITH CLASS ${cssClass} IN BODY`, settings.logLevel);
 			const selectedCanvas = document.querySelector(`body:has(.canvas-file[data-canvas-path="${canvasPath}"])`);
+			const getActiveLeaf = leaves.find((leaf) => leaf.view instanceof FileView && leaf.view.file.path === canvasPath);
 			
-			if (selectedCanvas) {
+			if (selectedCanvas || getActiveLeaf) {
 				for (const css of cssClass) {
 					addToDOM(css, canvasPath, appendMode, settings.logLevel, leaves);
 					removeFromViewContent(css, settings.logLevel, leaves);
@@ -112,7 +115,7 @@ export function reloadCanvas(canvasPath: string, appendMode: string, settings: C
 		} else {
 			for (const css of cssClass) {
 				logging(`RELOADING CANVAS ${canvasPath} WITH CLASS ${css} IN VIEW-CONTENT`, settings.logLevel);
-				removeFromBody(css, settings.logLevel);
+				removeFromBody(css, settings.logLevel, canvasPath);
 				addToDOM(css, canvasPath, appendMode, settings.logLevel, leaves);
 			}
 		}

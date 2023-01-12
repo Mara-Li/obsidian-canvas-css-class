@@ -218,7 +218,7 @@ export default class CanvasCSS extends Plugin {
 						const isIncluded = canvasClassList ? canvasClassList.canvasClass.includes(cssClass) : false;
 						if (!isIncluded) {
 							removeFromViewContent(cssClass, this.settings.logLevel, leaves);
-							removeFromBody(cssClass, this.settings.logLevel);
+							removeFromBody(cssClass, this.settings.logLevel, file.path);
 						}
 					}
 				}
@@ -227,7 +227,7 @@ export default class CanvasCSS extends Plugin {
 				removeCanvasPathAndCanvasFile(AppendMode.body);
 				for (const canvas of this.settings.canvasAdded) {
 					for (const cssClass of canvas.canvasClass) {
-						removeFromBody(cssClass, this.settings.logLevel);
+						removeFromBody(cssClass, this.settings.logLevel, file?.path);
 					}
 				}
 			}
