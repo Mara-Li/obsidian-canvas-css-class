@@ -1,4 +1,4 @@
-import {FileView, ItemView, Notice, Plugin, Workspace, WorkspaceLeaf} from "obsidian";
+import {FileView, ItemView, Notice, Plugin, WorkspaceLeaf} from "obsidian";
 import {DEFAULT_SETTINGS, CanvasCssSettings, AppendMode} from "./interface";
 import {CanvasCssSettingsTabs} from "./settings";
 import {AddCssClass} from "./modals/addClass";
@@ -30,7 +30,7 @@ export default class CanvasCSS extends Plugin {
 				canvasClass: [],
 				appendMode: mode
 			});
-			this.saveSettings().then();
+			this.saveSettings();
 		}
 		return oldClasses;
 	}
@@ -47,20 +47,19 @@ export default class CanvasCSS extends Plugin {
 					canvas.appendMode = AppendMode.workspaceLeaf;
 				}
 			});
-			this.saveSettings().then();
+			this.saveSettings();
 		}
 	}
 	
 	/**
 	 * Allow to get the canvas opened in the current view, to get a specific one
-	 * @param workspace {Workspace} the Obsidian workspace
 	 * @param filePath {string} the path of the canvas
 	 * @return {WorkspaceLeaf[]} all leaf corresponding to the canvas file
 	 */
-	getSpecificLeaf(workspace: Workspace, filePath: string): WorkspaceLeaf[] {
+	getLeafByPath(filePath: string): WorkspaceLeaf[] {
 		const allSpecificLeafs: WorkspaceLeaf[] = [];
-		workspace.iterateAllLeaves((leaf) => {
-			if (leaf.view instanceof FileView && leaf.view.file.path === filePath && !allSpecificLeafs.includes(leaf)) {
+		this.app.workspace.iterateAllLeaves((leaf) => {
+			if (leaf.view instanceof FileView && leaf.view.file.path === filePath) {
 				allSpecificLeafs.push(leaf);
 			}
 		});
@@ -104,7 +103,7 @@ export default class CanvasCSS extends Plugin {
 							}
 							this.saveSettings();
 							const mode = this.settings.canvasAdded.find((item) => item.canvasPath === canvasPath)?.appendMode;
-							const theOpenedLeaf = this.getSpecificLeaf(this.app.workspace, canvasPath);
+							const theOpenedLeaf = this.getLeafByPath(canvasPath);
 							addToDOM(result, canvasPath, mode ? mode : AppendMode.workspaceLeaf, this.settings.logLevel, theOpenedLeaf);
 						}).open();
 					} return true;
@@ -147,7 +146,7 @@ export default class CanvasCSS extends Plugin {
 						new Notice(
 							(t("message.switchedToBody") as string)
 						);
-						const leaves = this.getSpecificLeaf(this.app.workspace, canvasPath);
+						const leaves = this.getLeafByPath(canvasPath);
 						reloadCanvas(canvasPath, oldClasses.appendMode, this.settings, leaves);
 					}
 					return true;
@@ -170,7 +169,7 @@ export default class CanvasCSS extends Plugin {
 						new Notice(
 							(t("message.switchedToViewContent") as string)
 						);
-						const leaves = this.getSpecificLeaf(this.app.workspace, canvasPath);
+						const leaves = this.getLeafByPath(canvasPath);
 						reloadCanvas(canvasPath, oldClasses.appendMode, this.settings, leaves);
 					}
 					return true;
@@ -193,7 +192,7 @@ export default class CanvasCSS extends Plugin {
 						new Notice(
 							(t("message.quickSwitch") as StringFunction)(oldClasses.appendMode)
 						);
-						const leaves = this.getSpecificLeaf(this.app.workspace, canvasPath);
+						const leaves = this.getLeafByPath(canvasPath);
 						reloadCanvas(canvasPath, oldClasses.appendMode, this.settings, leaves);
 					}
 					return true;
@@ -202,12 +201,11 @@ export default class CanvasCSS extends Plugin {
 			}});
 		
 		this.registerEvent(this.app.workspace.on("file-open", (file) => {
-			// @ts-ignore
-			const leavesTypes = this.app.workspace.getActiveViewOfType(ItemView)?.getViewType();
-			if (file && file.extension === "canvas" && leavesTypes === "canvas") {
+			const leafType = this.app.workspace.getActiveViewOfType(ItemView)?.getViewType();
+			if (file && file.extension === "canvas" && leafType === "canvas") {
 				logging(`OPENED FILE ${file.path} IS A CANVAS ; ADDING CLASS`, this.settings.logLevel);
 				const canvasClassList = this.settings.canvasAdded.find((canvas) => canvas.canvasPath === file.path);
-				const leaves = this.getSpecificLeaf(this.app.workspace, file.path);
+				const leaves = this.getLeafByPath(file.path);
 				if (canvasClassList) {
 					reloadCanvas(file.path, canvasClassList.appendMode, this.settings, leaves);
 				}
@@ -222,7 +220,7 @@ export default class CanvasCSS extends Plugin {
 						}
 					}
 				}
-			} else if (leavesTypes !== "canvas") {
+			} else if (leafType !== "canvas") {
 				const isFile = file ? ` ("${file.path}") ` : " ";
 				logging(`OPENED FILE${isFile}IS NOT A CANVAS`, this.settings.logLevel);
 				for (const canvas of this.settings.canvasAdded) {

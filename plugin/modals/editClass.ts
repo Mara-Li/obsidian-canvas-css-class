@@ -38,7 +38,7 @@ export class RenameCssClass extends Modal {
 		new Setting(contentEl)
 			.addButton(cb => cb
 				.setButtonText(add)
-				.onClick(async () => {
+				.onClick( () => {
 					this.onSubmit(this.result.replace(/\W+/g, "-").toLowerCase());
 					this.close();
 				}));

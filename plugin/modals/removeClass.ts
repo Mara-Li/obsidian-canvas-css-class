@@ -57,7 +57,7 @@ export class RemoveCSSclass extends FuzzySuggestModal<string> {
 			}
 			this.plugin.saveSettings();
 			new Notice((t("removeFromCanvas") as StringFunction)([item.toString(), this.filepath]));
-			const openedLeaves = this.plugin.getSpecificLeaf(this.app.workspace, this.filepath);
+			const openedLeaves = this.plugin.getLeafByPath(this.filepath);
 			removeFromDOM(item.toString(), this.settings.logLevel, openedLeaves, this.filepath);
 		}
 	}
