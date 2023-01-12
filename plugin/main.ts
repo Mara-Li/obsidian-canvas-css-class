@@ -1,4 +1,4 @@
-import {ItemView, Notice, Plugin, Workspace, WorkspaceLeaf} from "obsidian";
+import {FileView, ItemView, Notice, Plugin, Workspace, WorkspaceLeaf} from "obsidian";
 import {DEFAULT_SETTINGS, CanvasCssSettings, AppendMode} from "./interface";
 import {CanvasCssSettingsTabs} from "./settings";
 import {AddCssClass} from "./modals/addClass";
@@ -35,6 +35,9 @@ export default class CanvasCSS extends Plugin {
 		return oldClasses;
 	}
 	
+	/** Function to add a new canvas in the settings if none exists ;
+	 * If the canvas already exists, it will return the old settings
+	 */
 	convertOldSettings() {
 		// Convert the old settings to the new ones
 		if (this.settings.canvasAdded) {
@@ -47,15 +50,21 @@ export default class CanvasCSS extends Plugin {
 			this.saveSettings().then();
 		}
 	}
-
+	
+	/**
+	 * Allow to get the canvas opened in the current view, to get a specific one
+	 * @param workspace {Workspace} the Obsidian workspace
+	 * @param filePath {string} the path of the canvas
+	 * @return {WorkspaceLeaf[]} all leaf corresponding to the canvas file
+	 */
 	getSpecificLeaf(workspace: Workspace, filePath: string): WorkspaceLeaf[] {
 		const allSpecificLeafs: WorkspaceLeaf[] = [];
 		workspace.iterateAllLeaves((leaf) => {
-			const viewState = leaf.getViewState();
-			if (viewState.type === "canvas" && viewState.state.file === filePath && !allSpecificLeafs.includes(leaf)) {
+			if (leaf.view instanceof FileView && leaf.view.file.path === filePath && !allSpecificLeafs.includes(leaf)) {
 				allSpecificLeafs.push(leaf);
 			}
 		});
+		logging(`Found ${allSpecificLeafs.length} leaves for ${filePath}`, this.settings.logLevel);
 		return allSpecificLeafs;
 	}
 	
