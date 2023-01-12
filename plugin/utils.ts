@@ -47,14 +47,14 @@ export function removeFromDOM(cssClass: string, logLevel: string, leaves: Worksp
 export function removeFromBody(cssClass: string, logLevel: string, filepath: string | undefined): void {
 	const classIsInBody = document.body.classList.contains(cssClass);
 	if (classIsInBody) {
-		logging(`Class of ${filepath} : ${document.querySelector("body")?.classList}`, logLevel);
-		document.querySelector("body")?.classList.remove(cssClass);
+		logging(`Class of "${filepath}" : ${document.body.classList}`, logLevel);
+		document.body.classList.remove(cssClass);
 		logging(`Removed ${cssClass} from the body`, logLevel);
 	}
 	const bodyContainsData = document.body.classList.contains("canvas-file") && document.body.getAttribute("data-canvas-path");
 	if (bodyContainsData) {
-		document.querySelector("body")?.removeAttribute("data-canvas-path");
-		document.querySelector("body")?.classList.remove("canvas-file");
+		document.body.removeAttribute("data-canvas-path");
+		document.body.classList.remove("canvas-file");
 	}
 }
 
@@ -102,7 +102,7 @@ export function reloadCanvas(canvasPath: string, appendMode: string, settings: C
 	const cssClass = settings.canvasAdded.find((canvas) => canvas.canvasPath === canvasPath)?.canvasClass;
 	if (cssClass) {
 		if (appendMode === AppendMode.body) {
-			logging(`RELOADING CANVAS ${canvasPath} WITH CLASS ${cssClass} IN BODY`, settings.logLevel);
+			logging(`RELOADING canvas "${canvasPath}" in BODY MODE`, settings.logLevel);
 			const selectedCanvas = document.querySelector(`body:has(.canvas-file[data-canvas-path="${canvasPath}"])`);
 			const getActiveLeaf = leaves.find((leaf) => leaf.view instanceof FileView && leaf.view.file.path === canvasPath);
 			
@@ -114,7 +114,7 @@ export function reloadCanvas(canvasPath: string, appendMode: string, settings: C
 			}
 		} else {
 			for (const css of cssClass) {
-				logging(`RELOADING CANVAS ${canvasPath} WITH CLASS ${css} IN VIEW-CONTENT`, settings.logLevel);
+				logging(`RELOADING canvas "${canvasPath}" in VIEW-CONTENT MODE`, settings.logLevel);
 				removeFromBody(css, settings.logLevel, canvasPath);
 				addToDOM(css, canvasPath, appendMode, settings.logLevel, leaves);
 			}
@@ -154,12 +154,3 @@ export function addToDOM(cssClass: string, filePath: string, appendMode: string,
 	}
 }
 
-/**
- * Function to REMOVE the canvas path and canvas file from the body and the view-content
- * @param appendMode {string} the mode set for the canvas
- */
-export function removeCanvasPathAndCanvasFile(appendMode: string): void {
-	const querySelector = whereToAppend(appendMode);
-	document.querySelector(querySelector)?.removeAttribute("data-canvas-path");
-	document.querySelector(querySelector)?.classList.remove("canvas-file");
-}

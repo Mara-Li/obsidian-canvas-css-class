@@ -7,7 +7,7 @@ import {StringFunction, t, translationLanguage} from "./i18n";
 import {
 	addToDOM, logging,
 	reloadCanvas,
-	removeCanvasPathAndCanvasFile, removeFromBody,
+	removeFromBody,
 	removeFromViewContent,
 } from "./utils";
 
@@ -223,8 +223,8 @@ export default class CanvasCSS extends Plugin {
 					}
 				}
 			} else if (leavesTypes !== "canvas") {
-				logging(`OPENED FILE (${file?.path}) IS NOT A CANVAS, REMOVING ALL FROM THE BODY`, this.settings.logLevel);
-				removeCanvasPathAndCanvasFile(AppendMode.body);
+				const isFile = file ? ` ("${file.path}") ` : " ";
+				logging(`OPENED FILE${isFile}IS NOT A CANVAS`, this.settings.logLevel);
 				for (const canvas of this.settings.canvasAdded) {
 					for (const cssClass of canvas.canvasClass) {
 						removeFromBody(cssClass, this.settings.logLevel, file?.path);

@@ -124,7 +124,7 @@ export class CanvasCssSettingsTabs extends PluginSettingTab {
 							await this.plugin.saveSettings();
 							for (const cssClass of oldCanvas?.canvasClass ?? []) {
 								const openedLeaves = this.plugin.getSpecificLeaf(this.app.workspace, canvas.canvasPath);
-								removeFromDOM(cssClass, logLevel, openedLeaves);
+								removeFromDOM(cssClass, logLevel, openedLeaves, canvas.canvasPath);
 							}
 							this.display();
 						}));
@@ -168,7 +168,7 @@ export class CanvasCssSettingsTabs extends PluginSettingTab {
 								await this.plugin.saveSettings();
 								this.display();
 								const openedLeaves = this.plugin.getSpecificLeaf(this.app.workspace, canvas.canvasPath);
-								removeFromDOM(cssClass, logLevel, openedLeaves);
+								removeFromDOM(cssClass, logLevel, openedLeaves, canvas.canvasPath);
 							})
 					);
 			}
