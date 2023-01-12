@@ -1,6 +1,6 @@
 {
 	"name": "canvas-css-class",
-	"version": "2.1.6",
+	"version": "2.1.7",
 	"description": "Add a CSS class to the canvas, but also other attributes.",
 	"main": "main.js",
 	"scripts": {
