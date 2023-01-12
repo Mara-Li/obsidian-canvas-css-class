@@ -9,9 +9,9 @@
 		"lint": "eslint --ext .ts plugin/",
 		"lint:fix": "eslint --fix --ext .ts  plugin/",
 		"bump": "node version-bump.mjs",
-		"bump:beta": "node bump-beta.mjs",
-		"beta": "commit-and-tag-version  --prerelease --tag-build beta --infile CHANGELOG-beta.md && node version-beta.mjs && git add manifest-beta.json && git commit --amend --no-edit",
-		"publish": "commit-and-tag-version --packageFiles package.json --bumpFiles manifest.json package.json"
+		"bump:beta": "node bump-beta.mjs && git commit -am \"chore(bump): bump beta\" && git push",
+		"beta": "commit-and-tag-version  --prerelease --tag-build beta --infile CHANGELOG-beta.md",
+		"publish": "commit-and-tag-version --packageFiles package.json --bumpFiles manifest.json package.json package-lock.json"
 	},
 	"commit-and-tag-version": {
 		"t": "",
