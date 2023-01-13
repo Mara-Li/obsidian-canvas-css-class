@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.1.8](https://github.com/Lisandra-dev/canvas-css-class/compare/2.1.7...2.1.8) (2023-01-13)
+
+
+### Bug Fixes
+
+* canvas-data-path not applied in body mode if none class has been add ([08cad92](https://github.com/Lisandra-dev/canvas-css-class/commit/08cad9262520583de716743339ba25e68ce49b85)), closes [#6](https://github.com/Lisandra-dev/canvas-css-class/issues/6)
+* canvas-data-path not applied in body mode in another windows ([c883b0d](https://github.com/Lisandra-dev/canvas-css-class/commit/c883b0de597d6b81aca6335f350010fc0b099ef3))
+
 ### [2.1.7](https://github.com/Lisandra-dev/canvas-css-class/compare/2.1.6...2.1.7) (2023-01-12)
 
 

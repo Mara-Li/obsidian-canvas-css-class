@@ -1,6 +1,6 @@
 {
 	"name": "canvas-css-class",
-	"version": "2.1.7",
+	"version": "2.1.8",
 	"description": "Add a CSS class to the canvas, but also other attributes.",
 	"main": "main.js",
 	"scripts": {
@@ -12,7 +12,7 @@
 		"bump:beta": "node bump-beta.mjs && git commit -am \"chore(bump): bump beta\" && git push",
 		"beta": "commit-and-tag-version  --prerelease --tag-build beta --infile CHANGELOG-beta.md",
 		"publish": "commit-and-tag-version --packageFiles package.json --bumpFiles manifest.json package.json package-lock.json",
-		"move:vault" : "node esbuild.config.mjs production && copy main.js \"K:\\Constellation\\.obsidian\\plugins\\canvas-css-class\" && copy styles.css \"K:\\Constellation\\.obsidian\\plugins\\canvas-css-class\""
+		"move:vault": "node esbuild.config.mjs production && copy main.js \"K:\\Constellation\\.obsidian\\plugins\\canvas-css-class\" && copy styles.css \"K:\\Constellation\\.obsidian\\plugins\\canvas-css-class\""
 	},
 	"commit-and-tag-version": {
 		"t": "",
