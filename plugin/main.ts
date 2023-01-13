@@ -59,11 +59,12 @@ export default class CanvasCSS extends Plugin {
 	getLeafByPath(filePath: string): WorkspaceLeaf[] {
 		const allSpecificLeafs: WorkspaceLeaf[] = [];
 		this.app.workspace.iterateAllLeaves((leaf) => {
-			if (leaf.view instanceof FileView && leaf.view.file.path === filePath) {
+			if (leaf.view instanceof FileView && leaf.view.file.path === filePath && !allSpecificLeafs.includes(leaf)) {
 				allSpecificLeafs.push(leaf);
 			}
 		});
 		logging(`Found ${allSpecificLeafs.length} leaves for ${filePath}`, this.settings.logLevel);
+		
 		return allSpecificLeafs;
 	}
 	
@@ -203,12 +204,13 @@ export default class CanvasCSS extends Plugin {
 		this.registerEvent(this.app.workspace.on("file-open", (file) => {
 			const leafType = this.app.workspace.getActiveViewOfType(ItemView)?.getViewType();
 			if (file && file.extension === "canvas" && leafType === "canvas") {
+				
 				logging(`OPENED FILE ${file.path} IS A CANVAS ; ADDING CLASS`, this.settings.logLevel);
 				const canvasClassList = this.settings.canvasAdded.find((canvas) => canvas.canvasPath === file.path);
 				const leaves = this.getLeafByPath(file.path);
-				if (canvasClassList) {
-					reloadCanvas(file.path, canvasClassList.appendMode, this.settings, leaves);
-				}
+				const appendMode = canvasClassList?.appendMode ?? AppendMode.workspaceLeaf;
+				reloadCanvas(file.path, appendMode, this.settings, leaves);
+				
 				const canvasClassesNotFromThisFile = this.settings.canvasAdded.filter((item) => item.canvasPath !== file.path);
 				
 				for (const canvas of canvasClassesNotFromThisFile) {
@@ -225,7 +227,7 @@ export default class CanvasCSS extends Plugin {
 				logging(`OPENED FILE${isFile}IS NOT A CANVAS`, this.settings.logLevel);
 				for (const canvas of this.settings.canvasAdded) {
 					for (const cssClass of canvas.canvasClass) {
-						removeFromBody(cssClass, this.settings.logLevel, file?.path);
+						removeFromBody(cssClass, this.settings.logLevel, file?.path, true);
 					}
 				}
 			}

@@ -44,17 +44,17 @@ export function removeFromDOM(cssClass: string, logLevel: string, leaves: Worksp
  * @param logLevel {string} the log level of the plugin
  * @param filepath
  */
-export function removeFromBody(cssClass: string, logLevel: string, filepath: string | undefined): void {
-	const classIsInBody = document.body.classList.contains(cssClass);
+export function removeFromBody(cssClass: string | null, logLevel: string, filepath: string | undefined, removeData= false): void {
+	const classIsInBody = cssClass && document.body.classList.contains(cssClass);
 	if (classIsInBody) {
 		logging(`Class of "${filepath}" : ${document.body.classList}`, logLevel);
-		document.body.classList.remove(cssClass);
+		activeDocument.body.classList.remove(cssClass);
 		logging(`Removed ${cssClass} from the body`, logLevel);
 	}
 	const bodyContainsData = document.body.classList.contains("canvas-file") && document.body.getAttribute("data-canvas-path");
-	if (bodyContainsData) {
-		document.body.removeAttribute("data-canvas-path");
-		document.body.classList.remove("canvas-file");
+	if (bodyContainsData && removeData) {
+		activeDocument.body.removeAttribute("data-canvas-path");
+		activeDocument.body.classList.remove("canvas-file");
 	}
 }
 
@@ -78,19 +78,6 @@ export function removeFromViewContent(cssClass: string, logLevel: string, leaves
 	});
 }
 
-
-/**
- * Function to get the query selector of the canvas based on the mode settings
- * @param appendMode {string} the mode set for the canvas
- */
-export function whereToAppend(appendMode: string): string {
-	if (appendMode === AppendMode.body) {
-		return "body";
-	} else {
-		return ".workspace-leaf.mod-active .view-content";
-	}
-}
-
 /**
  * Function that reload the canvas to change the mode and add the class. Allow to quick change the mode between the two.
  * @param canvasPath {string} the path of the canvas
@@ -99,27 +86,35 @@ export function whereToAppend(appendMode: string): string {
  * @param leaves
  */
 export function reloadCanvas(canvasPath: string, appendMode: string, settings: CanvasCssSettings, leaves: WorkspaceLeaf[]): void {
-	const cssClass = settings.canvasAdded.find((canvas) => canvas.canvasPath === canvasPath)?.canvasClass;
-	if (cssClass) {
-		if (appendMode === AppendMode.body) {
-			logging(`RELOADING canvas "${canvasPath}" in BODY MODE`, settings.logLevel);
-			const selectedCanvas = document.querySelector(`body:has(.canvas-file[data-canvas-path="${canvasPath}"])`);
-			const getActiveLeaf = leaves.find((leaf) => leaf.view instanceof FileView && leaf.view.file.path === canvasPath);
-			
-			if (selectedCanvas || getActiveLeaf) {
-				for (const css of cssClass) {
-					addToDOM(css, canvasPath, appendMode, settings.logLevel, leaves);
-					removeFromViewContent(css, settings.logLevel, leaves);
-				}
+	let cssClass = settings.canvasAdded.find((canvas) => canvas.canvasPath === canvasPath)?.canvasClass;
+	if (appendMode === AppendMode.body) {
+		logging(`RELOADING canvas "${canvasPath}" in BODY MODE`, settings.logLevel);
+		const selectedCanvas = document.querySelector(`body:has(.canvas-file[data-canvas-path="${canvasPath}"])`);
+		const getActiveLeaf = leaves.filter((leaf) => leaf.view instanceof FileView && leaf.view.file.path === canvasPath);
+		if (selectedCanvas || getActiveLeaf) {
+			if (!cssClass || cssClass.length === 0) {
+				addToDOM(null, canvasPath, appendMode, settings.logLevel, leaves);
+				removeFromViewContent(null, settings.logLevel, leaves, true);
+				cssClass = [];
 			}
+			for (const css of cssClass) {
+				addToDOM(css, canvasPath, appendMode, settings.logLevel, getActiveLeaf);
+				removeFromViewContent(css, settings.logLevel, leaves, true);
+			}
+		}
+	} else {
+		logging(`RELOADING canvas "${canvasPath}" in VIEW-CONTENT MODE`, settings.logLevel);
+		if (!cssClass || cssClass.length === 0) {
+			removeFromBody(null, settings.logLevel, canvasPath, true);
+			addToDOM(null, canvasPath, appendMode, settings.logLevel, leaves);
 		} else {
 			for (const css of cssClass) {
-				logging(`RELOADING canvas "${canvasPath}" in VIEW-CONTENT MODE`, settings.logLevel);
-				removeFromBody(css, settings.logLevel, canvasPath);
+				removeFromBody(css, settings.logLevel, canvasPath, true);
 				addToDOM(css, canvasPath, appendMode, settings.logLevel, leaves);
 			}
 		}
 	}
+	
 }
 
 /**
