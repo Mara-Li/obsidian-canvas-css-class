@@ -8,6 +8,10 @@ This plugin do two things :
 ---
 Yeah, that's it.
 
+> **Note**  
+> Actually, the plugin doesn't load any CSS in your canvas. You need to write your own CSS, and add it into your `.obsidian/snippets` folder.  
+> Get more information about snippets [here](https://help.obsidian.md/Extending+Obsidian/CSS+snippets).
+
 
 # Usage
 
@@ -51,7 +55,7 @@ The plugin will add, by default, the css class to `.workspace-leaf.mod-active .v
 This allows a better compatibility when you switch of focused file, because the css class will be conserved. 
 The problem is that the css class is not conserved and exported when you export as an image. 
 
-Changing the behavior to the `body` of Obsidian allow you to export the image conserving the css-class, but if you switch of focused file, the css class will be removed.
+Changing the behavior to the `body` of Obsidian allow you to export the image conserving the css-class, but if you switch of focused file, the css class will be removed (unless you open it in a new windows!)
 
 My advice : 
 - Use a macro to switch into `body` behavior when you use the command for export as an image (you can use [Quick Add](https://github.com/chhoumann/quickadd) for that). Note : you need to add a delay, min of 30s, to allowing this to work. 
