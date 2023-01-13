@@ -6,6 +6,12 @@
 import {FileView, Notice, WorkspaceLeaf} from "obsidian";
 import {AppendMode, CanvasCssSettings} from "./interface";
 
+/**
+ * This function allow to choose the log level of the plugin and send the message to the console with the option chosen
+ *
+ * @param {string} message the message to send to the console
+ * @param {string} logLevel the log level of the message, taken from settings
+ */
 export function logging(message: string, logLevel: string): void {
 	switch (logLevel) {
 	case "warn":
@@ -30,7 +36,7 @@ export function logging(message: string, logLevel: string): void {
  * @param cssClass {string} the class to remove
  * @param logLevel {string} the log level of the plugin
  * @param leaves {WorkspaceLeaf[]} the leaves to remove the class from, if the method used is AppendMode.workspaceLeaf
- * @param filepath {string} the path of the file to remove the class from, if the method used is AppendMode.body (used only for the log)
+ * @param filepath {string |undefined} the path of the file to remove the class from, if the method used is AppendMode.body (used only for the log)
  */
 export function removeFromDOM(cssClass: string, logLevel: string, leaves: WorkspaceLeaf[], filepath: string | undefined): void {
 	removeFromBody(cssClass, logLevel, filepath);
@@ -40,9 +46,10 @@ export function removeFromDOM(cssClass: string, logLevel: string, leaves: Worksp
 
 /**
  * The function to remove from Dom the class added. It removes from the body.
- * @param cssClass {string} the class to remove
+ * @param cssClass {string|null} the class to remove, null if we need to only remove the .canvas-file and the canvas-path attribute
  * @param logLevel {string} the log level of the plugin
- * @param filepath
+ * @param filepath {string} The filepath, used for logging
+ * @param removeData {boolean} if true, remove the canvas-path attribute and the .canvas-file class
  */
 export function removeFromBody(cssClass: string | null, logLevel: string, filepath: string | undefined, removeData= false): void {
 	const classIsInBody = cssClass && document.body.classList.contains(cssClass);
@@ -83,7 +90,7 @@ export function removeFromViewContent(cssClass: string | null, logLevel: string,
  * @param canvasPath {string} the path of the canvas
  * @param appendMode {string} the mode set for the canvas
  * @param settings {CanvasCssSettings} the settings of the plugin
- * @param leaves
+ * @param leaves {WorkspaceLeaf[]} the leaves of Obsidian where the canvas is
  */
 export function reloadCanvas(canvasPath: string, appendMode: string, settings: CanvasCssSettings, leaves: WorkspaceLeaf[]): void {
 	let cssClass = settings.canvasAdded.find((canvas) => canvas.canvasPath === canvasPath)?.canvasClass;
@@ -123,7 +130,7 @@ export function reloadCanvas(canvasPath: string, appendMode: string, settings: C
  * @param {string} filePath the path of the canvas, to add the class to the right canvas
  * @param {string} appendMode the query selector to use to add the class
  * @param {string} logLevel the log level of the message
- * @param leaves
+ * @param leaves {WorkspaceLeaf[]} the leaves where the file is opened
  */
 export function addToDOM(cssClass: string | null, filePath: string, appendMode: string, logLevel: string, leaves: WorkspaceLeaf[]): void {
 	if (appendMode === AppendMode.body) {
