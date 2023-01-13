@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.2.0](https://github.com/Lisandra-dev/canvas-css-class/compare/2.1.8...2.2.0) (2023-01-13)
+
+
+### Features
+
+* add an option to fix the global default append mode ([cac4997](https://github.com/Lisandra-dev/canvas-css-class/commit/cac4997867d0bc6b156b97ed64f7d54676eb8e0c)), closes [#7](https://github.com/Lisandra-dev/canvas-css-class/issues/7)
+
 ### [2.1.8](https://github.com/Lisandra-dev/canvas-css-class/compare/2.1.7...2.1.8) (2023-01-13)
 
 
