@@ -4,6 +4,7 @@ import {AddCssClass, AddNewClassWithFile} from "./modals/addClass";
 import {EditMode, RenameCanvasPath, RenameCssClass} from "./modals/editClass";
 import {t} from "./i18n";
 import {addToDOM, reloadCanvas, removeFromDOM} from "./utils";
+import {AppendMode} from "./interface";
 
 export class CanvasCssSettingsTabs extends PluginSettingTab {
 	plugin: CanvasCSS;
@@ -41,6 +42,26 @@ export class CanvasCssSettingsTabs extends PluginSettingTab {
 						await this.plugin.saveSettings();
 					});
 			});
+		
+		new Setting(containerEl)
+			.setName(t("settings.appendMode.default.title") as string)
+			.setDesc(t("settings.appendMode.default.desc") as string)
+			.addDropdown((dropdown) => {
+				dropdown
+					.addOption(AppendMode.workspaceLeaf, t("settings.appendMode.options.workspaceLeaf") as string)
+					.addOption(AppendMode.body, t("settings.appendMode.options.body") as string)
+					.setValue(this.plugin.settings.defaultAppendMode)
+					.onChange(async (value) => {
+						this.plugin.settings.defaultAppendMode = value as AppendMode;
+						const canvasToReload = this.plugin.getLeafOfCanvasNotInSettings();
+						for (const canvas of canvasToReload) {
+							// @ts-ignore
+							reloadCanvas(canvas.view.file.path, value, this.plugin.settings, canvas);
+						}
+						await this.plugin.saveSettings();
+					});
+			});
+		
 		const logLevel = this.plugin.settings.logLevel;
 		
 		new Setting(containerEl)

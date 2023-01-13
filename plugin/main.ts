@@ -44,11 +44,25 @@ export default class CanvasCSS extends Plugin {
 			// Convert the old settings to the new ones
 			this.settings.canvasAdded.forEach((canvas) => {
 				if (!canvas.appendMode) {
-					canvas.appendMode = AppendMode.workspaceLeaf;
+					canvas.appendMode = this.settings.defaultAppendMode;
 				}
 			});
 			this.saveSettings();
 		}
+	}
+	
+	getLeafOfCanvasNotInSettings() {
+		const allLeafs: WorkspaceLeaf[] = [];
+		this.app.workspace.iterateAllLeaves((leaf) => {
+			if (leaf.view instanceof FileView
+				&& leaf.view.file.extension === "canvas"
+				//@ts-ignore
+				&& !this.settings.canvasAdded.find((item) => item.canvasPath === leaf.view.file.path)) {
+				allLeafs.push(leaf);
+			}
+		});
+		logging(`Found ${allLeafs.length} canvas leaves without settings`, this.settings.logLevel);
+		return allLeafs;
 	}
 	
 	/**
@@ -59,7 +73,8 @@ export default class CanvasCSS extends Plugin {
 	getLeafByPath(filePath: string): WorkspaceLeaf[] {
 		const allSpecificLeafs: WorkspaceLeaf[] = [];
 		this.app.workspace.iterateAllLeaves((leaf) => {
-			if (leaf.view instanceof FileView && leaf.view.file.path === filePath && !allSpecificLeafs.includes(leaf)) {
+			if (leaf.view instanceof FileView
+				&& leaf.view.file.path === filePath) {
 				allSpecificLeafs.push(leaf);
 			}
 		});
@@ -100,12 +115,12 @@ export default class CanvasCSS extends Plugin {
 									});
 								}
 							} else {
-								this.settings.canvasAdded.push({canvasPath: canvasPath, canvasClass: [result], appendMode: AppendMode.workspaceLeaf});
+								this.settings.canvasAdded.push({canvasPath: canvasPath, canvasClass: [result], appendMode: this.settings.defaultAppendMode});
 							}
 							this.saveSettings();
 							const mode = this.settings.canvasAdded.find((item) => item.canvasPath === canvasPath)?.appendMode;
 							const theOpenedLeaf = this.getLeafByPath(canvasPath);
-							addToDOM(result, canvasPath, mode ? mode : AppendMode.workspaceLeaf, this.settings.logLevel, theOpenedLeaf);
+							addToDOM(result, canvasPath, mode ? mode : this.settings.defaultAppendMode, this.settings.logLevel, theOpenedLeaf);
 						}).open();
 					} return true;
 				} return false;
@@ -156,7 +171,7 @@ export default class CanvasCSS extends Plugin {
 			}});
 		
 		this.addCommand({
-			id: "switch-to-view-content-mode",
+			id: "switch-to-workspace-leaf-content-mode",
 			name: t("commands.switchToViewContentMode") as string,
 			checkCallback: (checking: boolean) => {
 				const canvasView = this.app.workspace.getActiveViewOfType(ItemView);
@@ -187,7 +202,7 @@ export default class CanvasCSS extends Plugin {
 					//@ts-ignore
 					const canvasPath = canvasView.file.path;
 					if (!checking) {
-						const oldClasses = this.quickCreateSettings(canvasPath, AppendMode.workspaceLeaf);
+						const oldClasses = this.quickCreateSettings(canvasPath, this.settings.defaultAppendMode);
 						oldClasses.appendMode = oldClasses.appendMode === AppendMode.body ? AppendMode.workspaceLeaf : AppendMode.body;
 						this.saveSettings();
 						new Notice(
@@ -208,7 +223,7 @@ export default class CanvasCSS extends Plugin {
 				logging(`OPENED FILE ${file.path} IS A CANVAS ; ADDING CLASS`, this.settings.logLevel);
 				const canvasClassList = this.settings.canvasAdded.find((canvas) => canvas.canvasPath === file.path);
 				const leaves = this.getLeafByPath(file.path);
-				const appendMode = canvasClassList?.appendMode ?? AppendMode.workspaceLeaf;
+				const appendMode = canvasClassList ? canvasClassList.appendMode : this.settings.defaultAppendMode;
 				reloadCanvas(file.path, appendMode, this.settings, leaves);
 				
 				const canvasClassesNotFromThisFile = this.settings.canvasAdded.filter((item) => item.canvasPath !== file.path);

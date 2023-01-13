@@ -1,7 +1,7 @@
 # Canvas CSS Class
 
 This plugin do two things : 
-- Add the class `.canvas-file` to the body of each canvas file, and adding the attribute `[data-canvas-path="filepath"]` 
+- Add the class `.canvas-file` to the DOM of each canvas file, and adding the attribute `[data-canvas-path="filepath"]` 
 - Allow you to add custom css class to canvas, using a modal input. Obviously, you can also remove the css-class using the plugin, with the settings or the commands modal. 
 
 
@@ -18,10 +18,10 @@ Yeah, that's it.
 The plugin will add two commands to the command modal :
 - `Add CSS class` : Add a css class to the current canvas file
 - `Remove CSS class` : Remove a css class to the current canvas file
-- `Change the append mode between body & workspace` : Allow to choose the behavior of the plugin. By default, the plugin will add the css class to `.workspace-leaf.mod-active .view-content` of the canvas file. See below for more information.  
+- `Change the append mode between body & workspace` : Allow to choose the behavior of the plugin. By default, the plugin will add the css class to `workspace-leaf-content` of the canvas file. See below for more information.  
   There is 3 commands to allow changing this behavior : 
   - `quickswitch between body & view-content` : Invert the behavior of the actual canvas. 
-  - `Switch to view-content mode` : Convert the actual canvas to the view-content behavior.
+  - `Switch to view-content mode` : Convert the actual canvas to the workspace-leaf-content behavior.
   - `Switch to body mode` : Convert the actual canvas to the body behavior.
 
 You can also use the settings to add or remove a css class to the current canvas file.
@@ -50,7 +50,7 @@ In the settings, you can also :
 
 ## Append behavior
 
-The plugin will add, by default, the css class to `.workspace-leaf.mod-active .view-content` of the canvas file.
+The plugin will add, by default, the css class to `.workspace-leaf-content` of the canvas file, but it can be changed using the settings of the plugin.
 
 This allows a better compatibility when you switch of focused file, because the css class will be conserved. 
 The problem is that the css class is not conserved and exported when you export as an image. 

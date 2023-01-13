@@ -32,7 +32,7 @@ export function logging(message: string, logLevel: string): void {
 }
 
 /**
- * The function to remove from Dom the class added. It removes from the body and the view-content
+ * The function to remove from Dom the class added. It removes from the body and the workspace-leaf-content
  * @param cssClass {string} the class to remove
  * @param logLevel {string} the log level of the plugin
  * @param leaves {WorkspaceLeaf[]} the leaves to remove the class from, if the method used is AppendMode.workspaceLeaf
@@ -66,7 +66,7 @@ export function removeFromBody(cssClass: string | null, logLevel: string, filepa
 }
 
 /**
- * The function to remove from Dom the class added. It removes from the view-content.
+ * The function to remove from Dom the class added. It removes from the workspace-leaf-content.
  * @param cssClass {string} the class to remove
  * @param logLevel {string} the log level of the plugin
  * @param leaves {WorkspaceLeaf[]} the leaves of Obsidian
@@ -76,7 +76,7 @@ export function removeFromViewContent(cssClass: string | null, logLevel: string,
 	leaves.forEach((leaf) => {
 		if (cssClass && cssClass.length > 0 && leaf.view.containerEl.classList.contains(cssClass)) {
 			leaf.view.containerEl.classList.remove(cssClass);
-			logging(`Removed ${cssClass} from the view-content`, logLevel);
+			logging(`Removed ${cssClass} from the workspace-leaf-content`, logLevel);
 		}
 		if (removeAll && leaf.view.containerEl.classList.contains("canvas-file") && leaf.view.containerEl.getAttribute("data-canvas-path")) {
 			leaf.view.containerEl.classList.remove("canvas-file");
@@ -92,32 +92,33 @@ export function removeFromViewContent(cssClass: string | null, logLevel: string,
  * @param settings {CanvasCssSettings} the settings of the plugin
  * @param leaves {WorkspaceLeaf[]} the leaves of Obsidian where the canvas is
  */
-export function reloadCanvas(canvasPath: string, appendMode: string, settings: CanvasCssSettings, leaves: WorkspaceLeaf[]): void {
+export function reloadCanvas(canvasPath: string, appendMode: string, settings: CanvasCssSettings, leaves: WorkspaceLeaf[] | WorkspaceLeaf): void {
+	const workspaceLeave = Array.isArray(leaves) ? leaves : [leaves];
 	let cssClass = settings.canvasAdded.find((canvas) => canvas.canvasPath === canvasPath)?.canvasClass;
 	if (appendMode === AppendMode.body) {
 		logging(`RELOADING canvas "${canvasPath}" in BODY MODE`, settings.logLevel);
 		const selectedCanvas = document.querySelector(`body:has(.canvas-file[data-canvas-path="${canvasPath}"])`);
-		const getActiveLeaf = leaves.filter((leaf) => leaf.view instanceof FileView && leaf.view.file.path === canvasPath);
+		const getActiveLeaf = workspaceLeave.filter((leaf) => leaf.view instanceof FileView && leaf.view.file.path === canvasPath);
 		if (selectedCanvas || getActiveLeaf) {
 			if (!cssClass || cssClass.length === 0) {
-				addToDOM(null, canvasPath, appendMode, settings.logLevel, leaves);
-				removeFromViewContent(null, settings.logLevel, leaves, true);
+				addToDOM(null, canvasPath, appendMode, settings.logLevel, workspaceLeave);
+				removeFromViewContent(null, settings.logLevel, workspaceLeave, true);
 				cssClass = [];
 			}
 			for (const css of cssClass) {
 				addToDOM(css, canvasPath, appendMode, settings.logLevel, getActiveLeaf);
-				removeFromViewContent(css, settings.logLevel, leaves, true);
+				removeFromViewContent(css, settings.logLevel, workspaceLeave, true);
 			}
 		}
 	} else {
 		logging(`RELOADING canvas "${canvasPath}" in VIEW-CONTENT MODE`, settings.logLevel);
 		if (!cssClass || cssClass.length === 0) {
 			removeFromBody(null, settings.logLevel, canvasPath, true);
-			addToDOM(null, canvasPath, appendMode, settings.logLevel, leaves);
+			addToDOM(null, canvasPath, appendMode, settings.logLevel, workspaceLeave);
 		} else {
 			for (const css of cssClass) {
 				removeFromBody(css, settings.logLevel, canvasPath, true);
-				addToDOM(css, canvasPath, appendMode, settings.logLevel, leaves);
+				addToDOM(css, canvasPath, appendMode, settings.logLevel, workspaceLeave);
 			}
 		}
 	}
@@ -125,14 +126,18 @@ export function reloadCanvas(canvasPath: string, appendMode: string, settings: C
 }
 
 /**
- * This function add to the dom (view-content) the css class ;
+ * This function add to the dom (workspace-leaf-content) the css class ;
  * @param {string} cssClass the css class to add
  * @param {string} filePath the path of the canvas, to add the class to the right canvas
  * @param {string} appendMode the query selector to use to add the class
  * @param {string} logLevel the log level of the message
  * @param leaves {WorkspaceLeaf[]} the leaves where the file is opened
  */
-export function addToDOM(cssClass: string | null, filePath: string, appendMode: string, logLevel: string, leaves: WorkspaceLeaf[]): void {
+export function addToDOM(cssClass: string | null, 
+	filePath: string, 
+	appendMode: string, 
+	logLevel: string,
+	leaves: WorkspaceLeaf[]): void {
 	if (appendMode === AppendMode.body) {
 		if (!document.body.classList.contains("canvas-file")) {
 			activeDocument.body.addClass("canvas-file");
@@ -154,7 +159,7 @@ export function addToDOM(cssClass: string | null, filePath: string, appendMode: 
 			}
 			if (cssClass && !leaf.view.containerEl.classList.contains(cssClass)) {
 				leaf.view.containerEl.addClass(cssClass);
-				logging(`Added ${cssClass} to the view-content`, logLevel);
+				logging(`Added ${cssClass} to the workspace-leaf-content`, logLevel);
 			}
 		}
 	}

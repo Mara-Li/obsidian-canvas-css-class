@@ -37,13 +37,17 @@ export default {
 			},
 		},
 		appendMode: {
+			default: {
+				title: "Le mode d'ajout par défaut",
+				desc: "Le mode d'ajout par défaut de la classe au Canvas, incluant canvas-file et l'attribut data-canvas-path, lors de l'ouverture ou de la création du Canvas.",
+			},
 			title: "Comportement d'ajout",
 			desc: "Où ajouter la classe dans le Canvas.",
 			bodyDesc: "Ajoute le Canvas au body. Permet d'exporter le Canvas en tant qu'image mais peut avoir un comportement inattendu, notamment avec plusieurs fichiers ouverts.",
-			workspaceLeafDesc: "Ajoute le Canvas au view-content. Conserve la classe lorsque le focus change mais ne peut pas être exporté avec l'image.",
+			workspaceLeafDesc: "Ajoute le Canvas au workspace-leaf-content. Conserve la classe lorsque le focus change mais ne peut pas être exporté avec l'image.",
 			options: {
 				body: "body",
-				workspaceLeaf: "view-content",
+				workspaceLeaf: "workspace-leaf-content",
 			},
 			edit: "Modifier le comportement d'ajout de la classe au Canvas.",
 		},
@@ -67,13 +71,13 @@ export default {
 		addCanvas: "Ajouter une classe CSS au Canvas actif",
 		removeCanvas: "Supprimer une classe CSS du Canvas actif",
 		changeAppendMode: "Modifier le comportement d'ajout de la classe au Canvas",
-		switchToViewContentMode: "Passer au mode view-content",
+		switchToViewContentMode: "Passer au mode workspace-leaf-content",
 		switchToBodyMode: "Passer au mode body",
-		quickSwitch: "Quick switch entre body & view-content",
+		quickSwitch: "Quick switch entre body & workspace-leaf-content",
 	},
 	message : {
 		quickSwitch:(key: string): string => `Passage au mode : ${key}`,
 		switchedToBody: "Passage au mode body",
-		switchedToViewContent: "Passage au mode view-content",
+		switchedToViewContent: "Passage au mode workspace-leaf-content",
 	}
 };
