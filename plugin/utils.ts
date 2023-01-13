@@ -65,9 +65,9 @@ export function removeFromBody(cssClass: string | null, logLevel: string, filepa
  * @param leaves {WorkspaceLeaf[]} the leaves of Obsidian
  * @param removeAll {boolean} if we need to remove the data-attributes too.
  */
-export function removeFromViewContent(cssClass: string, logLevel: string, leaves: WorkspaceLeaf[], removeAll=false): void {
+export function removeFromViewContent(cssClass: string | null, logLevel: string, leaves: WorkspaceLeaf[], removeAll=false): void {
 	leaves.forEach((leaf) => {
-		if (leaf.view.containerEl.classList.contains(cssClass)) {
+		if (cssClass && cssClass.length > 0 && leaf.view.containerEl.classList.contains(cssClass)) {
 			leaf.view.containerEl.classList.remove(cssClass);
 			logging(`Removed ${cssClass} from the view-content`, logLevel);
 		}
@@ -125,23 +125,27 @@ export function reloadCanvas(canvasPath: string, appendMode: string, settings: C
  * @param {string} logLevel the log level of the message
  * @param leaves
  */
-export function addToDOM(cssClass: string, filePath: string, appendMode: string, logLevel: string, leaves: WorkspaceLeaf[]): void {
+export function addToDOM(cssClass: string | null, filePath: string, appendMode: string, logLevel: string, leaves: WorkspaceLeaf[]): void {
 	if (appendMode === AppendMode.body) {
-		if (!document.body.classList.contains("canvas-file") && !document.body.getAttribute("data-canvas-path")) {
-			document.body.classList.add("canvas-file");
-			document.body.setAttribute("data-canvas-path", filePath);
+		if (!document.body.classList.contains("canvas-file")) {
+			activeDocument.body.addClass("canvas-file");
+		} if (!document.body.getAttribute("data-canvas-path") || document.body.getAttribute("data-canvas-path") !== filePath) {
+			activeDocument.body.setAttribute("data-canvas-path", filePath);
+			activeDocument.body.setAttribute("data-canvas-path", filePath);
 		}
-		if (!document.body.classList.contains(cssClass)) {
-			document.body.classList.add(cssClass);
+		if (cssClass && cssClass.length > 0 && !document.body.classList.contains(cssClass)) {
+			activeDocument.body.addClass(cssClass);
 			logging(`Added ${cssClass} to the body`, logLevel);
 		}
 	} else {
 		for (const leaf of leaves) {
-			if (!leaf.view.containerEl.classList.contains("canvas-file") && !leaf.view.containerEl.getAttribute("data-canvas-path")) {
+			if (!leaf.view.containerEl.classList.contains("canvas-file")) {
 				leaf.view.containerEl.addClass("canvas-file");
+			}
+			if (!leaf.view.containerEl.getAttribute("data-canvas-path")) {
 				leaf.view.containerEl.setAttribute("data-canvas-path", filePath);
 			}
-			if (!leaf.view.containerEl.classList.contains(cssClass)) {
+			if (cssClass && !leaf.view.containerEl.classList.contains(cssClass)) {
 				leaf.view.containerEl.addClass(cssClass);
 				logging(`Added ${cssClass} to the view-content`, logLevel);
 			}
