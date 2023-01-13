@@ -52,13 +52,13 @@ export function removeFromDOM(cssClass: string, logLevel: string, leaves: Worksp
  * @param removeData {boolean} if true, remove the canvas-path attribute and the .canvas-file class
  */
 export function removeFromBody(cssClass: string | null, logLevel: string, filepath: string | undefined, removeData= false): void {
-	const classIsInBody = cssClass && document.body.classList.contains(cssClass);
+	const classIsInBody = cssClass && activeDocument.body.classList.contains(cssClass);
 	if (classIsInBody) {
-		logging(`Class of "${filepath}" : ${document.body.classList}`, logLevel);
+		logging(`Class of "${filepath}" : ${activeDocument.body.classList}`, logLevel);
 		activeDocument.body.classList.remove(cssClass);
 		logging(`Removed ${cssClass} from the body`, logLevel);
 	}
-	const bodyContainsData = document.body.classList.contains("canvas-file") && document.body.getAttribute("data-canvas-path");
+	const bodyContainsData = activeDocument.body.classList.contains("canvas-file") && activeDocument.body.getAttribute("data-canvas-path");
 	if (bodyContainsData && removeData) {
 		activeDocument.body.removeAttribute("data-canvas-path");
 		activeDocument.body.classList.remove("canvas-file");
@@ -139,13 +139,13 @@ export function addToDOM(cssClass: string | null,
 	logLevel: string,
 	leaves: WorkspaceLeaf[]): void {
 	if (appendMode === AppendMode.body) {
-		if (!document.body.classList.contains("canvas-file")) {
+		if (!activeDocument.body.classList.contains("canvas-file")) {
 			activeDocument.body.addClass("canvas-file");
-		} if (!document.body.getAttribute("data-canvas-path") || document.body.getAttribute("data-canvas-path") !== filePath) {
+		} if (!activeDocument.body.getAttribute("data-canvas-path") || activeDocument.body.getAttribute("data-canvas-path") !== filePath) {
 			activeDocument.body.setAttribute("data-canvas-path", filePath);
 			activeDocument.body.setAttribute("data-canvas-path", filePath);
 		}
-		if (cssClass && cssClass.length > 0 && !document.body.classList.contains(cssClass)) {
+		if (cssClass && cssClass.length > 0 && !activeDocument.body.classList.contains(cssClass)) {
 			activeDocument.body.addClass(cssClass);
 			logging(`Added ${cssClass} to the body`, logLevel);
 		}
