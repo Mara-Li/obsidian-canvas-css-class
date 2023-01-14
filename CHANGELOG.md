@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.2.1](https://github.com/Lisandra-dev/canvas-css-class/compare/2.2.0...2.2.1) (2023-01-14)
+
+
+### Bug Fixes
+
+* renaming broke append mode ([32f4e3c](https://github.com/Lisandra-dev/canvas-css-class/commit/32f4e3c6254b3f81ad3cfa88f9195bcc5e4c7a69))
+
 ## [2.2.0](https://github.com/Lisandra-dev/canvas-css-class/compare/2.1.8...2.2.0) (2023-01-13)
 
 
