@@ -43,8 +43,10 @@ export default class CanvasCSS extends Plugin {
 		if (this.settings.canvasAdded) {
 			// Convert the old settings to the new ones
 			this.settings.canvasAdded.forEach((canvas) => {
-				if (!canvas.appendMode) {
+				if (!canvas.appendMode || canvas.appendMode.length === 0) {
 					canvas.appendMode = this.settings.defaultAppendMode;
+				} else if (canvas.appendMode === "view-content") {
+					canvas.appendMode = AppendMode.workspaceLeaf;
 				}
 			});
 			this.saveSettings();
