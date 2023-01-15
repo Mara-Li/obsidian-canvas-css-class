@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.2.2](https://github.com/Lisandra-dev/canvas-css-class/compare/2.2.1...2.2.2) (2023-01-15)
+
+
+### Bug Fixes
+
+* workspace doesn't charge css class ([f779ad1](https://github.com/Lisandra-dev/canvas-css-class/commit/f779ad1b6d181aa9d660bbd0df5a8a92191f82d5)), closes [#8](https://github.com/Lisandra-dev/canvas-css-class/issues/8)
+
 ### [2.2.1](https://github.com/Lisandra-dev/canvas-css-class/compare/2.2.0...2.2.1) (2023-01-14)
 
 
