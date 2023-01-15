@@ -1,4 +1,4 @@
-import {FileView, ItemView, Notice, Plugin, WorkspaceLeaf} from "obsidian";
+import {FileView, ItemView, Notice, Plugin, TFile, WorkspaceLeaf} from "obsidian";
 import {DEFAULT_SETTINGS, CanvasCssSettings, AppendMode} from "./interface";
 import {CanvasCssSettingsTabs} from "./settings";
 import {AddCssClass} from "./modals/addClass";
@@ -56,11 +56,13 @@ export default class CanvasCSS extends Plugin {
 	getLeafOfCanvasNotInSettings() {
 		const allLeafs: WorkspaceLeaf[] = [];
 		this.app.workspace.iterateAllLeaves((leaf) => {
-			if (leaf.view instanceof FileView
-				&& leaf.view.file.extension === "canvas"
-				//@ts-ignore
-				&& !this.settings.canvasAdded.find((item) => item.canvasPath === leaf.view.file.path)) {
-				allLeafs.push(leaf);
+			if (!(leaf.view instanceof FileView)) return allLeafs;
+			else if (leaf.view.file.extension === "canvas") {
+				const view = leaf.view as FileView;
+				const canvasClassList = this.settings.canvasAdded.find((canvas) => canvas.canvasPath === view.file.path);
+				if (!canvasClassList) {
+					allLeafs.push(leaf);
+				}
 			}
 		});
 		logging(`Found ${allLeafs.length} canvas leaves without settings`, this.settings.logLevel);
@@ -75,14 +77,58 @@ export default class CanvasCSS extends Plugin {
 	getLeafByPath(filePath: string): WorkspaceLeaf[] {
 		const allSpecificLeafs: WorkspaceLeaf[] = [];
 		this.app.workspace.iterateAllLeaves((leaf) => {
-			if (leaf.view instanceof FileView
-				&& leaf.view.file.path === filePath) {
-				allSpecificLeafs.push(leaf);
+			if (leaf.view instanceof FileView) {
+				const view = leaf.view as FileView;
+				if (view.file?.path === filePath) {
+					allSpecificLeafs.push(leaf);
+				}
 			}
 		});
 		logging(`Found ${allSpecificLeafs.length} leaves for ${filePath}`, this.settings.logLevel);
 		
 		return allSpecificLeafs;
+	}
+	
+	addingCanvasClassToLeaf(file: TFile|null) {
+		const leafType = this.app.workspace.getActiveViewOfType(ItemView)?.getViewType();
+		if (!file) {
+			logging("OPENED FILE IS NOT A CANVAS", this.settings.logLevel);
+			for (const canvas of this.settings.canvasAdded) {
+				for (const cssClass of canvas.canvasClass) {
+					removeFromBody(cssClass, this.settings.logLevel, undefined, true);
+				}
+			}
+			return;
+		}
+		if (file && file.extension === "canvas" && leafType === "canvas") {
+			
+			logging(`OPENED FILE ${file.path} IS A CANVAS ; ADDING CLASS`, this.settings.logLevel);
+			const canvasClassList = this.settings.canvasAdded.find((canvas) => canvas.canvasPath === file.path);
+			
+			const leaves = this.getLeafByPath(file.path);
+			const appendMode = canvasClassList ? canvasClassList.appendMode : this.settings.defaultAppendMode;
+			reloadCanvas(file.path, appendMode, this.settings, leaves);
+				
+			const canvasClassesNotFromThisFile = this.settings.canvasAdded.filter((item) => item.canvasPath !== file.path);
+				
+			for (const canvas of canvasClassesNotFromThisFile) {
+				for (const cssClass of canvas.canvasClass) {
+					const isIncluded = canvasClassList ? canvasClassList.canvasClass.includes(cssClass) : false;
+					if (!isIncluded) {
+						removeFromViewContent(cssClass, this.settings.logLevel, leaves);
+						removeFromBody(cssClass, this.settings.logLevel, file.path);
+					}
+				}
+			}
+		} else if (leafType !== "canvas") {
+			const isFile = file ? ` ("${file.path}") ` : " ";
+			logging(`OPENED FILE${isFile}IS NOT A CANVAS`, this.settings.logLevel);
+			for (const canvas of this.settings.canvasAdded) {
+				for (const cssClass of canvas.canvasClass) {
+					removeFromBody(cssClass, this.settings.logLevel, file?.path, true);
+				}
+			}
+		}
 	}
 	
 	async onload() {
@@ -218,38 +264,16 @@ export default class CanvasCSS extends Plugin {
 				return false;
 			}});
 		
-		this.registerEvent(this.app.workspace.on("file-open", (file) => {
-			const leafType = this.app.workspace.getActiveViewOfType(ItemView)?.getViewType();
-			if (file && file.extension === "canvas" && leafType === "canvas") {
-				
-				logging(`OPENED FILE ${file.path} IS A CANVAS ; ADDING CLASS`, this.settings.logLevel);
-				const canvasClassList = this.settings.canvasAdded.find((canvas) => canvas.canvasPath === file.path);
-				const leaves = this.getLeafByPath(file.path);
-				const appendMode = canvasClassList ? canvasClassList.appendMode : this.settings.defaultAppendMode;
-				reloadCanvas(file.path, appendMode, this.settings, leaves);
-				
-				const canvasClassesNotFromThisFile = this.settings.canvasAdded.filter((item) => item.canvasPath !== file.path);
-				
-				for (const canvas of canvasClassesNotFromThisFile) {
-					for (const cssClass of canvas.canvasClass) {
-						const isIncluded = canvasClassList ? canvasClassList.canvasClass.includes(cssClass) : false;
-						if (!isIncluded) {
-							removeFromViewContent(cssClass, this.settings.logLevel, leaves);
-							removeFromBody(cssClass, this.settings.logLevel, file.path);
-						}
-					}
-				}
-			} else if (leafType !== "canvas") {
-				const isFile = file ? ` ("${file.path}") ` : " ";
-				logging(`OPENED FILE${isFile}IS NOT A CANVAS`, this.settings.logLevel);
-				for (const canvas of this.settings.canvasAdded) {
-					for (const cssClass of canvas.canvasClass) {
-						removeFromBody(cssClass, this.settings.logLevel, file?.path, true);
-					}
-				}
-			}
+		this.app.workspace.onLayoutReady(() => {
+			this.addingCanvasClassToLeaf(this.app.workspace.getActiveFile());
+		});
+		
+		this.registerEvent(this.app.workspace.on("active-leaf-change", (leaf) => {
+			const view = leaf?.view instanceof FileView ? leaf.view : null;
+			const file = view ? view.file : null;
+			this.addingCanvasClassToLeaf(file);
 		}));
-
+		
 		this.addSettingTab(new CanvasCssSettingsTabs(this.app, this));
 		
 	}
