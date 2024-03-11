@@ -12,7 +12,7 @@
 		"bump:beta": "node bump-beta.mjs && git commit -am \"chore(bump): bump beta\" && git push",
 		"beta": "commit-and-tag-version  --prerelease --tag-build beta --infile CHANGELOG-beta.md",
 		"publish": "commit-and-tag-version --packageFiles package.json --bumpFiles manifest.json package.json package-lock.json",
-		"move:vault": "node esbuild.config.mjs production && copy main.js \"K:\\Constellation\\.obsidian\\plugins\\canvas-css-class\" && copy styles.css \"K:\\Constellation\\.obsidian\\plugins\\canvas-css-class\""
+		"move:vault": "node esbuild.config.mjs production && copy main.js \"E:\\Constellation\\.obsidian\\plugins\\canvas-css-class\" && copy styles.css \"E:\\Constellation\\.obsidian\\plugins\\canvas-css-class\""
 	},
 	"commit-and-tag-version": {
 		"t": "",
