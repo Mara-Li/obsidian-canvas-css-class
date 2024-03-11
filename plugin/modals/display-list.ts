@@ -1,7 +1,7 @@
 import { App, Modal, Setting } from "obsidian";
 import { t } from "plugin/i18n";
 import CanvasCSS from "plugin/main";
-import { reloadCanvas, removeFromDOM } from "plugin/utils";
+import { reloadCanvas } from "plugin/utils";
 
 import { AppendMode, CanvasClass } from "../interface";
 
@@ -72,10 +72,6 @@ export class ListClasses extends Modal {
 						.setValue(this.canvas.canvasClass[index])
 						.onChange(async (value) => {
 							this.canvas.canvasClass[index] = value;
-							if (value.length > 0) {
-								const openedLeaves = this.plugin.getLeafByPath(this.canvas.canvasPath);
-								reloadCanvas(this.canvas.canvasPath, this.canvas.appendMode, this.plugin.settings, openedLeaves);
-							}
 						});
 					text.inputEl.setAttribute("value", index);
 				})
@@ -83,14 +79,10 @@ export class ListClasses extends Modal {
 					.setIcon("trash")
 					.setTooltip(t("settings.remove.title") as string)
 					.onClick(async () => {
-						const cssClass = this.canvas.canvasClass[index];
 						const indexValue = this.canvas.canvasClass.indexOf(index);
 						//remove from list
 						this.canvas.canvasClass.splice(indexValue, 1);
 						this.onOpen();
-						const openedLeaves = this.plugin.getLeafByPath(this.canvas.canvasPath);
-						removeFromDOM(cssClass, this.plugin.settings.logLevel, openedLeaves, this.canvas.canvasPath);
-						
 					}));
 
 		}

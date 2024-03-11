@@ -44,6 +44,12 @@ export function removeFromDOM(cssClass: string, logLevel: string, leaves: Worksp
 	removeFromViewContent(cssClass, logLevel, leaves, true);
 }
 
+export function removeListFromDOM(cssClass: string[], logLevel: string, leaves: WorkspaceLeaf[], filepath: string | undefined) {
+	for (const css of cssClass) {
+		removeFromBody(css, logLevel, filepath);
+		removeFromViewContent(css, logLevel, leaves, true);
+	}
+}
 
 /**
  * The function to remove from Dom the class added. It removes from the body.
@@ -54,6 +60,7 @@ export function removeFromDOM(cssClass: string, logLevel: string, leaves: Worksp
  */
 export function removeFromBody(cssClass: string | null, logLevel: string, filepath: string | undefined, removeData= false): void {
 	const classIsInBody = cssClass && activeDocument.body.classList.contains(cssClass);
+	console.log("classIsInBody", classIsInBody, cssClass);
 	if (classIsInBody) {
 		logging(`Class of "${filepath}" : ${activeDocument.body.classList}`, logLevel);
 		activeDocument.body.classList.remove(cssClass);

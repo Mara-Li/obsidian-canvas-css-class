@@ -5,7 +5,7 @@ import {AppendMode, CanvasClass} from "./interface";
 import CanvasCSS from "./main";
 import { ListClasses } from "./modals/display-list";
 import { CanvasClassSuggester } from "./modals/inputSuggest";
-import { reloadCanvas} from "./utils";
+import { reloadCanvas, removeListFromDOM} from "./utils";
 
 export class CanvasCssSettingsTabs extends PluginSettingTab {
 	plugin: CanvasCSS;
@@ -94,9 +94,14 @@ export class CanvasCssSettingsTabs extends PluginSettingTab {
 						.setIcon("edit")
 						.setTooltip(t("settings.edit.title") as string)
 						.onClick(async () => {
+							const originalList = JSON.parse(JSON.stringify(canvas.canvasClass)) as string[];
 							new ListClasses(this.app, canvas, this.plugin, async (result: CanvasClass) => {
 								canvas.canvasClass = result.canvasClass;
 								await this.plugin.saveSettings();
+								const removedClasses = originalList.filter((item) => !result.canvasClass.includes(item));
+								const openedLeaves = this.plugin.getLeafByPath(canvas.canvasPath);
+								reloadCanvas(canvas.canvasPath, canvas.appendMode, this.plugin.settings, openedLeaves);
+								removeListFromDOM(removedClasses, this.plugin.settings.logLevel, openedLeaves, canvas.canvasPath);
 							}).open();
 						}))
 				.addExtraButton(cb =>

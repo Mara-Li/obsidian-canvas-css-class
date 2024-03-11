@@ -11,6 +11,7 @@ import {
 	reloadCanvas,
 	removeFromBody,
 	removeFromViewContent,
+	removeListFromDOM,
 } from "./utils";
 
 export default class CanvasCSS extends Plugin {
@@ -276,11 +277,15 @@ export default class CanvasCSS extends Plugin {
 					const path = canvasView.file.path;
 					if (!checking) {
 						let canvas = this.quickCreateSettings(path, this.settings.defaultAppendMode);
+						const originalList = JSON.parse(JSON.stringify(canvas.canvasClass)) as string[];
 						new ListClasses(this.app, canvas, this, (result) => {
 							canvas = result;
 							this.saveSettings();
 							const leaves = this.getLeafByPath(path);
+							const removedClasses = originalList.filter((item) => !result.canvasClass.includes(item));
+							console.log("REMOVED CLASS", removedClasses);
 							reloadCanvas(path, canvas.appendMode, this.settings, leaves);
+							removeListFromDOM(removedClasses, this.settings.logLevel, leaves, path);
 						}).open();
 					}
 					return true;
