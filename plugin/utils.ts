@@ -1,9 +1,10 @@
 /**
 	 * This function allow to choose the log level of the plugin and send the message to the console with the option chosen
 	 * @param {string} message the message to send to the console
- * * @param {string} level the log level of the message
+	 *  @param {string} level the log level of the message
 	 */
 import {FileView, Notice, WorkspaceLeaf} from "obsidian";
+
 import {AppendMode, CanvasCssSettings} from "./interface";
 
 /**
@@ -43,6 +44,12 @@ export function removeFromDOM(cssClass: string, logLevel: string, leaves: Worksp
 	removeFromViewContent(cssClass, logLevel, leaves, true);
 }
 
+export function removeListFromDOM(cssClass: string[], logLevel: string, leaves: WorkspaceLeaf[], filepath: string | undefined) {
+	for (const css of cssClass) {
+		removeFromBody(css, logLevel, filepath);
+		removeFromViewContent(css, logLevel, leaves, true);
+	}
+}
 
 /**
  * The function to remove from Dom the class added. It removes from the body.
@@ -53,6 +60,7 @@ export function removeFromDOM(cssClass: string, logLevel: string, leaves: Worksp
  */
 export function removeFromBody(cssClass: string | null, logLevel: string, filepath: string | undefined, removeData= false): void {
 	const classIsInBody = cssClass && activeDocument.body.classList.contains(cssClass);
+	console.log("classIsInBody", classIsInBody, cssClass);
 	if (classIsInBody) {
 		logging(`Class of "${filepath}" : ${activeDocument.body.classList}`, logLevel);
 		activeDocument.body.classList.remove(cssClass);
@@ -98,7 +106,7 @@ export function reloadCanvas(canvasPath: string, appendMode: string, settings: C
 	if (appendMode === AppendMode.body) {
 		logging(`RELOADING canvas "${canvasPath}" in BODY MODE`, settings.logLevel);
 		const selectedCanvas = document.querySelector(`body:has(.canvas-file[data-canvas-path="${canvasPath}"])`);
-		const getActiveLeaf = workspaceLeave.filter((leaf) => leaf.view instanceof FileView && leaf.view.file.path === canvasPath);
+		const getActiveLeaf = workspaceLeave.filter((leaf) => leaf.view instanceof FileView && leaf?.view?.file?.path === canvasPath);
 		if (selectedCanvas || getActiveLeaf) {
 			if (!cssClass || cssClass.length === 0) {
 				addToDOM(null, canvasPath, appendMode, settings.logLevel, workspaceLeave);

@@ -39,6 +39,8 @@ export default {
 				workspaceLeaf: "workspace-leaf-content",
 			},
 			edit: "Edit the mode for appending class to the canvas.",
+			save: "Save",
+			cancel: "Cancel",
 		},
 		console: {
 			title: "Log Level",
@@ -61,6 +63,7 @@ export default {
 		edit: {
 			filepath: "Edit filepath",
 			class: "Rename class",
+			title: "Edit",
 		},
 		remove: {
 			desc: "Remove all classes from this canvas",
@@ -79,5 +82,9 @@ export default {
 		quickSwitch:(key: string): string => `Switched to ${key} mode`,
 		switchedToBody: "Switched to body mode",
 		switchedToViewContent: "Switched to workspace-leaf-content mode",
+	},
+	error: {
+		alreadyApplied: "This class is already applied to this canvas.",
+		emptyValue: "This value can't be empty.",
 	}
 };

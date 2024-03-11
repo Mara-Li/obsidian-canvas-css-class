@@ -1,7 +1,8 @@
 import {App, FuzzySuggestModal, Notice} from "obsidian";
+
+import {StringFunction,t} from "../i18n";
 import {CanvasCssSettings} from "../interface";
 import CanvasCSS from "../main";
-import {t, StringFunction} from "../i18n";
 import {removeFromDOM} from "../utils";
 
 

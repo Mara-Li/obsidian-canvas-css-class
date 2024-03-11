@@ -21,6 +21,8 @@ export default {
 	addButton: "Ajouter",
 	removeFromCanvas:(key: string[]): string  => `Suppression de ${key[0]} dans ${key[1]}`,
 	settings: {
+		save: "Sauvegarder",
+		cancel: "Annuler",
 		title: "Paramètre de Canvas CSS Class",
 		noClassAdded: "Aucune classe ajoutée.",
 		useCommandsInfo: "Utilisez la fenêtre de commande pour ajouter un Canvas et une classe.",
@@ -61,6 +63,7 @@ export default {
 		edit: {
 			filepath: "Modifier le chemin",
 			class: "Renommer la classe",
+			title: "Modifier",
 		},
 		remove: {
 			desc: "Supprimer toutes les classes",
@@ -79,5 +82,9 @@ export default {
 		quickSwitch:(key: string): string => `Passage au mode : ${key}`,
 		switchedToBody: "Passage au mode body",
 		switchedToViewContent: "Passage au mode workspace-leaf-content",
+	},
+	error: {
+		"alreadyApplied": "Cette classe est déjà appliquée à ce Canvas.",
+		"emptyValue" : "Nom de classe vide",
 	}
 };

@@ -12,7 +12,7 @@
 		"bump:beta": "node bump-beta.mjs && git commit -am \"chore(bump): bump beta\" && git push",
 		"beta": "commit-and-tag-version  --prerelease --tag-build beta --infile CHANGELOG-beta.md",
 		"publish": "commit-and-tag-version --packageFiles package.json --bumpFiles manifest.json package.json package-lock.json",
-		"move:vault": "node esbuild.config.mjs production && copy main.js \"K:\\Constellation\\.obsidian\\plugins\\canvas-css-class\" && copy styles.css \"K:\\Constellation\\.obsidian\\plugins\\canvas-css-class\""
+		"move:vault": "node esbuild.config.mjs production && copy main.js \"E:\\Constellation\\.obsidian\\plugins\\canvas-css-class\" && copy styles.css \"E:\\Constellation\\.obsidian\\plugins\\canvas-css-class\""
 	},
 	"commit-and-tag-version": {
 		"t": "",
@@ -31,14 +31,14 @@
 	"author": "Lisandra-dev",
 	"license": "AGPL-3.0",
 	"devDependencies": {
-		"@types/node": "^18.11.17",
-		"@typescript-eslint/eslint-plugin": "5.47.0",
-		"@typescript-eslint/parser": "5.47.0",
+		"@types/node": "^18.19.22",
+		"@lisandra-dev/eslint-config": "^1.1.4",
 		"builtin-modules": "3.3.0",
 		"esbuild": "0.16.10",
-		"obsidian": "^1.1.1",
+		"obsidian": "^1.5.7",
 		"tslib": "2.4.1",
-		"typescript": "4.9.4"
+		"typescript": "5.4.2",
+		"eslint": "^8.57.0"
 	},
 	"dependencies": {
 		"commit-and-tag-version": "^10.1.0"
