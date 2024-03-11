@@ -1,4 +1,5 @@
 import {App, Modal, Setting} from "obsidian";
+
 import {t} from "../i18n";
 import {AppendMode} from "../interface";
 

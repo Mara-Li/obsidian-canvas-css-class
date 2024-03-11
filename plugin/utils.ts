@@ -1,9 +1,10 @@
 /**
 	 * This function allow to choose the log level of the plugin and send the message to the console with the option chosen
 	 * @param {string} message the message to send to the console
- * * @param {string} level the log level of the message
+	 *  @param {string} level the log level of the message
 	 */
 import {FileView, Notice, WorkspaceLeaf} from "obsidian";
+
 import {AppendMode, CanvasCssSettings} from "./interface";
 
 /**
@@ -98,7 +99,7 @@ export function reloadCanvas(canvasPath: string, appendMode: string, settings: C
 	if (appendMode === AppendMode.body) {
 		logging(`RELOADING canvas "${canvasPath}" in BODY MODE`, settings.logLevel);
 		const selectedCanvas = document.querySelector(`body:has(.canvas-file[data-canvas-path="${canvasPath}"])`);
-		const getActiveLeaf = workspaceLeave.filter((leaf) => leaf.view instanceof FileView && leaf.view.file.path === canvasPath);
+		const getActiveLeaf = workspaceLeave.filter((leaf) => leaf.view instanceof FileView && leaf?.view?.file?.path === canvasPath);
 		if (selectedCanvas || getActiveLeaf) {
 			if (!cssClass || cssClass.length === 0) {
 				addToDOM(null, canvasPath, appendMode, settings.logLevel, workspaceLeave);

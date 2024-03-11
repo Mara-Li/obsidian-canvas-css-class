@@ -1,6 +1,7 @@
-import {App, Modal, Setting} from "obsidian";
-import {t} from "../i18n";
-import {AppendMode} from "../interface";
+import { App, Modal, Setting } from "obsidian";
+
+import { t } from "../i18n";
+import { AppendMode } from "../interface";
 
 const add = (t("addButton") as string);
 const className = (t("className") as string);
@@ -13,16 +14,16 @@ const className = (t("className") as string);
 
 export class AddCssClass extends Modal {
 	result: string;
-	onSubmit:(result: string)=>void;
-	
+	onSubmit: (result: string) => void;
+
 	constructor(app: App, onSubmit: (result: string) => void) {
 		super(app);
 		this.onSubmit = onSubmit;
 	}
 
 	onOpen() {
-		const {contentEl} = this;
-		contentEl.createEl("h1", {text:(t("addCssClass.title") as string)});
+		const { contentEl } = this;
+		contentEl.createEl("h1", { text: (t("addCssClass.title") as string) });
 		new Setting(contentEl)
 			.setName(className)
 			.setDesc(t("addCssClass.desc") as string)
@@ -41,7 +42,7 @@ export class AddCssClass extends Modal {
 	}
 
 	onClose() {
-		const {contentEl} = this;
+		const { contentEl } = this;
 		contentEl.empty();
 	}
 }
@@ -56,8 +57,8 @@ export class AddNewClassWithFile extends Modal {
 	path: string;
 	cssClass: string;
 	appendMode: string;
-	onSubmit:(path: string, cssClass: string, appendMode: string)=>void;
-	
+	onSubmit: (path: string, cssClass: string, appendMode: string) => void;
+
 	/**
 	 * Constructor
 	 * @param app: App
@@ -69,8 +70,8 @@ export class AddNewClassWithFile extends Modal {
 	}
 
 	onOpen() {
-		const {contentEl} = this;
-		contentEl.createEl("h1", {text: t("addCssClass.title") as string});
+		const { contentEl } = this;
+		contentEl.createEl("h1", { text: t("addCssClass.title") as string });
 		new Setting(contentEl)
 			.setName(t("addFilePath.filePath") as string)
 			.setDesc(t("addFilePath.desc") as string)
@@ -87,18 +88,18 @@ export class AddNewClassWithFile extends Modal {
 				.onChange(async (value) => {
 					this.cssClass = value;
 				}));
-		
+
 		const desc = document.createDocumentFragment();
 		// create list of modes
-		desc.createEl("p", {text: t("settings.appendMode.desc") as string});
+		desc.createEl("p", { text: t("settings.appendMode.desc") as string });
 		const list = desc.createEl("ul");
 		for (const mode in AppendMode) {
 			const li = list.createEl("li");
-			li.createEl("span", {text: AppendMode[mode as keyof typeof AppendMode]});
-			li.createEl("span", {text: " - "});
-			li.createEl("span", {text: t(`settings.appendMode.${mode}Desc`) as string});
+			li.createEl("span", { text: AppendMode[mode as keyof typeof AppendMode] });
+			li.createEl("span", { text: " - " });
+			li.createEl("span", { text: t(`settings.appendMode.${mode}Desc`) as string });
 		}
-		
+
 		new Setting(contentEl)
 			.setName(t("settings.appendMode.title") as string)
 			.setDesc(desc)
@@ -120,7 +121,7 @@ export class AddNewClassWithFile extends Modal {
 	}
 
 	onClose() {
-		const {contentEl} = this;
+		const { contentEl } = this;
 		contentEl.empty();
 	}
 }

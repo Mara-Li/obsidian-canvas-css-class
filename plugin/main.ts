@@ -1,9 +1,11 @@
 import {FileView, ItemView, Notice, Plugin, TFile, WorkspaceLeaf} from "obsidian";
-import {DEFAULT_SETTINGS, CanvasCssSettings, AppendMode} from "./interface";
-import {CanvasCssSettingsTabs} from "./settings";
-import {AddCssClass} from "./modals/addClass";
-import {RemoveCSSclass} from "./modals/removeClass";
+
 import {StringFunction, t, translationLanguage} from "./i18n";
+import {AppendMode,CanvasCssSettings, DEFAULT_SETTINGS} from "./interface";
+import {AddCssClass} from "./modals/addClass";
+import { ListClasses } from "./modals/display-list";
+import {RemoveCSSclass} from "./modals/removeClass";
+import {CanvasCssSettingsTabs} from "./settings";
 import {
 	addToDOM, logging,
 	reloadCanvas,
@@ -57,9 +59,9 @@ export default class CanvasCSS extends Plugin {
 		const allLeafs: WorkspaceLeaf[] = [];
 		this.app.workspace.iterateAllLeaves((leaf) => {
 			if (!(leaf.view instanceof FileView)) return allLeafs;
-			else if (leaf.view.file.extension === "canvas") {
+			else if (leaf.view.file?.extension === "canvas") {
 				const view = leaf.view as FileView;
-				const canvasClassList = this.settings.canvasAdded.find((canvas) => canvas.canvasPath === view.file.path);
+				const canvasClassList = this.settings.canvasAdded.find((canvas) => canvas.canvasPath === view.file?.path);
 				if (!canvasClassList) {
 					allLeafs.push(leaf);
 				}
@@ -264,6 +266,29 @@ export default class CanvasCSS extends Plugin {
 				return false;
 			}});
 		
+		this.addCommand({
+			id: "edit-canvas",
+			name: "Edit canvas",
+			checkCallback: (checking: boolean) => {
+				const canvasView = this.app.workspace.getActiveViewOfType(ItemView);
+				if ((canvasView?.getViewType() === "canvas")) {
+					//@ts-ignore
+					const path = canvasView.file.path;
+					if (!checking) {
+						let canvas = this.quickCreateSettings(path, this.settings.defaultAppendMode);
+						new ListClasses(this.app, canvas, this, (result) => {
+							canvas = result;
+							this.saveSettings();
+							const leaves = this.getLeafByPath(path);
+							reloadCanvas(path, canvas.appendMode, this.settings, leaves);
+						}).open();
+					}
+					return true;
+				}
+				return false;
+			}
+		});	
+
 		this.app.workspace.onLayoutReady(() => {
 			this.addingCanvasClassToLeaf(this.app.workspace.getActiveFile());
 		});
