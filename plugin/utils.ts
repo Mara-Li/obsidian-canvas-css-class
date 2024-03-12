@@ -60,7 +60,6 @@ export function removeListFromDOM(cssClass: string[], logLevel: string, leaves: 
  */
 export function removeFromBody(cssClass: string | null, logLevel: string, filepath: string | undefined, removeData= false): void {
 	const classIsInBody = cssClass && activeDocument.body.classList.contains(cssClass);
-	console.log("classIsInBody", classIsInBody, cssClass);
 	if (classIsInBody) {
 		logging(`Class of "${filepath}" : ${activeDocument.body.classList}`, logLevel);
 		activeDocument.body.classList.remove(cssClass);
