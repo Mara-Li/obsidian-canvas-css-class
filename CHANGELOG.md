@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.3.2](https://github.com/Lisandra-dev/obsidian-canvas-css-class/compare/2.3.1...2.3.2) (2024-03-12)
+
+
+### Bug Fixes
+
+* urgent fix for modals translation ([b2ee217](https://github.com/Lisandra-dev/obsidian-canvas-css-class/commit/b2ee2171495ac99b9ef7cf6171ce7a6df9a293b9))
+
 ### [2.3.1](https://github.com/Lisandra-dev/obsidian-canvas-css-class/compare/2.3.0...2.3.1) (2024-03-12)
 
 ## [2.3.0](https://github.com/Lisandra-dev/obsidian-canvas-css-class/compare/2.2.2...2.3.0) (2024-03-12)
