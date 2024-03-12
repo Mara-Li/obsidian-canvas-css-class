@@ -21,6 +21,8 @@ export default {
 	addButton: "Add",
 	removeFromCanvas:(key: string[]): string  => `Removed ${key[0]} from ${key[1]}`,
 	settings: {
+		save: "Save",
+		cancel: "Cancel",
 		title: "Canvas CSS Class Settings",
 		noClassAdded: "No class added yet.",
 		useCommandsInfo: "Use the commands modal to add a canvas and a class.",

@@ -1,14 +1,3 @@
-.canvas-css-class-opt {
-	font-weight: normal;
-	padding-left: 15px;
-	border: none;
-}
-
-.canvas-css-class-opt::before {
-	content: "•";
-	margin-right: 5px;
-}
-
 .canvas-css-class-title .setting-item-info {
 	display: none;
 }
@@ -18,7 +7,7 @@
 }
 
 .canvas-css-modal {
-	padding-top: 2em;
+	padding-top: 3em;
 }
 
 .canvas-css-modal .no-info .setting-item-info {
