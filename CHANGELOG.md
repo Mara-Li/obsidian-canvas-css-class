@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.3.4](https://github.com/Lisandra-dev/obsidian-canvas-css-class/compare/2.3.3...2.3.4) (2024-03-12)
+
+
+### Bug Fixes
+
+* close button open empty modal ([e1e2e8e](https://github.com/Lisandra-dev/obsidian-canvas-css-class/commit/e1e2e8e35d4c74d34c31c5bd2e15120038802159))
+
 ### [2.3.3](https://github.com/Lisandra-dev/obsidian-canvas-css-class/compare/2.3.2...2.3.3) (2024-03-12)
 
 
