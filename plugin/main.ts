@@ -140,6 +140,8 @@ export default class CanvasCSS extends Plugin {
 		
 		this.convertOldSettings();
 		
+		
+
 		this.addCommand({
 			id: "add-canvas-css-class",
 			name: t("commands.addCanvas") as string,
@@ -283,7 +285,6 @@ export default class CanvasCSS extends Plugin {
 							this.saveSettings();
 							const leaves = this.getLeafByPath(path);
 							const removedClasses = originalList.filter((item) => !result.canvasClass.includes(item));
-							console.log("REMOVED CLASS", removedClasses);
 							reloadCanvas(path, canvas.appendMode, this.settings, leaves);
 							removeListFromDOM(removedClasses, this.settings.logLevel, leaves, path);
 						}).open();
@@ -302,6 +303,29 @@ export default class CanvasCSS extends Plugin {
 			const view = leaf?.view instanceof FileView ? leaf.view : null;
 			const file = view ? view.file : null;
 			this.addingCanvasClassToLeaf(file);
+			//prevent duplicate button when reopening the same file
+			const allCssButton = document.querySelectorAll(".canvas-css-class-button");
+			allCssButton.forEach((button) => {
+				button.remove();
+			});
+			if (this.settings.addButton && view?.getViewType() === "canvas" && file?.extension === "canvas") {
+				const button = view.addAction("ratio",(t("commands.editCanvas") as StringFunction)(file.basename) as string, async () => {
+					const path = file.path;					
+					this.quickCreateSettings(path, this.settings.defaultAppendMode);
+					let canvas = this.settings.canvasAdded.find((item) => item.canvasPath === path);
+					if (!canvas) return;
+					const originalList = JSON.parse(JSON.stringify(canvas.canvasClass)) as string[];
+					new ListClasses(this.app, canvas, this, (result) => {
+						canvas = result;
+						this.saveSettings();
+						const leaves = this.getLeafByPath(path);
+						const removedClasses = originalList.filter((item) => !result.canvasClass.includes(item));
+						reloadCanvas(path, canvas.appendMode, this.settings, leaves);
+						removeListFromDOM(removedClasses, this.settings.logLevel, leaves, path);
+					}).open();
+				});
+				button.addClass("canvas-css-class-button");
+			}
 		}));
 		
 		this.addSettingTab(new CanvasCssSettingsTabs(this.app, this));

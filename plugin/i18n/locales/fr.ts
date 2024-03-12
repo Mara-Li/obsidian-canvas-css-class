@@ -68,6 +68,10 @@ export default {
 		remove: {
 			desc: "Supprimer toutes les classes",
 			title: "Supprimer"
+		},
+		addButton: {
+			name: "Ajouter un bouton",
+			desc: "Ajoute un bouton pour ajouter une classe au Canvas",
 		}
 	},
 	commands: {
@@ -77,6 +81,7 @@ export default {
 		switchToViewContentMode: "Passer au mode workspace-leaf-content",
 		switchToBodyMode: "Passer au mode body",
 		quickSwitch: "Quick switch entre body & workspace-leaf-content",
+		editCanvas: (name: string) => `Modifier les paramètres de ${name}`
 	},
 	message : {
 		quickSwitch:(key: string): string => `Passage au mode : ${key}`,

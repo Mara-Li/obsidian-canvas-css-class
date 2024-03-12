@@ -20,7 +20,6 @@ export class ListClasses extends Modal {
 	onClose(): void {
 		const { contentEl } = this;
 		contentEl.empty();
-		this.close();
 	}
 
 	onOpen() {
@@ -126,7 +125,7 @@ export class ListClasses extends Modal {
 				.setButtonText(t("settings.cancel") as string)
 				.setWarning()
 				.onClick(async () => {
-					this.onClose();
+					this.close();
 				}));
 
 

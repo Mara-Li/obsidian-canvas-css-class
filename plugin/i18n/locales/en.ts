@@ -68,6 +68,10 @@ export default {
 		remove: {
 			desc: "Remove all classes from this canvas",
 			title: "Remove"
+		},
+		addButton: {
+			name: "Add button in the page header",
+			desc: "Ajoute un bouton dans l'en-tête de la page pour ouvrir les paramètres de la classe css du canevas. Ne fonctionne que si l'en-tête de page est activé.",
 		}
 	},
 	commands: {
@@ -77,6 +81,7 @@ export default {
 		switchToViewContentMode: "Switch to workspace-leaf-content mode",
 		switchToBodyMode: "Switch to body mode",
 		quickSwitch: "Quick switch between workspace-leaf-content & body mode",
+		editCanvas: (name: string) => `Edit ${name} settings`
 	},
 	message : {
 		quickSwitch:(key: string): string => `Switched to ${key} mode`,

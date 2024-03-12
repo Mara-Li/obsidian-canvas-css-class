@@ -20,12 +20,16 @@ export class CanvasCssSettingsTabs extends PluginSettingTab {
 
 		containerEl.empty();
 
-		containerEl.createEl("h1", {text: t("settings.title") as string});
-		
+		const desc = document.createDocumentFragment();
 		if (this.plugin.settings.canvasAdded.length=== 0) {
-			containerEl.createEl("p", {text: t("settings.noClassAdded") as string});
-			containerEl.createEl("p", {text: t("settings.useCommandsInfo") as string});
+			desc.createEl("p", {text: t("settings.noClassAdded") as string});
+			desc.createEl("p", {text: t("settings.useCommandsInfo") as string});
 		}
+
+		new Setting(containerEl)
+			.setName(t("settings.title") as string)
+			.setHeading()
+			.setDesc(desc);
 		
 		new Setting(containerEl)
 			.setName(t("settings.console.title") as string)
@@ -44,6 +48,18 @@ export class CanvasCssSettingsTabs extends PluginSettingTab {
 					});
 			});
 		
+		new Setting(containerEl)
+			.setName(t("settings.addButton.name") as string)
+			.setDesc(t("settings.addButton.desc") as string)
+			.addToggle((toggle) => {
+				toggle
+					.setValue(this.plugin.settings.addButton)
+					.onChange(async (value) => {
+						this.plugin.settings.addButton = value;
+						await this.plugin.saveSettings();
+					});
+			});	
+
 		new Setting(containerEl)
 			.setName(t("settings.appendMode.default.title") as string)
 			.setDesc(t("settings.appendMode.default.desc") as string)
