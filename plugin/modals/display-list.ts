@@ -118,7 +118,7 @@ export class ListClasses extends Modal {
 					}
 					else {
 						this.onSubmit(this.canvas);
-						this.onClose();
+						this.close();
 					}	
 				}))
 			.addButton(cb => cb
