@@ -19,18 +19,15 @@ export class CanvasCssSettingsTabs extends PluginSettingTab {
 		const {containerEl} = this;
 
 		containerEl.empty();
-
-		const desc = document.createDocumentFragment();
+		
 		if (this.plugin.settings.canvasAdded.length=== 0) {
+			const desc = document.createDocumentFragment();
 			desc.createEl("p", {text: t("settings.noClassAdded") as string});
 			desc.createEl("p", {text: t("settings.useCommandsInfo") as string});
+			new Setting(containerEl)
+				.setHeading()
+				.setDesc(desc);
 		}
-
-		new Setting(containerEl)
-			.setName(t("settings.title") as string)
-			.setHeading()
-			.setDesc(desc);
-		
 		new Setting(containerEl)
 			.setName(t("settings.console.title") as string)
 			.setDesc(t("settings.console.desc") as string)
