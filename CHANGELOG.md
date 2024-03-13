@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.4.0](https://github.com/Lisandra-dev/obsidian-canvas-css-class/compare/2.3.3...2.4.0) (2024-03-13)
+
+
+### Features
+
+* add a button for switch between body & workspace mode ([95ee8a5](https://github.com/Lisandra-dev/obsidian-canvas-css-class/commit/95ee8a50680d9b31ebe1a3200c4be01f3c4e177a))
+
+
+### Bug Fixes
+
+* close button open empty modal ([e1e2e8e](https://github.com/Lisandra-dev/obsidian-canvas-css-class/commit/e1e2e8e35d4c74d34c31c5bd2e15120038802159))
+
 ### [2.3.4](https://github.com/Lisandra-dev/obsidian-canvas-css-class/compare/2.3.3...2.3.4) (2024-03-12)
 
 
