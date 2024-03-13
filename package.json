@@ -31,14 +31,15 @@
 	"author": "Lisandra-dev",
 	"license": "AGPL-3.0",
 	"devDependencies": {
-		"@types/node": "^18.19.22",
 		"@lisandra-dev/eslint-config": "^1.1.4",
+		"@types/node": "^18.19.22",
 		"builtin-modules": "3.3.0",
 		"esbuild": "0.16.10",
+		"eslint": "^8.57.0",
+		"i18next": "^23.10.1",
 		"obsidian": "^1.5.7",
 		"tslib": "2.4.1",
-		"typescript": "5.4.2",
-		"eslint": "^8.57.0"
+		"typescript": "5.4.2"
 	},
 	"dependencies": {
 		"commit-and-tag-version": "^10.1.0"

@@ -1,0 +1,89 @@
+{
+  "addButton": "Ajouter",
+  "addCssClass": {
+    "desc": "Le nom de la classe que vous souhaitez ajouter au Canvas",
+    "title": "Ajouter une classe CSS"
+  },
+  "addFilePath": {
+    "desc": "Le chemin du fichier du Canva auquel vous souhaitez ajouter une classe",
+    "filePath": "Chemin du fichier"
+  },
+  "className": "Nom de la classe",
+  "commands": {
+    "addCanvas": "Ajouter une classe CSS au Canvas actif",
+    "editCanvas": "Modifier les paramètres de {{- name}}",
+    "quickSwitch": "Quick switch entre body & workspace-leaf-content",
+    "removeCanvas": "Supprimer une classe CSS du Canvas actif",
+    "switchToBodyMode": "Passer au mode body",
+    "switchToViewContentMode": "Passer au mode workspace-leaf-content"
+  },
+  "error": {
+    "alreadyApplied": "Cette classe est déjà appliquée à ce Canvas.",
+    "emptyValue": "Nom de classe vide"
+  },
+  "message": {
+    "quickSwitch": "Passage au mode : {{- mode}}",
+    "switchedToBody": "Passage au mode body",
+    "switchedToViewContent": "Passage au mode workspace-leaf-content"
+  },
+  "removeFromCanvas": "Suppression de {{- class}} dans {{- canvas}}",
+  "renameCssClass": {
+    "desc": "Le nom de la classe que vous souhaitez renommer",
+    "placeholder": "Nouveau nom",
+    "title": "Renommer une classe CSS"
+  },
+  "renameFilePath": {
+    "desc": "Le nouveau chemin du Canvas que vous souhaitez modifier",
+    "placeholder": "Nouveau chemin",
+    "title": "Modifier le chemin du Canvas"
+  },
+  "settings": {
+    "addButton": {
+      "class": "Bouton : Ouvrir les paramètres du canvas ouvert",
+      "name": "Ajouter un bouton dans le menu de titre",
+      "quickSwitch": "Bouton : Quick switch entre les modes de vues"
+    },
+    "alreadyApplied": "Cette classe est déjà appliquée à ce Canvas.",
+    "appendMode": {
+      "bodyDesc": "Ajoute le Canvas au body. Permet d'exporter le Canvas en tant qu'image mais peut avoir un comportement inattendu, notamment avec plusieurs fichiers ouverts.",
+      "default": {
+        "desc": "Le mode d'ajout par défaut de la classe au Canvas, incluant canvas-file et l'attribut data-canvas-path, lors de l'ouverture ou de la création du Canvas.",
+        "title": "Le mode d'ajout par défaut"
+      },
+      "desc": "Où ajouter la classe dans le Canvas.",
+      "options": {
+        "body": "body",
+        "workspaceLeaf": "workspace-leaf-content"
+      },
+      "title": "Comportement d'ajout",
+      "workspaceLeafDesc": "Ajoute le Canvas au workspace-leaf-content. Conserve la classe lorsque le focus change mais ne peut pas être exporté avec l'image."
+    },
+    "cancel": "Annuler",
+    "console": {
+      "desc": "Permet de mieux suivre les ajouts/suppressions effectués par le plugin. Notice affichera une notification Obsidian.",
+      "options": {
+        "error": "Erreur",
+        "log": "Log",
+        "none": "Aucun",
+        "notice": "Notice",
+        "warn": "Avertissement"
+      },
+      "title": "Niveau de log"
+    },
+    "edit": {
+      "title": "Modifier"
+    },
+    "newCanvas": {
+      "addNewCanvas": "Ajouter un nouveau Canvas"
+    },
+    "newClass": {
+      "addingInfo": "Ajouter une classe"
+    },
+    "noClassAdded": "Aucune classe ajoutée.",
+    "remove": {
+      "title": "Supprimer"
+    },
+    "save": "Sauvegarder",
+    "useCommandsInfo": "Utilisez la fenêtre de commande pour ajouter un Canvas et une classe."
+  }
+}

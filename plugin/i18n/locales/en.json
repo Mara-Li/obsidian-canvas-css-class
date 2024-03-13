@@ -1,0 +1,89 @@
+{
+  "addButton": "Add",
+  "addCssClass": {
+    "desc": "The name of the class you want to add to the canvas",
+    "title": "Add CSS Class"
+  },
+  "addFilePath": {
+    "desc": "The filepath of the canvas you want to add a class to",
+    "filePath": "Filepath"
+  },
+  "className": "Class Name",
+  "commands": {
+    "addCanvas": "Add a CSS Class to the active canvas",
+    "editCanvas": "Edit {{- name}} settings",
+    "quickSwitch": "Quick switch between workspace-leaf-content & body mode",
+    "removeCanvas": "Remove a CSS Class from the active canvas",
+    "switchToBodyMode": "Switch to body mode",
+    "switchToViewContentMode": "Switch to workspace-leaf-content mode"
+  },
+  "error": {
+    "alreadyApplied": "This class is already applied to this canvas.",
+    "emptyValue": "This value can't be empty."
+  },
+  "message": {
+    "quickSwitch": "Switched to {{- mode}} mode",
+    "switchedToBody": "Switched to body mode",
+    "switchedToViewContent": "Switched to workspace-leaf-content mode"
+  },
+  "removeFromCanvas": "Removed {{- class}} from {{- canvas}}",
+  "renameCssClass": {
+    "desc": "The name of the class you want to rename",
+    "placeholder": "New name",
+    "title": "Rename CSS Class"
+  },
+  "renameFilePath": {
+    "desc": "The new filepath of the canvas you want to rename",
+    "placeholder": "New Filepath",
+    "title": "Edit canvas filepath"
+  },
+  "settings": {
+    "addButton": {
+      "class": "Button: Open open canvas settings",
+      "name": "Add button in the page header",
+      "quickSwitch": "Button: Quick switch between view modes"
+    },
+    "alreadyApplied": "This class is already applied to this canvas.",
+    "appendMode": {
+      "bodyDesc": "Append the canvas to the body. Allow to export as an image with the canvas but can have some unexpected mode, notably when multiple files are open.",
+      "default": {
+        "desc": "The default mode to append the class to the canvas, including canvas-file and the data-canvas-path attribute, when the canvas is opened or created.",
+        "title": "Default appending mode"
+      },
+      "desc": "Where to append the class into the canvas.",
+      "options": {
+        "body": "body",
+        "workspaceLeaf": "workspace-leaf-content"
+      },
+      "title": "Append Mode",
+      "workspaceLeafDesc": "Append the canvas to the workspace-leaf-content. Keep the class when focus change but can't be exported with the image."
+    },
+    "cancel": "Cancel",
+    "console": {
+      "desc": "Allows to better follow the additions/removals made by the plugin. Notice will display an Obsidian notification.",
+      "options": {
+        "error": "Error",
+        "log": "Log",
+        "none": "None",
+        "notice": "Notice",
+        "warn": "Warn"
+      },
+      "title": "Log Level"
+    },
+    "edit": {
+      "title": "Edit"
+    },
+    "newCanvas": {
+      "addNewCanvas": "Add new Canvas"
+    },
+    "newClass": {
+      "addingInfo": "Add a class to this canvas"
+    },
+    "noClassAdded": "No class added yet.",
+    "remove": {
+      "title": "Remove"
+    },
+    "save": "Save",
+    "useCommandsInfo": "Use the commands modal to add a canvas and a class."
+  }
+}
