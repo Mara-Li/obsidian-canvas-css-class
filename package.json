@@ -8,24 +8,12 @@
 		"dev": "node esbuild.config.mjs --sourcemap development",
 		"lint": "eslint --ext .ts plugin/",
 		"lint:fix": "eslint --fix --ext .ts  plugin/",
-		"bump": "node version-bump.mjs",
-		"bump:beta": "node bump-beta.mjs && git commit -am \"chore(bump): bump beta\" && git push",
-		"beta": "commit-and-tag-version  --prerelease --tag-build beta --infile CHANGELOG-beta.md",
-		"publish": "commit-and-tag-version --packageFiles package.json --bumpFiles manifest.json package.json package-lock.json",
-		"move:vault": "node esbuild.config.mjs production && copy main.js \"E:\\Constellation\\.obsidian\\plugins\\canvas-css-class\" && copy styles.css \"E:\\Constellation\\.obsidian\\plugins\\canvas-css-class\""
+		"bump": "node commit-and-tag-version.js",
+		"postbump": "git push --follow-tags origin master",
+		"export": "node esbuild.config.mjs production export"
 	},
 	"commit-and-tag-version": {
-		"t": "",
-		"bumpFiles": [
-			{
-				"filename": "manifest-beta.json",
-				"type": "json"
-			},
-			{
-				"filename": "package.json",
-				"type": "json"
-			}
-		]
+		"t": ""
 	},
 	"keywords": [],
 	"author": "Lisandra-dev",
@@ -34,6 +22,7 @@
 		"@lisandra-dev/eslint-config": "^1.1.4",
 		"@types/node": "^18.19.22",
 		"builtin-modules": "3.3.0",
+		"dotenv": "^16.4.5",
 		"esbuild": "0.16.10",
 		"eslint": "^8.57.0",
 		"i18next": "^23.10.1",
