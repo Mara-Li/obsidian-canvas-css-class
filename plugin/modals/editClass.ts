@@ -1,6 +1,6 @@
+import {t} from "i18next";
 import {App, Modal, Setting} from "obsidian";
 
-import {t} from "../i18n";
 import {AppendMode} from "../interface";
 
 const add = (t("addButton") as string);
@@ -126,7 +126,8 @@ export class EditMode extends Modal {
 			const li = list.createEl("li");
 			li.createEl("span", {text: AppendMode[mode as keyof typeof AppendMode]});
 			li.createEl("span", {text: " - "});
-			li.createEl("span", {text: t(`settings.appendMode.${mode}Desc`) as string});
+			const translated = mode === "body" ? t("settings.appendMode.bodyDesc") : t("settings.appendMode.workspaceLeafDesc");
+			li.createEl("span", {text: translated});
 		}
 		
 		new Setting(contentEl)

@@ -2,7 +2,8 @@ export interface CanvasCssSettings {
 	canvasAdded: CanvasClass[];
 	logLevel: string;
 	defaultAppendMode: AppendMode;
-	addButton: boolean;
+	addButtonSetting: boolean;
+	addButtonSwitchView: boolean;
 }
 
 export enum AppendMode {
@@ -15,7 +16,8 @@ export const DEFAULT_SETTINGS: CanvasCssSettings = {
 	canvasAdded: [],
 	logLevel: "none",
 	defaultAppendMode: AppendMode.workspaceLeaf,
-	addButton: false
+	addButtonSetting: false,
+	addButtonSwitchView: false,
 };
 
 export interface CanvasClass {

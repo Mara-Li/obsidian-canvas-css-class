@@ -1,10 +1,10 @@
+import i18next from "i18next";
 import { App, Modal, Setting } from "obsidian";
 
-import { t } from "../i18n";
 import { AppendMode } from "../interface";
 
-const add = (t("addButton") as string);
-const className = (t("className") as string);
+const add = (i18next.t("addButton"));
+const className = (i18next.t("className"));
 
 /**
  * Modal to add a CSS class to a canvas
@@ -23,10 +23,10 @@ export class AddCssClass extends Modal {
 
 	onOpen() {
 		const { contentEl } = this;
-		contentEl.createEl("h1", { text: (t("addCssClass.title") as string) });
+		contentEl.createEl("h1", { text: (i18next.t("addCssClass.title")) });
 		new Setting(contentEl)
 			.setName(className)
-			.setDesc(t("addCssClass.desc") as string)
+			.setDesc(i18next.t("addCssClass.desc"))
 			.addText(text => text
 				.setPlaceholder(className)
 				.onChange(async (value) => {
@@ -71,18 +71,20 @@ export class AddNewClassWithFile extends Modal {
 
 	onOpen() {
 		const { contentEl } = this;
-		contentEl.createEl("h1", { text: t("addCssClass.title") as string });
 		new Setting(contentEl)
-			.setName(t("addFilePath.filePath") as string)
-			.setDesc(t("addFilePath.desc") as string)
+			.setHeading()
+			.setName(i18next.t("addCssClass.title"));
+		new Setting(contentEl)
+			.setName(i18next.t("addFilePath.filePath"))
+			.setDesc(i18next.t("addFilePath.desc"))
 			.addText(text => text
-				.setPlaceholder(t("addFilePath.filePath") as string)
+				.setPlaceholder(i18next.t("addFilePath.filePath"))
 				.onChange(async (value) => {
-					this.path = value.replace(".canvas", "") + ".canvas";
+					this.path = `${value.replace(".canvas", "")}.canvas`;
 				}));
 		new Setting(contentEl)
 			.setName(className)
-			.setDesc(t("addCssClass.desc") as string)
+			.setDesc(i18next.t("addCssClass.desc"))
 			.addText(text => text
 				.setPlaceholder(className)
 				.onChange(async (value) => {
@@ -91,21 +93,22 @@ export class AddNewClassWithFile extends Modal {
 
 		const desc = document.createDocumentFragment();
 		// create list of modes
-		desc.createEl("p", { text: t("settings.appendMode.desc") as string });
+		desc.createEl("p", { text: i18next.t("settings.appendMode.desc")});
 		const list = desc.createEl("ul");
 		for (const mode in AppendMode) {
 			const li = list.createEl("li");
 			li.createEl("span", { text: AppendMode[mode as keyof typeof AppendMode] });
 			li.createEl("span", { text: " - " });
-			li.createEl("span", { text: t(`settings.appendMode.${mode}Desc`) as string });
+			const translated = mode === "body" ? i18next.t("settings.appendMode.bodyDesc") : i18next.t("settings.appendMode.workspaceLeafDesc");
+			li.createEl("span", { text: translated});
 		}
 
 		new Setting(contentEl)
-			.setName(t("settings.appendMode.title") as string)
+			.setName(i18next.t("settings.appendMode.title"))
 			.setDesc(desc)
 			.addDropdown(dropdown => dropdown
-				.addOption("body", t("settings.appendMode.options.body") as string)
-				.addOption("workspace-leaf", t("settings.appendMode.options.workspaceLeaf") as string)
+				.addOption("body", i18next.t("settings.appendMode.options.body"))
+				.addOption("workspace-leaf", i18next.t("settings.appendMode.options.workspaceLeaf"))
 				.setValue(AppendMode.body)
 				.onChange(async (value) => {
 					this.appendMode = value;

@@ -1,6 +1,6 @@
+import {t} from "i18next";
 import {App, FuzzySuggestModal, Notice} from "obsidian";
 
-import {StringFunction,t} from "../i18n";
 import {CanvasCssSettings} from "../interface";
 import CanvasCSS from "../main";
 import {removeFromDOM} from "../utils";
@@ -57,7 +57,7 @@ export class RemoveCSSclass extends FuzzySuggestModal<string> {
 				}
 			}
 			this.plugin.saveSettings();
-			new Notice((t("removeFromCanvas") as StringFunction)([item.toString(), this.filepath]));
+			new Notice(t("removeFromCanvas", {class: item.toString(), canvas: this.filepath}));
 			const openedLeaves = this.plugin.getLeafByPath(this.filepath);
 			removeFromDOM(item.toString(), this.settings.logLevel, openedLeaves, this.filepath);
 		}

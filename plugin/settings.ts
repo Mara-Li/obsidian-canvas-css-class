@@ -1,6 +1,6 @@
+import i18next from "i18next";
 import {App, PluginSettingTab, Setting} from "obsidian";
 
-import {t} from "./i18n";
 import {AppendMode, CanvasClass} from "./interface";
 import CanvasCSS from "./main";
 import { ListClasses } from "./modals/display-list";
@@ -22,22 +22,22 @@ export class CanvasCssSettingsTabs extends PluginSettingTab {
 		
 		if (this.plugin.settings.canvasAdded.length=== 0) {
 			const desc = document.createDocumentFragment();
-			desc.createEl("p", {text: t("settings.noClassAdded") as string});
-			desc.createEl("p", {text: t("settings.useCommandsInfo") as string});
+			desc.createEl("p", {text: i18next.t("settings.noClassAdded") as string});
+			desc.createEl("p", {text: i18next.t("settings.useCommandsInfo") as string});
 			new Setting(containerEl)
 				.setHeading()
 				.setDesc(desc);
 		}
 		new Setting(containerEl)
-			.setName(t("settings.console.title") as string)
-			.setDesc(t("settings.console.desc") as string)
+			.setName(i18next.t("settings.console.title"))
+			.setDesc(i18next.t("settings.console.desc"))
 			.addDropdown((dropdown) => {
 				dropdown
-					.addOption("none", t("settings.console.options.none") as string)
-					.addOption("error", t("settings.console.options.error") as string)
-					.addOption("warn", t("settings.console.options.warn") as string)
-					.addOption("log", t("settings.console.options.log") as string)
-					.addOption("notice", t("settings.console.options.notice") as string)
+					.addOption("none", i18next.t("settings.console.options.none") )
+					.addOption("error", i18next.t("settings.console.options.error") )
+					.addOption("warn", i18next.t("settings.console.options.warn") )
+					.addOption("log", i18next.t("settings.console.options.log") )
+					.addOption("notice", i18next.t("settings.console.options.notice") )
 					.setValue(this.plugin.settings.logLevel)
 					.onChange(async (value) => {
 						this.plugin.settings.logLevel = value;
@@ -45,25 +45,44 @@ export class CanvasCssSettingsTabs extends PluginSettingTab {
 					});
 			});
 		
-		new Setting(containerEl)
-			.setName(t("settings.addButton.name") as string)
-			.setDesc(t("settings.addButton.desc") as string)
-			.addToggle((toggle) => {
-				toggle
-					.setValue(this.plugin.settings.addButton)
-					.onChange(async (value) => {
-						this.plugin.settings.addButton = value;
-						await this.plugin.saveSettings();
-					});
-			});	
 
 		new Setting(containerEl)
-			.setName(t("settings.appendMode.default.title") as string)
-			.setDesc(t("settings.appendMode.default.desc") as string)
+			.setName(i18next.t("settings.addButton.name"))
+			.setHeading();
+		
+		new Setting(containerEl)
+			.setDesc(i18next.t("settings.addButton.class"))
+			.addToggle((toggle) => {
+				toggle
+					.setValue(this.plugin.settings.addButtonSetting)
+					.onChange(async (value) => {
+						this.plugin.settings.addButtonSetting = value;
+						await this.plugin.saveSettings();
+					});	
+			});
+		
+		new Setting(containerEl)
+			.setDesc(i18next.t("settings.addButton.quickSwitch"))
+			.addToggle((toggle) => {
+				toggle
+					.setValue(this.plugin.settings.addButtonSwitchView)
+					.onChange(async (value) => {
+						this.plugin.settings.addButtonSwitchView = value;
+						await this.plugin.saveSettings();
+					});
+			});
+			
+			
+		
+			
+
+		new Setting(containerEl)
+			.setName(i18next.t("settings.appendMode.default.title"))
+			.setDesc(i18next.t("settings.appendMode.default.desc"))
 			.addDropdown((dropdown) => {
 				dropdown
-					.addOption(AppendMode.workspaceLeaf, t("settings.appendMode.options.workspaceLeaf") as string)
-					.addOption(AppendMode.body, t("settings.appendMode.options.body") as string)
+					.addOption(AppendMode.workspaceLeaf, i18next.t("settings.appendMode.options.workspaceLeaf") )
+					.addOption(AppendMode.body, i18next.t("settings.appendMode.options.body") )
 					.setValue(this.plugin.settings.defaultAppendMode)
 					.onChange(async (value) => {
 						this.plugin.settings.defaultAppendMode = value as AppendMode;
@@ -78,7 +97,7 @@ export class CanvasCssSettingsTabs extends PluginSettingTab {
 				
 		new Setting(containerEl)
 			.addButton(cb => cb
-				.setButtonText(t("settings.newCanvas.addNewCanvas") as string)
+				.setButtonText(i18next.t("settings.newCanvas.addNewCanvas") )
 				.onClick(async () => {
 					const newCanvas: CanvasClass = {
 						canvasPath: "",
@@ -105,7 +124,7 @@ export class CanvasCssSettingsTabs extends PluginSettingTab {
 				.addExtraButton(cb =>
 					cb
 						.setIcon("edit")
-						.setTooltip(t("settings.edit.title") as string)
+						.setTooltip(i18next.t("settings.edit.title") )
 						.onClick(async () => {
 							const originalList = JSON.parse(JSON.stringify(canvas.canvasClass)) as string[];
 							new ListClasses(this.app, canvas, this.plugin, async (result: CanvasClass) => {
@@ -120,7 +139,7 @@ export class CanvasCssSettingsTabs extends PluginSettingTab {
 				.addExtraButton(cb =>
 					cb
 						.setIcon("trash")
-						.setTooltip(t("settings.remove.title") as string)
+						.setTooltip(i18next.t("settings.remove.title") )
 						.onClick(async () => {
 							const indexValue = this.plugin.settings.canvasAdded.indexOf(canvas);
 							this.plugin.settings.canvasAdded.splice(indexValue, 1);

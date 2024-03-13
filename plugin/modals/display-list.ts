@@ -1,7 +1,6 @@
+import {t} from "i18next";
 import { App, Modal, Setting } from "obsidian";
-import { t } from "plugin/i18n";
 import CanvasCSS from "plugin/main";
-import { reloadCanvas } from "plugin/utils";
 
 import { AppendMode, CanvasClass } from "../interface";
 
@@ -46,20 +45,20 @@ export class ListClasses extends Modal {
 			const li = list.createEl("li");
 			li.createEl("span", { text: AppendMode[mode as keyof typeof AppendMode] });
 			li.createEl("span", { text: " - " });
-			li.createEl("span", { text: t(`settings.appendMode.${mode}Desc`) as string });
+			const translated = mode === "body" ? t("settings.appendMode.bodyDesc") : t("settings.appendMode.workspaceLeafDesc");
+			li.createEl("span", { text: translated });
 		}
 		new Setting(contentEl)
 			.setName(t("settings.appendMode.title") as string)
 			.setDesc(desc)
 			.addDropdown((dropdown) => {
 				dropdown
-					.addOption("body", t("settings.appendMode.options.body") as string)
-					.addOption("workspace-leaf", t("settings.appendMode.options.workspaceLeaf") as string)
-					.setValue(AppendMode.body)
+					.addOption("body", t("settings.appendMode.options.body"))
+					.addOption("workspace-leaf-content", t("settings.appendMode.options.workspaceLeaf"))
+					.setValue(this.canvas.appendMode)
 					.onChange(async (value) => {
 						this.canvas.appendMode = value as AppendMode;
-						const openedLeaves = this.plugin.getLeafByPath(this.canvas.canvasPath);
-						reloadCanvas(this.canvas.canvasPath, this.canvas.appendMode, this.plugin.settings, openedLeaves);
+						
 					});
 			});
 

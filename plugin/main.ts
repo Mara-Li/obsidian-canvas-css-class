@@ -1,6 +1,7 @@
-import {FileView, ItemView, Notice, Plugin, TFile, WorkspaceLeaf} from "obsidian";
+import i18next from "i18next";
+import { FileView, ItemView, Notice, Plugin, TFile, WorkspaceLeaf} from "obsidian";
 
-import {StringFunction, t, translationLanguage} from "./i18n";
+import { resources, translationLanguage } from "./i18n";
 import {AppendMode,CanvasCssSettings, DEFAULT_SETTINGS} from "./interface";
 import {AddCssClass} from "./modals/addClass";
 import { ListClasses } from "./modals/display-list";
@@ -104,7 +105,6 @@ export default class CanvasCSS extends Plugin {
 			return;
 		}
 		if (file && file.extension === "canvas" && leafType === "canvas") {
-			
 			logging(`OPENED FILE ${file.path} IS A CANVAS ; ADDING CLASS`, this.settings.logLevel);
 			const canvasClassList = this.settings.canvasAdded.find((canvas) => canvas.canvasPath === file.path);
 			
@@ -136,6 +136,13 @@ export default class CanvasCSS extends Plugin {
 	
 	async onload() {
 		await this.loadSettings();
+		await i18next.init({
+			lng: translationLanguage,
+			fallbackLng: "en",
+			resources,
+			returnNull: false,
+			returnEmptyString: false,
+		});
 		console.log(`Loading ${this.manifest.name.replaceAll(" ", "")} v${this.manifest.version} (language: ${translationLanguage})`);
 		
 		this.convertOldSettings();
@@ -144,7 +151,7 @@ export default class CanvasCSS extends Plugin {
 
 		this.addCommand({
 			id: "add-canvas-css-class",
-			name: t("commands.addCanvas") as string,
+			name: i18next.t("commands.addCanvas") as string,
 			checkCallback: (checking: boolean) => {
 				const canvasView = this.app.workspace.getActiveViewOfType(ItemView);
 				if ((canvasView?.getViewType() === "canvas")) {
@@ -155,7 +162,7 @@ export default class CanvasCSS extends Plugin {
 							const oldClasses = this.settings.canvasAdded.find((item) => item.canvasPath === canvasPath);
 							if (oldClasses) {
 								if (oldClasses.canvasClass.includes(result)) {
-									new Notice(t("settings.alreadyApplied") as string);
+									new Notice(i18next.t("settings.alreadyApplied"));
 								} else {
 									oldClasses.canvasClass.push(result);
 									// replace the old canvas class with the new one
@@ -182,7 +189,7 @@ export default class CanvasCSS extends Plugin {
 		
 		this.addCommand({
 			id: "remove-canvas-css-class",
-			name: t("commands.removeCanvas") as string,
+			name: i18next.t("commands.removeCanvas"),
 			checkCallback: (checking: boolean) => {
 				const canvasView = this.app.workspace.getActiveViewOfType(ItemView);
 				if ((canvasView?.getViewType() === "canvas")) {
@@ -201,7 +208,7 @@ export default class CanvasCSS extends Plugin {
 		
 		this.addCommand({
 			id: "switch-to-body-mode",
-			name: t("commands.switchToBodyMode") as string,
+			name: i18next.t("commands.switchToBodyMode"),
 			checkCallback: (checking: boolean) => {
 				const canvasView = this.app.workspace.getActiveViewOfType(ItemView);
 				if ((canvasView?.getViewType() === "canvas")) {
@@ -213,8 +220,11 @@ export default class CanvasCSS extends Plugin {
 						oldClasses.appendMode = AppendMode.body;
 						this.saveSettings();
 						new Notice(
-							(t("message.switchedToBody") as string)
+							(i18next.t("message.switchedToBody"))
 						);
+						this.removeBodyButton();
+						this.removeWorkspaceButton();
+						this.addWorkspaceButton(canvasView, canvasPath);
 						const leaves = this.getLeafByPath(canvasPath);
 						reloadCanvas(canvasPath, oldClasses.appendMode, this.settings, leaves);
 					}
@@ -225,7 +235,7 @@ export default class CanvasCSS extends Plugin {
 		
 		this.addCommand({
 			id: "switch-to-workspace-leaf-content-mode",
-			name: t("commands.switchToViewContentMode") as string,
+			name: i18next.t("commands.switchToViewContentMode"),
 			checkCallback: (checking: boolean) => {
 				const canvasView = this.app.workspace.getActiveViewOfType(ItemView);
 				if ((canvasView?.getViewType() === "canvas")) {
@@ -236,8 +246,11 @@ export default class CanvasCSS extends Plugin {
 						oldClasses.appendMode = AppendMode.workspaceLeaf;
 						this.saveSettings();
 						new Notice(
-							(t("message.switchedToViewContent") as string)
+							(i18next.t("message.switchedToViewContent"))
 						);
+						this.removeBodyButton();
+						this.removeWorkspaceButton();
+						this.addButtonBodyView(canvasView, canvasPath);
 						const leaves = this.getLeafByPath(canvasPath);
 						reloadCanvas(canvasPath, oldClasses.appendMode, this.settings, leaves);
 					}
@@ -248,7 +261,7 @@ export default class CanvasCSS extends Plugin {
 		
 		this.addCommand({
 			id: "quick-switch-mode",
-			name: t("commands.quickSwitch") as string,
+			name: i18next.t("commands.quickSwitch"),
 			checkCallback:(checking: boolean) => {
 				const canvasView = this.app.workspace.getActiveViewOfType(ItemView);
 				if ((canvasView?.getViewType() === "canvas")) {
@@ -259,8 +272,16 @@ export default class CanvasCSS extends Plugin {
 						oldClasses.appendMode = oldClasses.appendMode === AppendMode.body ? AppendMode.workspaceLeaf : AppendMode.body;
 						this.saveSettings();
 						new Notice(
-							(t("message.quickSwitch") as StringFunction)(oldClasses.appendMode)
+							(i18next.t("message.quickSwitch", {mode: oldClasses.appendMode}))
 						);
+						//reload button 
+						if (oldClasses.appendMode === AppendMode.body) {
+							this.removeWorkspaceButton();
+							this.addButtonBodyView(canvasView, canvasPath);
+						} else {
+							this.removeBodyButton();
+							this.addWorkspaceButton(canvasView, canvasPath);
+						}
 						const leaves = this.getLeafByPath(canvasPath);
 						reloadCanvas(canvasPath, oldClasses.appendMode, this.settings, leaves);
 					}
@@ -308,28 +329,86 @@ export default class CanvasCSS extends Plugin {
 			allCssButton.forEach((button) => {
 				button.remove();
 			});
-			if (this.settings.addButton && view?.getViewType() === "canvas" && file?.extension === "canvas") {
-				const button = view.addAction("ratio",(t("commands.editCanvas") as StringFunction)(file.basename) as string, async () => {
-					const path = file.path;					
-					this.quickCreateSettings(path, this.settings.defaultAppendMode);
-					let canvas = this.settings.canvasAdded.find((item) => item.canvasPath === path);
-					if (!canvas) return;
-					const originalList = JSON.parse(JSON.stringify(canvas.canvasClass)) as string[];
-					new ListClasses(this.app, canvas, this, (result) => {
-						canvas = result;
-						this.saveSettings();
-						const leaves = this.getLeafByPath(path);
-						const removedClasses = originalList.filter((item) => !result.canvasClass.includes(item));
-						reloadCanvas(path, canvas.appendMode, this.settings, leaves);
-						removeListFromDOM(removedClasses, this.settings.logLevel, leaves, path);
-					}).open();
-				});
-				button.addClass("canvas-css-class-button");
+			if (view?.getViewType() === "canvas" && file?.extension === "canvas") {
+				if (this.settings.addButtonSetting) {
+					const button = view.addAction("ratio",(i18next.t("commands.editCanvas", {name: file.basename})), async () => {
+						const path = file.path;
+						this.quickCreateSettings(path, this.settings.defaultAppendMode);
+						let canvas = this.settings.canvasAdded.find((item) => item.canvasPath === path);
+						if (!canvas) return;
+						const originalList = JSON.parse(JSON.stringify(canvas.canvasClass)) as string[];
+						new ListClasses(this.app, canvas, this, async (result) => {
+							canvas = result;
+							await this.saveSettings();
+							const leaves = this.getLeafByPath(path);
+							const removedClasses = originalList.filter((item) => !result.canvasClass.includes(item));
+							reloadCanvas(path, canvas.appendMode, this.settings, leaves);
+							removeListFromDOM(removedClasses, this.settings.logLevel, leaves, path);
+							if (canvas.appendMode === AppendMode.body) {
+								this.removeWorkspaceButton();
+								this.addButtonBodyView(view, path);
+							} else {
+								this.removeBodyButton();
+								this.addWorkspaceButton(view, path);
+							}
+						}).open();
+					});
+					button.addClass("canvas-css-class-button");
+				}
+				if (this.settings.addButtonSwitchView) {
+					const path = file.path;
+					let viewMode = this.settings.defaultAppendMode;
+					const thisFile = this.settings.canvasAdded.find((item) => item.canvasPath === path);
+					if (thisFile) viewMode = thisFile.appendMode as AppendMode;
+					if (viewMode === AppendMode.body) {
+						this.addButtonBodyView(view, path);
+					} else {
+						this.addWorkspaceButton(view, path);
+					}
+				}
 			}
 		}));
 		
 		this.addSettingTab(new CanvasCssSettingsTabs(this.app, this));
 		
+	}
+	
+	removeBodyButton() {
+		const bodyButton = document.querySelector(".switch-body-button");
+		if (bodyButton) bodyButton.remove();
+	}
+
+	removeWorkspaceButton() {
+		const workspaceButton = document.querySelector(".switch-workspace-button");
+		if (workspaceButton) workspaceButton.remove();
+	}
+
+	async addButtonBodyView(view: FileView | ItemView, path: string) {
+		const button = view.addAction("layout-template", i18next.t("commands.switchToBodyMode"), async () => {
+			const oldClasses = this.quickCreateSettings(path, AppendMode.body);
+			oldClasses.appendMode = AppendMode.body;
+			await this.saveSettings();
+			const leaves = this.getLeafByPath(path);
+			reloadCanvas(path, oldClasses.appendMode, this.settings, leaves);
+			//switch to other button
+			this.removeBodyButton();
+			this.addWorkspaceButton(view, path);
+		});
+		button.addClass("canvas-css-class-button", "switch-body-button");
+	}
+
+	async addWorkspaceButton(view: FileView | ItemView, path: string) {
+		const button = view.addAction("table", i18next.t("commands.switchToViewContentMode"), async () => {
+			const oldClasses = this.quickCreateSettings(path, AppendMode.workspaceLeaf);
+			oldClasses.appendMode = AppendMode.workspaceLeaf;
+			await this.saveSettings();
+			const leaves = this.getLeafByPath(path);
+			reloadCanvas(path, oldClasses.appendMode, this.settings, leaves);
+			//switch to other button 
+			this.removeWorkspaceButton();
+			this.addButtonBodyView(view, path);
+		});
+		button.addClass("canvas-css-class-button", "switch-workspace-button");
 	}
 
 	onunload() {

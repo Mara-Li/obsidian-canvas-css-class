@@ -19,6 +19,7 @@ export class CanvasClassSuggester extends AbstractInputSuggest<string> {
 		return canvas.map((file) => file.path);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	selectSuggestion(value: string, evt: MouseEvent | KeyboardEvent): void {
 		this.onSubmit(value);
 		this.inputEl.value = value;
