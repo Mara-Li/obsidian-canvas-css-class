@@ -60,6 +60,6 @@ jobs:
                   token: ${{ secrets.GITHUB_TOKEN }}
                   files: |
                       ${{ env.PLUGIN_NAME }}.zip
-                      main.js
-                      manifest.json
-                      styles.css
+                      dist/main.js
+                      dist/manifest.json
+                      dist/styles.css
