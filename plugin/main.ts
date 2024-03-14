@@ -374,16 +374,19 @@ export default class CanvasCSS extends Plugin {
 	}
 	
 	removeBodyButton() {
+		if (!this.settings.addButtonSwitchView) return;
 		const bodyButton = document.querySelector(".switch-body-button");
 		if (bodyButton) bodyButton.remove();
 	}
 
 	removeWorkspaceButton() {
+		if (!this.settings.addButtonSwitchView) return;
 		const workspaceButton = document.querySelector(".switch-workspace-button");
 		if (workspaceButton) workspaceButton.remove();
 	}
 
 	async addButtonBodyView(view: FileView | ItemView, path: string) {
+		if (!this.settings.addButtonSwitchView) return;
 		const button = view.addAction("layout-template", i18next.t("commands.switchToBodyMode"), async () => {
 			const oldClasses = this.quickCreateSettings(path, AppendMode.body);
 			oldClasses.appendMode = AppendMode.body;
@@ -398,6 +401,7 @@ export default class CanvasCSS extends Plugin {
 	}
 
 	async addWorkspaceButton(view: FileView | ItemView, path: string) {
+		if (!this.settings.addButtonSwitchView) return;
 		const button = view.addAction("table", i18next.t("commands.switchToViewContentMode"), async () => {
 			const oldClasses = this.quickCreateSettings(path, AppendMode.workspaceLeaf);
 			oldClasses.appendMode = AppendMode.workspaceLeaf;
