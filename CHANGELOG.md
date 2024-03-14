@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+### [2.4.1](https://github.com/Lisandra-dev/obsidian-canvas-css-class/compare/2.4.0...2.4.1) (2024-03-14)
+
+
+### Bug Fixes
+
+* buton should've appear if disabled ([d9cee9b](https://github.com/Lisandra-dev/obsidian-canvas-css-class/commit/d9cee9b411b1625a93b9967a8056d087718bc985))
+* pattern ([6a9f9ac](https://github.com/Lisandra-dev/obsidian-canvas-css-class/commit/6a9f9ac1dfac892fc6ab184cb07c3a845f38c739))
+
 ## [2.4.0](https://github.com/Lisandra-dev/obsidian-canvas-css-class/compare/2.3.3...2.4.0) (2024-03-13)
 
 
