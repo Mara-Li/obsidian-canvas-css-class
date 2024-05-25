@@ -68,7 +68,7 @@ My advice :
 # Installation
 
 - Install the plugin using the community plugin manager (not yet added)
-- Using [BRAT](https://github.com/TfTHacker/obsidian42-brat) using this link : `https://github.com/Lisandra-dev/obsidian-canvas-css-class`
+- Using [BRAT](https://github.com/TfTHacker/obsidian42-brat) using this link : `https://github.com/mara-li/obsidian-canvas-css-class`
 - Manually, with unzipping the last release in your `.obsidian/plugins` folder. 
 
 ---
@@ -76,7 +76,7 @@ My advice :
 
 You can help me to develop the plugin using npm !
 
-- First clone the project on your computer with git clone `git@github.com:Lisandra-dev/canvas-css-class.git`
+- First clone the project on your computer with git clone `git@github.com:mara-li/canvas-css-class.git`
 - cd `canvas-css-class`
 - `npm install`
 - `npm run dev` to start the developing "in live" with your Obsidian (you need to have the plugin installed in your `.obsidian/plugins`) to see the changes in live. As it can break your Obsidian Sync, I recommend you to use a test vault.)
@@ -90,7 +90,7 @@ Some notes:
 ## 🗺️ Translation 
 
 I use i18n to adding translation to the plugin. If you want to help me to translate the plugin, you can do it with :
-- [Fork the project](https://github.com/Lisandra-dev/obsidian-canvas-css-class/fork)
+- [Fork the project](https://github.com/mara-li/obsidian-canvas-css-class/fork)
 - Clone the new fork on your computer or open it with Github Dev (replace the `.com` with `.dev` in the URL)
 - Create a new branch, called `translation`
 - Clone the file `en.ts` in the folder `plugin/i18n/locales/` and rename it with the language code (for example `fr.ts` for french)
