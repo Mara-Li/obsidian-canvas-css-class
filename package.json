@@ -16,7 +16,7 @@
 		"t": ""
 	},
 	"keywords": [],
-	"author": "Lisandra-dev",
+	"author": "Mara-Li",
 	"license": "AGPL-3.0",
 	"devDependencies": {
 		"@lisandra-dev/eslint-config": "^1.1.4",
