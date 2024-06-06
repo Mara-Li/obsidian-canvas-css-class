@@ -104,7 +104,7 @@ export class CanvasCssSettingsTabs extends PluginSettingTab {
 						canvasClass: [],
 						appendMode: this.plugin.settings.defaultAppendMode
 					};
-					this.plugin.settings.canvasAdded.push(newCanvas);
+					this.plugin.settings.canvasAdded.unshift(newCanvas);
 					await this.plugin.saveSettings();
 					this.display();
 				}));
@@ -114,7 +114,7 @@ export class CanvasCssSettingsTabs extends PluginSettingTab {
 				.setClass("canvas-css-class-title")
 				.addSearch(cb => {
 					cb.setValue(canvas.canvasPath);
-					cb.setPlaceholder("test");
+					cb.setPlaceholder(i18next.t("addFilePath.filePath"));
 					new CanvasClassSuggester(cb.inputEl, this.plugin, this.app, async (result: string) => {
 						canvas.canvasPath = result;
 						await this.plugin.saveSettings();
