@@ -25,7 +25,7 @@ jobs:
         uses: mara-li/reusable-workflows/.github/workflows/obsidian-plugin-release.yaml@main
 
         with:
-            PLUGIN_NAME: <%= data.id %>
+            PLUGIN_NAME: canvas-css-class
             CACHE: "pnpm"
         secrets:
             GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -34,7 +34,7 @@ jobs:
         if: ${{ inputs.bump }}
         uses: mara-li/reusable-workflows/.github/workflows/obsidian-plugin-bump-version.yaml@main
         with:
-            PLUGIN_NAME: <%= data.id %>
+            PLUGIN_NAME: canvas-css-class
             BETA: ${{ inputs.beta }}
             CACHE: "pnpm"
         secrets:
