@@ -16,7 +16,7 @@
 		"t": ""
 	},
 	"keywords": [],
-	"author": "Lisandra-dev",
+	"author": "Mara-Li",
 	"license": "AGPL-3.0",
 	"devDependencies": {
 		"@biomejs/biome": "1.8.0",
