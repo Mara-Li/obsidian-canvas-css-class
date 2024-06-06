@@ -1,5 +1,5 @@
 # vscode
-.vscode 
+.vscode
 
 # Intellij
 *.iml
@@ -12,6 +12,7 @@ node_modules
 # They should be uploaded to GitHub releases instead.
 main.js
 styles.css
+!src/styles.css
 
 # Exclude sourcemaps
 *.map
