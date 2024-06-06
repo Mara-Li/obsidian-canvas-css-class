@@ -2,16 +2,16 @@
 
 This plugin do two things : 
 - Add the class `.canvas-file` to the DOM of each canvas file, and adding the attribute `[data-canvas-path="filepath"]` 
-- Allow you to add custom css class to canvas, using a modal input. Obviously, you can also remove the css-class using the plugin, with the settings or the commands modal. 
+- Allow you to add custom css class to canvas, using a modal input. Obviously, you can also remove the css-class using the plugin, with the settings or the commands modal.
 
 
----
 Yeah, that's it.
 
-> **Note**  
+> [!NOTE]  
 > Actually, the plugin doesn't load any CSS in your canvas. You need to write your own CSS, and add it into your `.obsidian/snippets` folder.  
 > Get more information about snippets [here](https://help.obsidian.md/Extending+Obsidian/CSS+snippets).
 
+The plugin will automatically follow file moved, renamed or deleted, so you don't need to change the path in the settings!
 
 # Usage
 
@@ -31,9 +31,6 @@ Moreover, the settings allow you to add a css class for a not-opened canvas file
 ![](docs/add_css_class_settings.png)
 
 
-> **Warning**   
-> If the filepath is edited (aka the file is moved or renamed), the css class will not be applied anymore. You will have to edit the filepath in the settings.
-
 In the settings, you can also : 
 - Remove all the css class 
 - Remove specific css class
@@ -43,7 +40,7 @@ In the settings, you can also :
 ![](docs/canvas-settings.png)
 
 
-> [!NOTE]
+> [!NOTE]  
 > - You don't need to add the `.canvas` to the filepath. The plugin will do it for you
 > - Same for class, the `.` will be added automatically when the CSS class is added.
 > - And, in the same idea, space will be converted to `-` in the class name, and converted to lowercase.
@@ -61,7 +58,7 @@ My advice :
 - Use a macro to switch into `body` behavior when you use the command for export as an image (you can use [Quick Add](https://github.com/chhoumann/quickadd) for that). Note : you need to add a delay, min of 30s, to allowing this to work. 
 - Create a button with [commander](https://github.com/phibr0/obsidian-commander) to quick switch between the two behaviors.
 
-> [!NOTE]
+> [!NOTE]  
 > If you add the same class to two different file, opened in the same time, but one on the body and the other on the view-content, the class will be applied « globally », so the focusing-removing won't happen here.
 
 ---
@@ -105,6 +102,5 @@ I use i18n to adding translation to the plugin. If you want to help me to transl
 
 
 ---
-
 If you find this plugin you can give me some coffee money : <br/>
 <a href='https://ko-fi.com/X8X54ZYAV' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://cdn.ko-fi.com/cdn/kofi1.png?v=3' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
