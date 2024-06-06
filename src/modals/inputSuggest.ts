@@ -1,5 +1,5 @@
 import { AbstractInputSuggest, App } from "obsidian";
-import CanvasCSS from "plugin/main";
+import CanvasCSS from "src/main";
 
 export class CanvasClassSuggester extends AbstractInputSuggest<string> {
 

@@ -370,6 +370,8 @@ export default class CanvasCSS extends Plugin {
 		}));
 		
 		this.addSettingTab(new CanvasCssSettingsTabs(this.app, this));
+
+
 		
 	}
 	

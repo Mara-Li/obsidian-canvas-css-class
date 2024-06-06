@@ -1,6 +1,6 @@
 import {t} from "i18next";
 import { App, Modal, Setting } from "obsidian";
-import CanvasCSS from "plugin/main";
+import CanvasCSS from "src/main";
 
 import { AppendMode, CanvasClass } from "../interface";
 

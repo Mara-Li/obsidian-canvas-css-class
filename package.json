@@ -4,13 +4,16 @@
 	"description": "Add a CSS class to the canvas, but also other attributes.",
 	"main": "main.js",
 	"scripts": {
-		"build": "node esbuild.config.mjs production",
-		"dev": "node esbuild.config.mjs --sourcemap development",
-		"lint": "eslint --ext .ts plugin/",
-		"lint:fix": "eslint --fix --ext .ts  plugin/",
-		"bump": "node commit-and-tag-version.js",
+		"prebuild": "tsc --noEmit --skipLibCheck",
+		"build": "node esbuild.config.mjs --production",
+		"dev:prod": "node esbuild.config.mjs --vault",
+		"dev": "node esbuild.config.mjs",
+		"export": "node esbuild.config.mjs --production --vault",
+		"bump": "node commit-and-tag-version.mjs",
 		"postbump": "git push --follow-tags origin master",
-		"export": "node esbuild.config.mjs production export"
+		"predeploy": "pnpm run bump",
+		"deploy": "pnpm run export",
+		"lint": "pnpm biome lint --apply src/"
 	},
 	"commit-and-tag-version": {
 		"t": ""
@@ -21,10 +24,11 @@
 	"devDependencies": {
 		"@biomejs/biome": "1.8.0",
 		"@lisandra-dev/eslint-config": "^1.1.4",
+		"@types/electron": "npm:@ophidian/electron-types@^24.3.1",
 		"@types/obsidian-typings": "npm:obsidian-typings@^1.1.6",
 		"builtin-modules": "3.3.0",
 		"dotenv": "^16.4.5",
-		"esbuild": "0.16.10",
+		"esbuild": "0.21.4",
 		"i18next": "^23.10.1",
 		"obsidian": "^1.5.7",
 		"tslib": "2.4.1",
@@ -37,7 +41,7 @@
 		"dedent": "^1.5.1"
 	},
 	"peerDependencies": {
-		"@types/node": "^20.10.7",
-		"@types/electron": "npm:@ophidian/electron-types"
+		"@types/electron": "npm:@ophidian/electron-types",
+		"@types/node": "^20.10.7"
 	}
 }

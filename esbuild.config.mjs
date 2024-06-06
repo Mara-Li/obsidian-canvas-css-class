@@ -5,7 +5,7 @@ import esbuild from "esbuild";
 import * as fs from "fs";
 import * as path from "path";
 import process from "process";
-import packageJson from "./package.json";
+import packageJson from "./package.json" assert {type: "json"};
 
 dotenv.config();
 
