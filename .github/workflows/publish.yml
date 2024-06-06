@@ -1,65 +1,41 @@
-name: Release Obsidian plugin
+name: Release obsidian plugin
 
 on:
     workflow_dispatch:
+        inputs:
+            bump:
+                default: false
+                description: "Bump version based on semantic release"
+                type: boolean
+                required: false
+            beta:
+                default: false
+                description: "Make a beta release"
+                type: boolean
+                required: false
     push:
         tags:
             - "*"
-env:
-    PLUGIN_NAME: canvas-css-class # Change this to match the id of your plugin.
+permissions:
+    contents: write
 
 jobs:
-    build:
-        runs-on: ubuntu-latest
+    release:
+        if: (github.event_name == 'push') || (github.event_name == 'workflow_dispatch' && !inputs.bump)
+        uses: mara-li/reusable-workflows/.github/workflows/obsidian-plugin-release.yaml@main
 
-        steps:
-            - uses: actions/checkout@v3
-            - name: Use Node.js
-              uses: actions/setup-node@v3
-              with:
-                  node-version: 18
+        with:
+            PLUGIN_NAME: <%= data.id %>
+            CACHE: "pnpm"
+        secrets:
+            GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-            - name: Build
-              id: build
-              run: |
-                  npm install
-                  npm run build
-                  mkdir ${{ env.PLUGIN_NAME }}
-                  cp dist/main.js dist/styles.css ${{ env.PLUGIN_NAME }}
-            - name: Copy files (beta)
-              if: contains(github.ref, '-')
-              run: |
-                  cp dist/manifest-beta.json ${{ env.PLUGIN_NAME }}
-                  mv manifest-beta.json manifest.json
-            - name: Copy files if not beta
-              if: ${{ !contains(github.ref, '-') }}
-              run: cp manifest.json ${{ env.PLUGIN_NAME }}
-            - name: Create zip
-              run: |
-                  zip -r ${{ env.PLUGIN_NAME }}.zip ${{ env.PLUGIN_NAME }}
-                  ls
-                  echo "tag_name=$(git tag --sort version:refname | tail -n 1)" >> $GITHUB_OUTPUT
-            - name: Create changelog (beta)
-              if: contains(github.ref, '-')
-              run: npx rexreplace "^.*?#+\s\[.*?\n.*?(?=\s*#+\s\[)" "_" -s -M -G -m -o "CHANGELOG-beta.md" > CHANGELOG-LATEST.md
-            - name: Create changelog (not beta)
-              if: ${{ !contains(github.ref, '-') }}
-              run: npx rexreplace "^.*?#+\s\[.*?\n.*?(?=\s*#+\s\[)" "_" -s -M -G -m -o "CHANGELOG.md" > CHANGELOG-LATEST.md
-            - name: Create Release
-              id: create_release
-              uses: softprops/action-gh-release@v1
-              env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-                  VERSION: ${{ github.ref }}
-              with:
-                  tag_name: ${{ github.ref_name }}
-                  name: ${{ github.github.ref_name }}
-                  body_path: CHANGELOG-LATEST.md
-                  draft: false
-                  prerelease: false
-                  token: ${{ secrets.GITHUB_TOKEN }}
-                  files: |
-                      ${{ env.PLUGIN_NAME }}.zip
-                      dist/main.js
-                      dist/manifest.json
-                      dist/styles.css
+    bump-version-and-release:
+        if: ${{ inputs.bump }}
+        uses: mara-li/reusable-workflows/.github/workflows/obsidian-plugin-bump-version.yaml@main
+        with:
+            PLUGIN_NAME: <%= data.id %>
+            BETA: ${{ inputs.beta }}
+            CACHE: "pnpm"
+        secrets:
+            GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

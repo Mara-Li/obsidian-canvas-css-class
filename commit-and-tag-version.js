@@ -1,25 +1,28 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-const { Command, Option } = require("commander");
-const commitAndTagVersion = require("commit-and-tag-version");
-const dedent = require("dedent");
-const c = require("ansi-colors");
+import { Command, Option } from "commander";
+import commitAndTagVersion from "commit-and-tag-version";
+import dedent from "dedent";
+import pkg from "ansi-colors";
+const { red, dim, gray, italic, bold, cyan, blue, green, underline, yellow, theme } = pkg;
 
 const program = new Command();
 
-c.theme({
-	danger: c.red,
-	dark: c.dim.gray,
-	disabled: c.gray,
-	em: c.italic,
-	heading: c.bold.underline,
-	info: c.cyan,
-	muted: c.dim,
-	primary: c.blue,
-	strong: c.bold,
-	success: c.green.bold,
-	underline: c.underline,
-	warning: c.yellow.underline,
+theme({
+	danger: red,
+	dark: dim.gray,
+	disabled: gray,
+	em: italic,
+	heading: bold.underline,
+	info: cyan,
+	muted: dim,
+	primary: blue,
+	strong: bold,
+	success: green.bold,
+	warning: yellow.underline,
 });
+
+const info = (msg) => pkg.info(msg);
+const heading = (msg) => pkg.heading(msg);
+const em = (msg) => pkg.em(msg);
 
 program
 	.description("Bump version and create a new tag")
@@ -36,22 +39,20 @@ program
 program.parse();
 const opt = program.opts();
 
-const betaMsg = opt.beta ? c.em("- Pre-release\n\t") : "";
-const dryRunMsg = opt.dryRun ? c.em("- Dry run\n\t") : "";
-const releaseAsMsg = opt.releaseAs
-	? c.em(`- Release as ${c.underline(opt.releaseAs)}`)
-	: "";
+const betaMsg = opt.beta ? em("- Pre-release\n\t") : "";
+const dryRunMsg = opt.dryRun ? em("- Dry run\n\t") : "";
+const releaseAsMsg = opt.releaseAs ? em(`- Release as ${underline(opt.releaseAs)}`) : "";
 
 const msg = dedent(`
-${c.heading("Options :")}
-	${betaMsg}${dryRunMsg}${releaseAsMsg}  
-`);
+	${heading("Options :")}
+		${betaMsg}${dryRunMsg}${releaseAsMsg}  
+	`);
 
 console.log(msg);
 console.log();
 
 if (opt.beta) {
-	console.log(`${c.bold.green(">")} ${c.info.underline("Bumping beta version...")}`);
+	console.log(`${bold.green(">")} ${info(underline("Bumping beta version..."))}`);
 	console.log();
 	const bumpFiles = [
 		{
@@ -69,10 +70,13 @@ if (opt.beta) {
 	];
 	commitAndTagVersion({
 		infile: "CHANGELOG-beta.md",
-		bumpFiles: bumpFiles,
+		bumpFiles,
 		prerelease: "",
 		dryRun: opt.dryRun,
 		tagPrefix: "",
+		scripts: {
+			postchangelog: "node hooks/_changelog.mjs -b",
+		},
 	})
 		.then(() => {
 			console.log("Done");
@@ -82,9 +86,9 @@ if (opt.beta) {
 		});
 } else {
 	const versionBumped = opt.releaseAs
-		? c.info("Release as " + c.underline(opt.releaseAs))
-		: c.info("Release");
-	console.log(`${c.bold.green(">")} ${c.underline(versionBumped)}`);
+		? info(`Release as ${underline(opt.releaseAs)}`)
+		: info("Release");
+	console.log(`${bold.green(">")} ${underline(versionBumped)}`);
 	console.log();
 
 	const bumpFiles = [
@@ -103,16 +107,18 @@ if (opt.beta) {
 		{
 			filename: "manifest.json",
 			type: "json",
-		}
+		},
 	];
-
 
 	commitAndTagVersion({
 		infile: "CHANGELOG.md",
-		bumpFiles: bumpFiles,
+		bumpFiles,
 		dryRun: opt.dryRun,
 		tagPrefix: "",
 		releaseAs: opt.releaseAs,
+		scripts: {
+			postchangelog: "node hooks/_changelog.mjs",
+		},
 	})
 		.then(() => {
 			console.log("Done");
