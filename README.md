@@ -43,7 +43,7 @@ In the settings, you can also :
 ![](docs/canvas-settings.png)
 
 
-> **Note**  
+> [!NOTE]
 > - You don't need to add the `.canvas` to the filepath. The plugin will do it for you
 > - Same for class, the `.` will be added automatically when the CSS class is added.
 > - And, in the same idea, space will be converted to `-` in the class name, and converted to lowercase.
@@ -61,7 +61,7 @@ My advice :
 - Use a macro to switch into `body` behavior when you use the command for export as an image (you can use [Quick Add](https://github.com/chhoumann/quickadd) for that). Note : you need to add a delay, min of 30s, to allowing this to work. 
 - Create a button with [commander](https://github.com/phibr0/obsidian-commander) to quick switch between the two behaviors.
 
-> **Note**
+> [!NOTE]
 > If you add the same class to two different file, opened in the same time, but one on the body and the other on the view-content, the class will be applied « globally », so the focusing-removing won't happen here.
 
 ---
