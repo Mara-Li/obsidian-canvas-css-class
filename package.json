@@ -3,6 +3,10 @@
 	"version": "2.5.0",
 	"description": "Add a CSS class to the canvas, but also other attributes.",
 	"main": "main.js",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/mara-li/obsidian-canvas-css-class"
+	},
 	"scripts": {
 		"prebuild": "tsc --noEmit --skipLibCheck",
 		"build": "node esbuild.config.mjs --production",

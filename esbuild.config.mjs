@@ -53,7 +53,7 @@ const moveStyles = {
 	setup(build) {
 		build.onEnd(() => {
 			if (fs.existsSync("src/styles.css"))
-				fs.copyFileSync("src/styles.css", "./styles.css");
+				fs.copyFileSync("src/styles.css", `${outdir}/styles.css`);
 		});
 	},
 };
@@ -72,7 +72,7 @@ const exportToVaultFunc = {
 
 			fs.copyFileSync(`${outdir}/main.js`, path.join(folderPlugin, "main.js"));
 			if (fs.existsSync(`${outdir}/styles.css`))
-				fs.copyFileSync("./styles.css", path.join(folderPlugin, "styles.css"));
+				fs.copyFileSync(`${outdir}/styles.css`, path.join(folderPlugin, "styles.css"));
 			fs.copyFileSync("./manifest.json", path.join(folderPlugin, "manifest.json"));
 		});
 	},

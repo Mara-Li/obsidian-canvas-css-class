@@ -67,9 +67,9 @@ My advice :
 ---
 # Installation
 
-- Install the plugin using the community plugin manager (not yet added)
-- Using [BRAT](https://github.com/TfTHacker/obsidian42-brat) using this link : `https://github.com/mara-li/obsidian-canvas-css-class`
-- Manually, with unzipping the last release in your `.obsidian/plugins` folder. 
+- [x] Install the plugin throught the Obsidian Community Plugin browser
+- [x] Using [BRAT](https://github.com/TfTHacker/obsidian42-brat) using this link : `https://github.com/mara-li/obsidian-canvas-css-class`
+- [x] Manually, with unzipping the last release in your `.obsidian/plugins` folder. 
 
 ---
 # :robot: Developing
