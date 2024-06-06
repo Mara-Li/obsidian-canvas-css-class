@@ -371,7 +371,22 @@ export default class CanvasCSS extends Plugin {
 		
 		this.addSettingTab(new CanvasCssSettingsTabs(this.app, this));
 
+		this.app.vault.on("rename", async (file, oldPath) => {
+			const oldClasses = this.settings.canvasAdded.find((item) => item.canvasPath === oldPath);
+			if (oldClasses) {
+				oldClasses.canvasPath = file.path;
+				await this.saveSettings();
+			}
+		});
 
+		this.app.vault.on("delete", async (file) => {
+			const oldClasses = this.settings.canvasAdded.find((item) => item.canvasPath === file.path);
+			if (oldClasses) {
+				//delete from the settings
+				this.settings.canvasAdded = this.settings.canvasAdded.filter((item) => item.canvasPath !== file.path);
+				await this.saveSettings();
+			}
+		});
 		
 	}
 	
